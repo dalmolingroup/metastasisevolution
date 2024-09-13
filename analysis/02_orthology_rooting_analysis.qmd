@@ -150,7 +150,6 @@ cogs[["string_id"]] <- separated_ids[, 2]
 
 # Freeing up some memory
 rm(separated_ids)
-gc()
 
 # keeping only eukaryotes
 cogs %<>% dplyr::select(-taxid.string_id) %>% 
@@ -197,6 +196,12 @@ gene_cogs %<>%
 # Exporting for package use
 gene_cogs |> 
   vroom::vroom_write(file = here("results/orthology_data/gene_cogs.csv"), delim = ",")
+
+map_ids |> 
+  vroom::vroom_write(file = here("results/orthology_data/map_ids.csv"), delim = ",")
+
+cogs |> 
+  vroom::vroom_write(file = here("results/orthology_data/cogs.csv"), delim = ",")
 ```
 
 ## Get interaction network from STRINGdb
@@ -241,6 +246,8 @@ res <- getBridge(ogr, what="results")
 
 res |> 
   vroom::vroom_write(file = here("results/orthology_data/genebridge_result.csv"), delim = ",")
+
+save(ogr, file = "../results/orthology_data/genebridge_ogr.RData")
 ```
 ## GeneBridge results processing
 

@@ -168,6 +168,7 @@ ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   theme_void() +
   theme(legend.position = "bottom")
 ```
+
 ## Plotting Human PPI Network
 
 ```{r plots}
@@ -200,8 +201,8 @@ ggraph::ggraph(graph,
   ) +
   ggplot2::scale_fill_manual(values = color_mappings, drop = FALSE)
 
-ggsave(file="../results/plots/human_ppi.svg", plot=ppi, width=10, height=8)
-ggsave(file="../results/plots/human_ppi_labaled.svg", plot=ppi, width=10, height=8)
+#ggsave(file="../results/plots/human_ppi.svg", plot=ppi, width=10, height=8)
+#ggsave(file="../results/plots/human_ppi_labaled.svg", plot=ppi, width=10, height=8)
 ```
 
 ```{r plots}
