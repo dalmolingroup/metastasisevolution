@@ -277,7 +277,7 @@ node_annotation <- nodelist %>%
   inner_join(df, by = c("queryItem" = "external_gene_name")) %>%
   distinct(queryItem, cog_id, Signature, root, clade_name)
 
-# Lista de características a serem plotadas
+# List of signatures
 signatures <- unique(node_annotation$Signature)
 
 # Criar e salvar plots
