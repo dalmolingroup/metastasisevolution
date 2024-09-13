@@ -377,12 +377,4 @@ combined_plot <- patchwork::wrap_plots(
 
 print(combined_plot)
 ```
-```{r plots}
 
-```
-```{r plots}
-
-```
-```{r plots}
-
-```
