@@ -416,65 +416,131 @@ combined_plot <- patchwork::wrap_plots(
 
 print(combined_plot)
 ```
-```{r}
+```{r trash}
   # Obter todas as categorias possíveis de clade_name
   all_clades <- node_annotation %>%
     arrange(desc(root)) %>%
     dplyr::select(clade_name) %>%
     unique()
 
+
   # Calcular o cumulativo agrupando por Signature (processos biológicos)
-  cumulative_genes <- node_annotation %>%
+  cumulative_genes <- nodelist %>%
     arrange(desc(root)) %>%
-    dplyr::select(queryItem, root, clade_name) %>%
-    unique() %>%
+    dplyr::select("queryItem", 
+                  "root",
+                  "clade_name",
+                  "cellular extravasation",
+                  "cell junction organization",           
+                  "cell adhesion",                          
+                  "extracellular matrix organization",     
+                  "epithelial to mesenchymal transition",  
+                  "regulation of metallopeptidase activity") %>%
     group_by(-root, clade_name) %>%
     summarise(count_genes = n(), .groups = "drop") %>%
     mutate(cumulative_sum = cumsum(count_genes)) %>%
     right_join(all_clades, by = "clade_name") %>%
     fill(cumulative_sum, .direction = "down")
   
-  cumulative_bp <- node_annotation %>%
-    arrange(desc(root)) %>%
-    dplyr::select(Signature, root, clade_name) #%>%
-    unique() %>%
-    group_by(-root, Signature) %>%
-    summarise(count_signatures = n(), .groups = "drop")
+  
+  # Calcular a soma cumulativa para cada processo biológico
+cumulative_bp <- nodelist %>%
+  # Selecionar as colunas necessárias
+  dplyr::select("queryItem", 
+                "root",
+                "clade_name",
+                "cellular extravasation",
+                "cell junction organization",           
+                "cell adhesion",                          
+                "extracellular matrix organization",     
+                "epithelial to mesenchymal transition",  
+                "regulation of metallopeptidase activity") %>%
+  # Remover duplicatas de genes para a mesma raiz (root)
+  distinct(root, queryItem, .keep_all = TRUE) %>%
+  # Certificar-se de que todas as colunas de processos biológicos são numéricas
+  mutate(across(c("cellular extravasation",
+                  "cell junction organization",
+                  "cell adhesion",                          
+                  "extracellular matrix organization",     
+                  "epithelial to mesenchymal transition",  
+                  "regulation of metallopeptidase activity"), 
+                ~ as.numeric(.))) %>%
+  # Agrupar por root e clade_name
+  group_by(root, clade_name) %>%
+  # Calcular a soma dos genes para cada processo biológico, removendo NAs
+  summarise(across(c("cellular extravasation",
+                     "cell junction organization",
+                     "cell adhesion",                          
+                     "extracellular matrix organization",     
+                     "epithelial to mesenchymal transition",  
+                     "regulation of metallopeptidase activity"), 
+                   ~ sum(. , na.rm = TRUE)),
+            .groups = "drop") %>%
+  # Ordenar pela raiz para garantir a ordem de soma cumulativa
+  arrange(desc(root)) %>%
+  # Calcular a soma cumulativa para cada processo biológico
+  mutate(across(c("cellular extravasation",
+                  "cell junction organization",
+                  "cell adhesion",                          
+                  "extracellular matrix organization",     
+                  "epithelial to mesenchymal transition",  
+                  "regulation of metallopeptidase activity"),
+                ~ cumsum(.))) %>%
+  # Unir com todos os clados
+  right_join(all_clades, by = "clade_name") %>%
+  # Preencher valores faltantes (caso haja clados sem dados em algum root)
+  fill(everything(), .direction = "down")
+  
+  
+  cumulative_data <- left_join(cumulative_genes, cumulative_bp)
+  
 
-   combined_data <- cumulative_genes %>%
-    full_join(cumulative_bp, by = "root") %>%
-    pivot_wider(names_from = Signature, values_from = count_signatures, values_fill = list(count = 0)) %>%
-     replace_na(list(
-    `cell adhesion` = 0,
-    `cell junction organization` = 0,
-    `cellular extravasation` = 0,
-    `epithelial to mesenchymal transition` = 0,
-    `extracellular matrix organization` = 0,
-    `regulation of metallopeptidase activity` = 0
-  ))
-    
-    
-  #   summarized_data <- combined_data %>%
-  group_by(clade_name, Signature) %>%
-  summarize(count = sum(cumulative_sum, na.rm = TRUE), .groups = 'drop')
-    
-  # Selecionar nomes únicos para o eixo x (sem duplicações)
-  unique_clade_names <- unique(cumulative_data$clade_name)
   
-  # Criar gráfico com preenchimento pelas Signatures (processos biológicos)
-  ggplot(cumulative_bp, aes(x = root, y = count_signatures, fill = Signature)) +
-    geom_bar(stat = "identity") +
-    geom_text(aes(label = count_signatures), vjust = 2, size = 3, color = "white") +
-    labs(x = NULL, y = NULL) +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.margin = margin(1, 1, 0, 1))
-  
-  ggplot(combined_data, aes(x = factor(clade_name, levels = unique_clade_names), y = cumulative_sum, fill = count_signatures)) +
-  geom_bar(stat = "identity", position = "stack") +  # Usar position = "stack" para empilhar as barras
-  geom_text(aes(label = cumulative_sum), position = position_stack(vjust = 0.5), size = 3, color = "white") +
-  labs(x = NULL, y = "Cumulative Sum") +
+  cumulative_long <- cumulative_data %>%
+  pivot_longer(cols = 6:11,
+               names_to = "process",
+               values_to = "count")
+
+# Criar o gráfico de barras empilhadas
+ggplot(cumulative_long, aes(x = factor(root), y = cumulative_sum, fill = process)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(x = "Root", y = "Cumulative Gene Count", fill = "Biological Process") +
+ # geom_text(aes(label=count), vjust = 2, size = 3, color = "white") +
+  scale_fill_brewer(palette = "Set3") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.margin = margin(1, 1, 0, 1))
+  coord_flip()  # Gira o gráfico para melhor visualização
+ 
 
+
+long_data <- cumulative_data %>%
+  pivot_longer(cols = 6:11, 
+               names_to = "Process", 
+               values_to = "Value")
+
+# Criar o gráfico
+ggplot() +
+  # Gráfico de barras para cumulative_sum
+  geom_bar(data = cumulative_data, 
+           aes(x = factor(-root), y = cumulative_sum), 
+           stat = "identity", fill = "lightblue") +
   
+  # Gráfico de linhas para os processos biológicos
+  geom_line(data = long_data, 
+            aes(x = factor(-root), y = Value, color = Process, group = Process), 
+            size = 1) +
+  
+  # Adicionar pontos para as linhas
+  #geom_area(data = long_data, 
+  #           aes(x = factor(-root), y = Value, color = Process, group = Process), 
+  #           size = 2) +
+  
+  # Rótulos e tema
+  labs(x = "Clade Name", y = "Values", 
+       title = "Cumulative Sum and Biological Processes",
+       fill = "Cumulative Sum",
+       color = "Biological Processes") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
 ```
