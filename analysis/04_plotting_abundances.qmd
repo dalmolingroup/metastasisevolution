@@ -19,6 +19,7 @@ library(readr)
 library(magrittr)
 library(ggplot2)
 library(hrbrthemes)
+library(tinter)
 ```
 
 ```{r funcs}
@@ -121,6 +122,27 @@ plot_cumulative_2 <- function(data, signature) {
   
   return(p)
 }
+
+plot_cumulative_3 <- function(node_annotation) {
+  
+  all_clades <- node_annotation %>%
+    arrange(desc(root)) %>%
+    dplyr::select(clade_name) %>%
+    unique()
+
+  cumulative_data <- node_annotation %>%
+    dplyr::select(-Signature) %>%
+    unique() %>%
+    arrange(desc(root)) %>%
+    group_by(-root, clade_name) %>%
+    summarise(count = n(), .groups = "drop") %>%
+    mutate(cumulative_sum = cumsum(count)) %>%
+    rename("root" = "-root") %>%
+    right_join(all_clades, by = "clade_name") %>%
+    fill(cumulative_sum, .direction = "down")
+
+  return(cumulative_data)
+}
 ```
 
 ```{r themes}
@@ -222,6 +244,8 @@ lca_names <- read_table(CLADE_NAMES)
 lca_names %<>% rename("lca" = root)
 ```
 
+
+
 ```{r run}
 lca_spp <- ogr@spbranches %>%
   rename("taxid" = ssp_id, "species" = ssp_name, "lca" = "branch") %>%
@@ -290,14 +314,27 @@ roots_seq <- node_annotation %>%
   unique()
 
 roots_seq$clade_name <- factor(roots_seq$clade_name, levels = roots_seq$clade_name)
+```
 
+
+
+```{r plots}
+cumulative_data <- plot_cumulative_3(node_annotation)
+
+# Criar gráfico
+ggplot(cumulative_data, aes(x = factor(clade_name, levels = clade_name), y = cumulative_sum)) +
+  geom_bar(stat = "identity") +
+  labs(x = NULL, y = NULL) +
+  geom_text(aes(label=cumulative_sum), vjust = 2, size = 3, color = "white") +
+  theme_modern_rc() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.margin = margin(1, 1, 0, 1))
 ```
 
 ```{r plots}
 # Plotting by species
 ggplot(avg_abundance_by_function) +
   # Geoms  ----------------
-ctenophora_line +
+choanoflagellata_line +
   geom_bar(
     aes(x = ncbi_name, y = avg_abundance, fill = Signature, color = after_scale(darken(fill, 0.1)))
     ,stat = "identity"
@@ -366,8 +403,10 @@ ggplot(avg_abundance_by_function) +
   theme_classic() + 
   theme_average
 ```
+
+
 ```{r plots}
- plots_combined <- c(plots[1:6], plots2[6])
+plots_combined <- c(plots[1:6], plots2[6])
 
 combined_plot <- patchwork::wrap_plots(
   plots_combined,
@@ -377,4 +416,65 @@ combined_plot <- patchwork::wrap_plots(
 
 print(combined_plot)
 ```
+```{r}
+  # Obter todas as categorias possíveis de clade_name
+  all_clades <- node_annotation %>%
+    arrange(desc(root)) %>%
+    dplyr::select(clade_name) %>%
+    unique()
 
+  # Calcular o cumulativo agrupando por Signature (processos biológicos)
+  cumulative_genes <- node_annotation %>%
+    arrange(desc(root)) %>%
+    dplyr::select(queryItem, root, clade_name) %>%
+    unique() %>%
+    group_by(-root, clade_name) %>%
+    summarise(count_genes = n(), .groups = "drop") %>%
+    mutate(cumulative_sum = cumsum(count_genes)) %>%
+    right_join(all_clades, by = "clade_name") %>%
+    fill(cumulative_sum, .direction = "down")
+  
+  cumulative_bp <- node_annotation %>%
+    arrange(desc(root)) %>%
+    dplyr::select(Signature, root, clade_name) #%>%
+    unique() %>%
+    group_by(-root, Signature) %>%
+    summarise(count_signatures = n(), .groups = "drop")
+
+   combined_data <- cumulative_genes %>%
+    full_join(cumulative_bp, by = "root") %>%
+    pivot_wider(names_from = Signature, values_from = count_signatures, values_fill = list(count = 0)) %>%
+     replace_na(list(
+    `cell adhesion` = 0,
+    `cell junction organization` = 0,
+    `cellular extravasation` = 0,
+    `epithelial to mesenchymal transition` = 0,
+    `extracellular matrix organization` = 0,
+    `regulation of metallopeptidase activity` = 0
+  ))
+    
+    
+  #   summarized_data <- combined_data %>%
+  group_by(clade_name, Signature) %>%
+  summarize(count = sum(cumulative_sum, na.rm = TRUE), .groups = 'drop')
+    
+  # Selecionar nomes únicos para o eixo x (sem duplicações)
+  unique_clade_names <- unique(cumulative_data$clade_name)
+  
+  # Criar gráfico com preenchimento pelas Signatures (processos biológicos)
+  ggplot(cumulative_bp, aes(x = root, y = count_signatures, fill = Signature)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(label = count_signatures), vjust = 2, size = 3, color = "white") +
+    labs(x = NULL, y = NULL) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.margin = margin(1, 1, 0, 1))
+  
+  ggplot(combined_data, aes(x = factor(clade_name, levels = unique_clade_names), y = cumulative_sum, fill = count_signatures)) +
+  geom_bar(stat = "identity", position = "stack") +  # Usar position = "stack" para empilhar as barras
+  geom_text(aes(label = cumulative_sum), position = position_stack(vjust = 0.5), size = 3, color = "white") +
+  labs(x = NULL, y = "Cumulative Sum") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.margin = margin(1, 1, 0, 1))
+
+  
+```
