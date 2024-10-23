@@ -87,7 +87,8 @@ plot_network <- function(graph, title, nodelist, xlims, ylims, legend = "none") 
       colour = NA,
       pie_scale = 1
     ) +
-    geom_node_text(aes(label = V(graph)$queryItem), nudge_x = 0.8, nudge_y = 0.8, size = 0.5, colour = "red") +
+    geom_node_text(aes(label = ifelse(V(graph)$color == "black", V(graph)$queryItem, NA)), 
+                   nudge_x = 0.8, nudge_y = 0.8, size = 0.5, colour = "red") +
     ggplot2::scale_fill_manual(values = color_mappings, drop = FALSE) +
     ggplot2::coord_fixed() +
     ggplot2::scale_x_continuous(limits = xlims) +
@@ -128,7 +129,7 @@ source_statements <- colnames(nodelist)[10:length(nodelist)]
 ## Plotting Intersections
 
 ```{r plots}
-upset(dplyr::select(as.data.frame(nodelist), 
+  upset(dplyr::select(as.data.frame(nodelist), 
                     "queryItem", 
                     "cell adhesion",                          
                     "extracellular matrix organization",      
@@ -138,22 +139,21 @@ upset(dplyr::select(as.data.frame(nodelist),
                     "cellular extravasation"),
                     nsets = 50, nintersects = NA,
       sets.bar.color = color_mappings, 
-      mainbar.y.label = "Intersecção dos \nProcessos Biológicos",
-      sets.x.label = "Tamanho do set")
+      mainbar.y.label = "Biological Process \nIntersections",
+      sets.x.label = "Set Size")
 ```
 
 ## Graph Build
 
 ```{r graph}
-graph <-
-  graph_from_data_frame(network_filtered, directed = FALSE, vertices = nodelist)
+#graph <-
+#  graph_from_data_frame(network_filtered, directed = FALSE, vertices = nodelist)
 
-layout <- easylayout::vivagraph(graph)
-layout <- easylayout::vivagraph(graph, layout = layout, pin_nodes = TRUE, lcc_margin_left = 10)
-V(graph)$x <- layout[, 1]
-V(graph)$y <- layout[, 2]
+#layout <- easylayout::easylayout(graph)
+#V(graph)$x <- layout[, 1]
+#V(graph)$y <- layout[, 2]
 
-#save(graph, file = "results/plots/graph")
+#save(graph, file = "../results/plots/graph")
 ```
 
 ## Plotting Network By Root
@@ -201,8 +201,8 @@ ggraph::ggraph(graph,
   ) +
   ggplot2::scale_fill_manual(values = color_mappings, drop = FALSE)
 
-#ggsave(file="../results/plots/human_ppi.svg", plot=ppi, width=10, height=8)
-#ggsave(file="../results/plots/human_ppi_labaled.svg", plot=ppi, width=10, height=8)
+#ggsave(file="../results/plots/human_ppi.svg", plot=ppi,  width=15, height=10)
+#ggsave(file="../results/plots/human_ppi_labaled.svg", plot=ppi_labaled, width=15, height=10)
 ```
 
 ```{r plots}
@@ -242,6 +242,7 @@ design <-
    FGHIJ
    KLMNO'
 
+#net_all_roots <-
 patchwork::wrap_plots(
   rev(plots),
   design = design,
@@ -249,6 +250,7 @@ patchwork::wrap_plots(
   ncol = 6
 )
 
-#ggsave("results/networks_all_roots.pdf")
-#ggsave("results/networks_all_roots.png")
+#ggsave(file = "../results/plots/networks_all_roots.pdf", plot=net_all_roots, width=10, height=8)
+#ggsave(file = "../results/plots/networks_all_roots.png", plot=net_all_roots, width=10, height=8)
+#ggsave(file = "../results/plots/networks_all_roots_lab.svg", plot=net_all_roots, width=10, height=8)
 ```
