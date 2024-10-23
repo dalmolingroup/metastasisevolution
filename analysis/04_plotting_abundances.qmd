@@ -271,6 +271,7 @@ long_data <- cumulative_data %>%
                names_to = "Process", 
                values_to = "Value")
 
+#a <-
 ggplot() +
   # Gráfico de barras para cumulative_sum
   geom_bar(data = cumulative_data, 
@@ -287,9 +288,9 @@ ggplot() +
        color = "Biological Processes") +
   
   theme_main +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
-
+#b <- 
 ggplot() +
   # Gráfico de barras para cumulative_sum
   geom_bar(data = cumulative_data, 
@@ -314,6 +315,9 @@ ggplot() +
   
   theme_main +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#ggsave(file = "../results/plots/cumulative.svg", plot=a, width=15, height=8)
+#ggsave(file = "../results/plots/cumulative_bp.svg", plot=b, width=15, height=8)
 ```
 
 ```{r plots}
@@ -389,4 +393,3 @@ ggplot(avg_abundance_by_function) +
   theme_classic() + 
   theme_average
 ```
-
