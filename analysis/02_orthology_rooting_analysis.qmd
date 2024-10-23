@@ -53,7 +53,8 @@ get_string_ids <- function(genes_hgnc, species_id = "9606") {
     "https://string-db.org/api/tsv/get_string_ids",
     identifiers = paste(genes_hgnc, collapse = "%0D"),  
     echo_query = "1",
-    species = species_id
+    species = species_id, 
+    .opts = list(ssl.verifypeer = FALSE)
   )
   
   map_ids <- read.table(text = req, sep = "\t", header = TRUE, quote = "") %>%
@@ -74,7 +75,8 @@ get_string_ids <- function(genes_hgnc, species_id = "9606") {
      "https://string-db.org/api/tsv/network",
      identifiers = identifiers, 
      required_core = "0", 
-     species = species_id 
+     species = species_id,
+     .opts = list(ssl.verifypeer = FALSE)
    )
    
    int_network <- read.table(text = req2, sep = "\t", header = TRUE)
