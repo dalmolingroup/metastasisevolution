@@ -72,7 +72,7 @@ plot_network <- function(graph, title, nodelist, xlims, ylims, legend = "none") 
   
   # Generate color map
   source_statements <-
-    colnames(nodelist)[11:length(nodelist)]
+    colnames(nodelist)[10:length(nodelist)]
   
   color_mappings <- c(
   "cell adhesion"                               = "#06141FFF"
@@ -82,8 +82,6 @@ plot_network <- function(graph, title, nodelist, xlims, ylims, legend = "none") 
   ,"cell junction organization"                  ="#72874EFF"
   ,"cellular extravasation"                      ="#046E8FFF"
 )
-  
-  names(color_mappings) <- source_statements
   
   vertices <- igraph::as_data_frame(graph, "vertices")
   
@@ -101,7 +99,7 @@ plot_network <- function(graph, title, nodelist, xlims, ylims, legend = "none") 
       pie_scale = 1
     ) +
     geom_node_text(aes(label = ifelse(V(graph)$color == "black", V(graph)$queryItem, NA)), 
-                   nudge_x = 0.8, nudge_y = 0.8, size = 0.5, colour = "red") +
+                   nudge_x = 1, nudge_y = 1, size = 0.5, colour = "#BFBEBF") +
     ggplot2::scale_fill_manual(values = color_mappings, drop = FALSE) +
     ggplot2::coord_fixed() +
     ggplot2::scale_x_continuous(limits = xlims) +
@@ -256,7 +254,7 @@ design <-
    FGHIJ
    KLMNO'
 
-net_all_roots <-
+#net_all_roots <-
 patchwork::wrap_plots(
   rev(plots),
   design = design,
@@ -266,5 +264,5 @@ patchwork::wrap_plots(
 
 #ggsave(file = "../results/plots/networks_all_roots.pdf", plot=net_all_roots, width=10, height=8)
 #ggsave(file = "../results/plots/networks_all_roots.png", plot=net_all_roots, width=10, height=8)
-#ggsave(file = "../results/plots/networks_all_roots_lab.svg", plot=net_all_roots, width=10, height=8)
+#aggsave(file = "../results/plots/networks_all_roots_lab.svg", plot=net_all_roots, width=10, height=8)
 ```
