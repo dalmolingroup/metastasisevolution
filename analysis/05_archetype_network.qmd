@@ -1,0 +1,112 @@
+---
+title: "05_archetype_network"
+author: "gleisonm"
+format: html
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  results = FALSE
+)
+```
+
+```{r libs}
+library(GeneBridge)
+library(geneplast.data)
+library(readr)
+library(dplyr)
+library(purrr)
+library(biomaRt)
+library(magrittr)
+library(KEGGREST)
+library(ape)
+library(tidyverse)
+library(data.table)
+library(stringi)
+library(AnnotationHub)
+library(sourcetools)
+library(here)
+```
+
+```{r funcs}
+get_network_interaction <- function(map_ids, stringId, species_id = "9606") {
+  # Extrai e formata os IDs de interesse
+  identifiers <- map_ids %>% 
+    pull({{stringId}}) %>% 
+    na.omit() %>% 
+    paste0(collapse = "%0d")
+  
+  # Envia a requisição para a API do STRING
+  response <- POST(
+    url = "https://string-db.org/api/tsv/interaction_partners?identifiers=",
+    body = list(
+      identifiers = identifiers,
+      required_score = "0",
+      species = species_id
+    ),
+    encode = "form",
+    config = httr::config(ssl_verifypeer = FALSE)
+  )
+  
+  # Converte o conteúdo da resposta em tabela
+  int_network <- read.table(text = content(response, as = "text"), 
+                            sep = "\t", 
+                            header = TRUE)
+  
+  # Remove duplicatas
+  int_network <- unique(int_network)
+  
+  return(int_network)
+}
+
+combine_scores <- function(dat, evidences = "all", confLevel = 0.4) {
+  if(evidences[1] == "all"){
+    edat<-dat[,-c(1,2,ncol(dat))]
+  } else {
+    if(!all(evidences%in%colnames(dat))){
+      stop("NOTE: one or more 'evidences' not listed in 'dat' colnames!")
+    }
+    edat<-dat[,evidences]
+  }
+  if (any(edat > 1)) {
+    edat <- edat/1000
+  }
+  edat<-1-edat
+  sc<- apply(X = edat, MARGIN = 1, FUN = function(x) 1-prod(x))
+  dat <- cbind(dat[,c(1,2)],combined_score = sc)
+  idx <- dat$combined_score >= confLevel
+  dat <-dat[idx,]
+  return(dat)
+}
+```
+
+```{r data}
+nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv ")
+metamonada_nodelist <- subset(nodelist, nodelist$clade_name == "Metamonada")
+```
+
+```{r metamonada_network}
+a <- get_network_interaction(metamonada_nodelist, node)
+
+# Recomputing scores
+string_edgelist <- combine_scores(a, 
+                                  evidences = c("ascore", "escore", "dscore"), 
+                                  confLevel = 0.7)
+
+colnames(string_edgelist) <- c("stringId_A", "stringId_B", "combined_score")
+
+# Remove o species id
+string_edgelist$stringId_A <- substring(string_edgelist$stringId_A, 6, 1000)
+string_edgelist$stringId_B <- substring(string_edgelist$stringId_B, 6, 1000)
+
+setdiff(
+  string_edgelist %$% c(stringId_A, stringId_B),
+  map_ids %>% pull(stringId)
+) 
+```
+
+
