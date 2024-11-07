@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r libs}
 library(GeneBridge)
-library(httr2)
+library(httr)
 library(geneplast.data)
 library(readr)
 library(dplyr)
@@ -34,7 +34,27 @@ library(here)
 ```
 
 ```{r funcs}
-get_network_interaction <- function(map_ids, stringId, species_id = "9606") {
+# Get STRING interactions
+ get_network_interaction <- function(map_ids, stringId, species_id = "9606") {
+ 
+   identifiers <- map_ids %>% pull(stringId) %>% na.omit %>% paste0(collapse="%0d") 
+ 
+   req2 <- RCurl::postForm(
+     "https://string-db.org/api/tsv/network",
+     identifiers = identifiers, 
+     required_core = "0", 
+     species = species_id,
+     .opts = list(ssl.verifypeer = FALSE)
+   )
+   
+   int_network <- read.table(text = req2, sep = "\t", header = TRUE)
+   
+   int_network <- unique(int_network)
+   
+   return(int_network)
+ }
+
+get_network_partness_interaction <- function(map_ids, stringId, species_id = "9606") {
   # Extrai e formata os IDs de interesse
   identifiers <- map_ids %>% 
     pull({{stringId}}) %>% 
@@ -121,7 +141,7 @@ cogdata <- dplyr::select(cogdata, "protein_id", "ssp_id", "og_id" = "cog_id")
 
 
 ```{r metamonada_network}
-metamonada_int <- get_network_interaction(metamonada_nodelist, queryItem)
+metamonada_int <- get_network_partness_interaction(metamonada_nodelist, queryItem)
 
 # Recomputing scores
 metamonada_edgelist <- combine_scores(metamonada_int, 
@@ -176,7 +196,38 @@ gene_cogs %>% filter(n > 1)
 # Resolving main proteins
 gene_cogs_resolved <- tribble(
   ~string_id, ~cog_id,
-
+"ENSP00000298910", "COG0515", #COG0515 / COG2114 / COG4886
+"ENSP00000239462", "KOG1225",#KOG1225 / KOG2579
+"ENSP00000261537", "KOG4582",
+"ENSP00000262903", "COG0666", #COG0666 / COG5021
+"ENSP00000285928", "COG0194", #COG0194 / COG4886
+"ENSP00000288266", "KOG3536",
+"ENSP00000288368", "KOG3519", #KOG3519 / KOG4428
+"ENSP00000296792", "KOG0267", #KOG0267 / KOG0310
+"ENSP00000298229", "KOG4384",
+"ENSP00000304604", "COG0194", #COG0194 / COG5021
+"ENSP00000305702", "KOG2723",
+"ENSP00000310561", "KOG1449", #KOG1449 / KOG3564
+"ENSP00000317272", "KOG3610",
+"ENSP00000329219", "KOG1922", #KOG1922 / KOG1923
+"ENSP00000331901", "KOG1627",
+"ENSP00000335044", "KOG2312", #KOG2312 / KOG2744
+"ENSP00000339299", "KOG0032", #KOG0032 / KOG4240
+"ENSP00000355890", "COG0008", #COG0008 / COG0442
+"ENSP00000356379", "KOG0165",
+"ENSP00000359085", "KOG1836", #KOG1836 / KOG3512
+"ENSP00000362115", "KOG4270",
+"ENSP00000362824", "COG0457", #COG0457 / COG3914
+"ENSP00000366953", "KOG0264", #KOG0264 / KOG4155
+"ENSP00000370950", "KOG3656",
+"ENSP00000376306", "KOG0976",
+"ENSP00000394107", "KOG4734",
+"ENSP00000418112", "COG3338", #COG3338 / COG5599
+"ENSP00000418734", "COG1310", #COG1310 / COG5259
+"ENSP00000430269","COG0596", #COG0596 / COG1011
+"ENSP00000454786", "KOG0129",
+"ENSP00000457991", "COG2114", #COG2114 / COG4886
+"ENSP00000471457", "KOG1453"
 )
 
 # Removing unresolved cases and adding manual assignments
@@ -213,13 +264,14 @@ groot_df <- res %>%
   inner_join(lca_names) %>%
   inner_join(gene_cogs) 
 
-groot_df |> 
-  vroom::vroom_write(file = here("results/orthology_data/groot_df.csv"), delim = ",")
+#groot_df |> 
+  #vroom::vroom_write(file = here("results/orthology_data/groot_df.csv"), delim = ",")
 
 ## Create
 nodelist <- data.frame(node = unique(c(metamonada_edgelist$stringId_A, metamonada_edgelist$stringId_B)))
 
 merged_paths <- merge(nodelist, groot_df, by.x = "node", by.y = "string_id")
+merged_paths <- subset(merged_paths, clade_name == "Metamonada")
 
 ```
 
@@ -241,25 +293,12 @@ network_filtered <- net %>%
   dplyr::select(stringId_A, stringId_B) |>
   distinct()
 
-pivotada <- df %>% 
-  dplyr::select(external_gene_name, Signature) %>% 
-  dplyr::mutate(n = 1) %>% 
-  tidyr::pivot_wider(
-    id_cols = external_gene_name,
-    names_from = Signature,
-    values_from = n,
-    values_fn = list(n = length),
-    values_fill = list(n = 0),
-  )
-
 source_statements <-
   colnames(pivotada)[2:length(pivotada)]
 
 nodelist <-
   data.frame(node = unique(c(network_filtered$stringId_A, network_filtered$stringId_B))) %>%
-  left_join(merged_paths, by = c("node" = "node")) %>%
-  left_join(map_ids, by = c("node" = "stringId")) %>%
-  left_join(pivotada, by = c("queryItem" = "external_gene_name"))
+  left_join(merged_paths, by = c("node" = "node"))
 
 # Network Metrics
 connected_nodes <- rle(sort(c(network_filtered[,1], network_filtered[,2])))
