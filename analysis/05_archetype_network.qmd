@@ -138,8 +138,6 @@ load(meta[["AH83116"]])
 cogdata <- dplyr::select(cogdata, "protein_id", "ssp_id", "og_id" = "cog_id")
 ```
 
-
-
 ```{r metamonada_network}
 metamonada_int <- get_network_partness_interaction(metamonada_nodelist, queryItem)
 
@@ -158,7 +156,6 @@ metamonada_edgelist$stringId_B <- substring(metamonada_edgelist$stringId_B, 6, 1
 #metamonada_edgelist |> 
   #vroom::vroom_write(file = here("results/orthology_data/metamonada_edgelist.csv"), delim = ",")
 ```
-
 
 ```{r run}
 map_ids <- unique(c(metamonada_edgelist$stringId_A, metamonada_edgelist$stringId_B))
@@ -250,6 +247,7 @@ ogr <- runPermutation(ogr, nPermutations=1000, verbose=FALSE)
 res <- getBridge(ogr, what="results")
 
 ```
+
 ## GeneBridge results processing
 
 ```{r run}
@@ -306,16 +304,55 @@ dict <- getBM(
 
 nodelist <- merge(nodelist, dict, by.x = "node", by.y = "ensembl_peptide_id", all.x = TRUE)
 
+nodelist <- nodelist %>%
+  mutate(in_metamonada = if_else(node %in% metamonada_nodelist$node, TRUE, FALSE))
+
 # Network Metrics
 connected_nodes <- rle(sort(c(network_filtered[,1], network_filtered[,2])))
 connected_nodes <- data.frame(count=connected_nodes$lengths, node=connected_nodes$values)
 connected_nodes <- left_join(nodelist, connected_nodes, by = c("node" = "node"))
 ```
 
-```{r graph}
-nodelist <- nodelist %>%
-  mutate(in_metamonada = if_else(node %in% metamonada_nodelist$node, TRUE, FALSE))
 
+```{r enrich}
+library(clusterProfiler)
+
+in_metamonada <- subset(nodelist, in_metamonada == TRUE)
+out_metamonada <- subset(nodelist, in_metamonada == FALSE)
+
+
+in_enrich <- enrichGO(
+gene = in_metamonada$hgnc_symbol,
+OrgDb = "org.Hs.eg.db",
+ont = "BP",
+pAdjustMethod = "BH",
+keyType = 'SYMBOL'
+)
+df_go_in <- in_enrich@result
+df_go_in <- df_go_in[df_go_in$qvalue <= 0.05,]
+
+out_enrich <- enrichGO(
+gene = out_metamonada$hgnc_symbol,
+OrgDb = "org.Hs.eg.db",
+ont = "BP",
+pAdjustMethod = "BH",
+keyType = 'SYMBOL'
+)
+df_go_out <- out_enrich@result
+df_go_out <- df_go_out[df_go_out$qvalue <= 0.05,]
+
+
+kegg_enrich <- enrichKEGG(
+gene = in_metamonada$hgnc_symbol,
+organism = "hsa",
+keyType = "ncbi-geneid",
+pAdjustMethod = "BH",
+)
+```
+
+
+
+```{r graph}
 library(RedeR)
 library(dplyr)
 library(igraph)
