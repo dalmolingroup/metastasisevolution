@@ -146,7 +146,7 @@ metamonada_int <- get_network_partness_interaction(metamonada_nodelist, queryIte
 # Recomputing scores
 metamonada_edgelist <- combine_scores(metamonada_int, 
                                   evidences = c("ascore", "escore", "dscore"), 
-                                  confLevel = 0.7)
+                                  confLevel = 0.4)
 
 colnames(metamonada_edgelist) <- c("stringId_A", "stringId_B", "combined_score")
 
@@ -293,15 +293,58 @@ network_filtered <- net %>%
   dplyr::select(stringId_A, stringId_B) |>
   distinct()
 
-source_statements <-
-  colnames(pivotada)[2:length(pivotada)]
-
 nodelist <-
   data.frame(node = unique(c(network_filtered$stringId_A, network_filtered$stringId_B))) %>%
   left_join(merged_paths, by = c("node" = "node"))
+
+dict <- getBM(
+  attributes = c("ensembl_peptide_id", "hgnc_symbol"),
+  filters = "ensembl_peptide_id",
+  values = nodelist$node,
+  mart = useMart("ensembl", dataset = "hsapiens_gene_ensembl")
+)
+
+nodelist <- merge(nodelist, dict, by.x = "node", by.y = "ensembl_peptide_id", all.x = TRUE)
 
 # Network Metrics
 connected_nodes <- rle(sort(c(network_filtered[,1], network_filtered[,2])))
 connected_nodes <- data.frame(count=connected_nodes$lengths, node=connected_nodes$values)
 connected_nodes <- left_join(nodelist, connected_nodes, by = c("node" = "node"))
+```
+
+```{r graph}
+nodelist <- nodelist %>%
+  mutate(in_metamonada = if_else(node %in% metamonada_nodelist$node, TRUE, FALSE))
+
+library(RedeR)
+library(dplyr)
+library(igraph)
+
+# Inicializar o RedeR
+rdp <- RedPort()
+calld(rdp)
+
+# Criação do grafo completo usando `network_filtered`
+g <- graph_from_data_frame(d=network_filtered, directed=FALSE)
+
+# Adiciona os atributos de `nodelist` ao grafo
+V(g)$name <- nodelist$node
+V(g)$label <- nodelist$hgnc_symbol
+V(g)$color <- nodelist$color
+
+# Seleciona os nós com `in_metamonada` igual a TRUE
+nodes_in_metamonada <- nodelist$node[nodelist$in_metamonada == TRUE]
+
+# Extrai o subgrafo correspondente
+g_metamonada <- induced_subgraph(g, vids=nodes_in_metamonada)
+
+# Adiciona o grafo completo ao RedeR
+N1 <- addGraphToRedeR(g, theme="tm1")
+
+# Adiciona o subgrafo de `in_metamonada` como um grafo aninhado
+N2 <- addGraphToRedeR(g_metamonada, isNested=TRUE, parent=N1, theme="tm2")
+
+# Ajuste de layout
+mergeOutEdges(Bnlevels=2)
+relaxRedeR(p1=100, p2=100, p3=5, p4=150, p5=5, p8=10, p9=20)
 ```
