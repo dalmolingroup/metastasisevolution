@@ -313,6 +313,17 @@ connected_nodes <- data.frame(count=connected_nodes$lengths, node=connected_node
 connected_nodes <- left_join(nodelist, connected_nodes, by = c("node" = "node"))
 ```
 
+```{r onchoenrich}
+library(oncoEnrichR)
+
+oeDB <- oncoEnrichR::load_db(cache_dir = "../../.cache/")
+
+myc_report <- oncoEnrichR::onco_enrich(query = out_metamonada$hgnc_symbol, oeDB = oeDB, project_title = "Metamonada Side Network")
+
+oncoEnrichR::write(report = myc_report, oeDB = oeDB, file = "../../myc_report_oncoenrichr.html", format = "html")
+
+```
+
 
 ```{r enrich}
 library(clusterProfiler)
