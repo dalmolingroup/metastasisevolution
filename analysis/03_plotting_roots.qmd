@@ -158,12 +158,12 @@ source_statements <- colnames(nodelist)[10:length(nodelist)]
 ## Graph Build
 
 ```{r graph}
-#graph <-
-#  graph_from_data_frame(network_filtered, directed = FALSE, vertices = nodelist)
+graph <-
+  graph_from_data_frame(network_filtered, directed = FALSE, vertices = nodelist)
 
-#layout <- easylayout::easylayout(graph)
-#V(graph)$x <- layout[, 1]
-#V(graph)$y <- layout[, 2]
+layout <- easylayout::easylayout(graph)
+V(graph)$x <- layout[, 1]
+V(graph)$y <- layout[, 2]
 
 #save(graph, file = "../results/plots/graph")
 ```
@@ -174,11 +174,92 @@ source_statements <- colnames(nodelist)[10:length(nodelist)]
 load("../results/plots/graph")
 
 ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
+  geom_edge_link0(color = "#90909020") +  
+  geom_node_point(aes(color = -root), size = 1.5) +  
+  theme_void() + 
+  theme(legend.position = "left")
+
+```
+
+
+```{r}
+# Criando uma coluna para a legenda
+V(graph)$color_group <- case_when(
+  V(graph)$root == 37 ~ "Metamonada",
+  V(graph)$root <= 36 & V(graph)$root >= 30 ~ "Choanoflagellata",
+  V(graph)$root <= 29 & V(graph)$root >= 20 ~ "Actinopterygii",
+  TRUE ~ "Outros"  
+)
+
+# Plotando o gráfico com a legenda personalizada
+ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   geom_edge_link0(color = "#90909020") +
-  geom_node_point(aes(color = -root), size = 1.5) +
+  geom_node_point(aes(color = color_group), size = 2) +
   coord_fixed() +
   theme_void() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "left") +
+  scale_color_manual(
+    values = c(
+      "Metamonada" = "#D32F2F",       
+      "Choanoflagellata" = "#388E3C", 
+      "Actinopterygii" = "#1976D2",   
+      "Outros" = "#212121"            
+    ),
+    name = "Clade",  
+    labels = c(
+      "Metamonada" = "Metamonada",
+      "Choanoflagellata" = "Metamonada - Choanoflagellata",
+      "Actinopterygii" = "Choanoflagellata - Actinopterygii",
+      "Outros" = "Actinopterygii - Human"
+    )
+  )
+
+```
+
+```{r euler}
+library(eulerr)
+
+euler_plot <- euler(c(
+  "Actinopterygii" = sum(nodelist$root >= 20 & nodelist$root <= 37) - sum(nodelist$root >= 20 & nodelist$root <= 30) - sum(nodelist$root == 37),
+  "Actinopterygii&Choanoflagellata" = sum(nodelist$root >= 20 & nodelist$root <= 30) - sum(nodelist$root == 37),
+  "Metamonada&Choanoflagellata&Actinopterygii" = sum(nodelist$root == 37) 
+))
+
+plot(euler_plot, quantities = T)
+```
+
+```{r}
+# Criando uma coluna para a legenda
+V(graph)$color_group <- case_when(
+  V(graph)$root == 37 ~ "Metamonada",
+  V(graph)$root == 30 ~ "Choanoflagellata",
+  V(graph)$root == 20 ~ "Actinopterygii",
+  TRUE ~ "Outros"  
+)
+
+# Plotando o gráfico com a legenda personalizada
+ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
+  geom_edge_link0(color = "#90909020") +
+  geom_node_point(aes(color = color_group), size = 2) +
+  coord_fixed() +
+  theme_void() +
+  theme(legend.position = "left") +
+  scale_color_manual(
+    values = c(
+      "Metamonada" = "#D32F2F",       
+      "Choanoflagellata" = "#388E3C", 
+      "Actinopterygii" = "#1976D2",   
+      "Outros" = "#212121"            
+    ),
+    name = "Clade",  
+    labels = c(
+      "Metamonada" = "Metamonada",
+      "Choanoflagellata" = "Choanoflagellata",
+      "Actinopterygii" = "Actinopterygii",
+      "Outros" = "Others"
+    )
+  )
+
 ```
 
 ## Plotting Human PPI Network
@@ -257,6 +338,52 @@ design <-
 #net_all_roots <-
 patchwork::wrap_plots(
   rev(plots),
+  design = design,
+  nrow = 6,
+  ncol = 6
+)
+
+#ggsave(file = "../results/plots/networks_all_roots.pdf", plot=net_all_roots, width=10, height=8)
+#ggsave(file = "../results/plots/networks_all_roots.png", plot=net_all_roots, width=10, height=8)
+#aggsave(file = "../results/plots/networks_all_roots_lab.svg", plot=net_all_roots, width=10, height=8)
+```
+
+```{r plots}
+geneplast_roots <- merged_paths |>
+  arrange(root)
+
+buffer <- c(-50, 50)
+xlims <- ceiling(range(V(graph)$x)) + buffer
+ylims <- ceiling(range(V(graph)$y)) + buffer
+
+roots <- unique(geneplast_roots$root) %>%
+  set_names(unique(geneplast_roots$clade_name))
+
+# Subset graphs by LCAs
+subsets <-
+  map(roots, ~ subset_and_adjust_color_by_root(geneplast_roots, .x, graph))
+
+# Plot titles
+titles <- names(roots)
+
+plots <-
+  map2(
+    subsets,
+    titles,
+    plot_network,
+    nodelist = nodelist,
+    xlims = xlims,
+    ylims = ylims,
+    legend = "right"
+  ) %>%
+  discard(is.null)
+
+design <- 
+  '123'
+
+#net_all_roots <-
+patchwork::wrap_plots(
+  plots$Metamonada, plots$Choanoflagellata, plots$Actinopterygii,
   design = design,
   nrow = 6,
   ncol = 6
