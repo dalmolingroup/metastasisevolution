@@ -139,7 +139,7 @@ source_statements <- colnames(nodelist)[10:length(nodelist)]
 
 ## Plotting Intersections
 
-```{r plots}
+```{r plots1}
   upset(dplyr::select(as.data.frame(nodelist), 
                     "queryItem", 
                     "cell adhesion",                          
@@ -158,31 +158,32 @@ source_statements <- colnames(nodelist)[10:length(nodelist)]
 ## Graph Build
 
 ```{r graph}
-graph <-
-  graph_from_data_frame(network_filtered, directed = FALSE, vertices = nodelist)
+#graph <-
+#  graph_from_data_frame(network_filtered, directed = FALSE, vertices = nodelist)
 
-layout <- easylayout::easylayout(graph)
-V(graph)$x <- layout[, 1]
-V(graph)$y <- layout[, 2]
+#layout <- easylayout::easylayout(graph)
+#V(graph)$x <- layout[, 1]
+#V(graph)$y <- layout[, 2]
 
 #save(graph, file = "../results/plots/graph")
 ```
 
 ## Plotting Network By Root
 
-```{r plots}
+```{r plots2}
 load("../results/plots/graph")
 
 ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   geom_edge_link0(color = "#90909020") +  
-  geom_node_point(aes(color = -root), size = 1.5) +  
+  geom_node_point(aes(color = -root), size = 2) +  
   theme_void() + 
   theme(legend.position = "left")
 
 ```
+The color of the nodes in the graph reflects the distance from the Human-LCA of all the analyzed clades. The darker the node, the older it is from the Human clade. In contrast, lighter nodes, represented by soft blue colors, correspond to newer clades, closer to the Human-LCA. This color gradient illustrates the evolutionary depth of different clades.
 
 
-```{r}
+```{r plots3}
 # Criando uma coluna para a legenda
 V(graph)$color_group <- case_when(
   V(graph)$root == 37 ~ "Metamonada",
@@ -215,6 +216,8 @@ ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   )
 
 ```
+The colors in the graph represent nodes that belong to specific clades within the phylogenetic tree. Nodes in red correspond to those in the Metamonada clade, which are also present in the Choanoflagellata and Actinopterygii clades. Green nodes represent genes that belong to the clade that spans from Metamonada to Choanoflagellata, encompassing shared evolutionary traits. Nodes in blue indicate genes that span from Choanoflagellata to Actinopterygii, further illustrating the gradual divergence between these groups. Finally, black nodes are genes that rooted after Actinopterygii, representing more recent evolutionary rooting. It is important to note that the nodes in Metamonada are also present in Choanoflagellata and Actinopterygii, while those in Choanoflagellata are encompassed by the Actinopterygii clade. This relationship is made more evident in the Euler diagram that follows.
+
 
 ```{r euler}
 library(eulerr)
@@ -228,7 +231,7 @@ euler_plot <- euler(c(
 plot(euler_plot, quantities = T)
 ```
 
-```{r}
+```{r plots4}
 # Criando uma coluna para a legenda
 V(graph)$color_group <- case_when(
   V(graph)$root == 37 ~ "Metamonada",
@@ -261,10 +264,12 @@ ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   )
 
 ```
+The colors of the nodes in the graph represent the evolutionary clades to which the genes belong, reflecting their hierarchical origin. Each node corresponds to a gene, and its color indicates the specific clade to which it is rooted, based on the evolutionary timeline.
+
 
 ## Plotting Human PPI Network
 
-```{r plots}
+```{r plots5}
 #ppi_labaled <-
 ggraph::ggraph(graph,
                "manual",
@@ -297,8 +302,9 @@ ggraph::ggraph(graph,
 #ggsave(file="../results/plots/human_ppi.svg", plot=ppi,  width=15, height=10)
 #ggsave(file="../results/plots/human_ppi_labaled.svg", plot=ppi_labaled, width=15, height=10)
 ```
+Human PPI Network
 
-```{r plots}
+```{r plots6}
 geneplast_roots <- merged_paths |>
   arrange(root)
 
@@ -348,7 +354,7 @@ patchwork::wrap_plots(
 #aggsave(file = "../results/plots/networks_all_roots_lab.svg", plot=net_all_roots, width=10, height=8)
 ```
 
-```{r plots}
+```{r plots7}
 geneplast_roots <- merged_paths |>
   arrange(root)
 
