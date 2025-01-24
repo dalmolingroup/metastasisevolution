@@ -1,7 +1,5 @@
 # Reconstruction of the Evolutionary Landscape of Biological Processes Involved in the Early Stages of the Metastatic Cascade
 
-# Reconstruction of the Evolutionary Landscape of Biological Processes Involved in the Early Stages of the Metastatic Cascade
-
 This repository contains an ongoing analysis focused on understanding the evolutionary origins of genes involved in the early stages of the metastatic cascade.
 
 Metastasis is a complex process where neoplastic cells spread from a primary tumor to distant tissues, forming secondary tumors. Despite significant efforts to decipher the biological mechanisms underlying metastasis, the evolutionary history of the genes associated with this process remains insufficiently explored.
