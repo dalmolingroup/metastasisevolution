@@ -19,14 +19,14 @@ The analysis reconstructs the evolutionary scenario of 470 orthologous genes acr
 These findings indicate that metastatic mechanisms emerged through evolutionary gains of function in distinct lineages. The study provides new perspectives on the evolutionary origins of metastasis-related genes and their role in cancer progression.
 
 ## Repository Structure
-├── _dev 
-├── analysis 
-├── assets 
-└── results 
- ├── Figures 
- ├── metastasis_genes 
- ├── orthology_data 
- └── plots
+├── _dev                     
+├── analysis                                 
+├── results                  
+│   ├── Figures              
+│   ├── metastasis_genes     
+│   ├── orthology_data       
+│   └── plots                
+└── assets                
 
 - **_dev**  
   Contains scripts for analyses currently under development.  
