@@ -91,7 +91,7 @@ library(here)
 
 # Function to download needed files
 download_if_missing <- function(url, filename = basename(url)) {
-  filename <- here::here("assets/", filename)
+  filename <- here::here("rstudio-scratch/metastasisevolution/assets/", filename)
   if (!file.exists(filename)) {
     download.file(url, filename)
   }
@@ -165,7 +165,7 @@ df <- vroom::vroom("_dev/cell_adhesion_genes.csv")
 load('assets/string_eukaryotes.rda')
 
 ## Table with Orthologous Groups and their proteins
-#download_if_missing("https://stringdb-static.org/download/COG.mappings.v11.0.txt.gz")
+download_if_missing("https://stringdb-static.org/download/COG.mappings.v11.0.txt.gz")
 
 cogs <- fread(
   "assets/COG.mappings.v11.0.txt.gz",
@@ -220,16 +220,12 @@ gene_cogs %>% filter(n > 1)
 # Resolving main proteins
 gene_cogs_resolved <- tribble(
   ~string_id, ~cog_id,
-  "ENSP00000239462",	"KOG1225",
-  "ENSP00000264808",	"KOG1721",	
-  "ENSP00000265562",	"KOG2220",	
-  "ENSP00000323856",	"COG5069",		
-  "ENSP00000359085",  "KOG3512",		
-  "ENSP00000361467",  "KOG3528",		
-  "ENSP00000363317",	"KOG3528",		
-  "ENSP00000383042",  "KOG0685",		
-  "ENSP00000418112",	"COG5599",		
-  "ENSP00000422533",	"KOG3545"
+  "ENSP00000239462", "KOG1225",     
+  "ENSP00000265131", "KOG1225",     
+  "ENSP00000265562", "KOG2220", 
+  "ENSP00000359085", "KOG3512", 
+  "ENSP00000361467", "KOG3528",    
+  "ENSP00000418112", "COG5599"    
 )
 
 # Removing unresolved cases and adding manual assignments
@@ -239,11 +235,389 @@ gene_cogs %<>%
   bind_rows(gene_cogs_resolved)
 
 # Exporting for package use
-gene_cogs |> 
-  vroom::vroom_write(file = here("results/orthology_data/gene_cogs.csv"), delim = ",")
+#gene_cogs |> 
+#  vroom::vroom_write(file = here("results/orthology_data/gene_cogs.csv"), delim = ",")
 
-map_ids |> 
-  vroom::vroom_write(file = here("results/orthology_data/map_ids.csv"), delim = ",")
+#map_ids |> 
+#  vroom::vroom_write(file = here("results/orthology_data/map_ids.csv"), delim = ",")
 
-cogs |> 
-  vroom::vroom_write(file = here("results/orthology_data/cogs.csv"), delim = ",")
+#cogs |> 
+#  vroom::vroom_write(file = here("results/orthology_data/cogs.csv"), delim = ",")
+
+# Get proteins interaction
+string_edgelist <- get_network_interaction(map_ids)
+
+# Recomputing scores
+string_edgelist <- combine_scores(string_edgelist, 
+                                  evidences = c("ascore", "escore", "dscore"), 
+                                  confLevel = 0.4)
+
+colnames(string_edgelist) <- c("stringId_A", "stringId_B", "combined_score")
+
+# Remove o species id
+string_edgelist$stringId_A <- substring(string_edgelist$stringId_A, 6, 1000)
+string_edgelist$stringId_B <- substring(string_edgelist$stringId_B, 6, 1000)
+
+# How many edgelist proteins are absent in gene_ids? (should return 0)
+setdiff(
+  string_edgelist %$% c(stringId_A, stringId_B),
+  map_ids %>% pull(stringId)
+) 
+
+# Exporting for package use
+# string_edgelist |> 
+#   vroom::vroom_write(file = here("results/orthology_data/string_edgelist.csv"), delim = ",")
+
+## Run GeneBridge
+ogr <- newBridge(ogdata=ogdata, phyloTree=phyloTree, ogids = gene_cogs$cog_id, refsp="9606")
+
+ogr <- runBridge(ogr, penalty = 2, threshold = 0.5, verbose = TRUE)
+
+ogr <- runPermutation(ogr, nPermutations=1000, verbose=FALSE)
+
+res <- getBridge(ogr, what="results")
+
+# res |> 
+#   vroom::vroom_write(file = here("results/orthology_data/genebridge_result.csv"), delim = ",")
+
+#save(ogr, file = "../results/orthology_data/genebridge_ogr.RData")
+
+## Naming the rooted clades and getting the final results table
+CLADE_NAMES <- "https://raw.githubusercontent.com/dalmolingroup/neurotransmissionevolution/ctenophora_before_porifera/analysis/geneplast_clade_names.tsv"
+
+lca_names <- read_table(CLADE_NAMES)
+
+groot_df <- res %>%
+  tibble::rownames_to_column("cog_id") %>%
+  dplyr::select(cog_id, root = Root) %>%
+  inner_join(lca_names) %>%
+  inner_join(gene_cogs) 
+
+# groot_df |> 
+#   vroom::vroom_write(file = here("results/orthology_data/groot_df.csv"), delim = ",")
+# 
+# ## Create
+ nodelist <- data.frame(node = unique(c(string_edgelist$stringId_A, string_edgelist$stringId_B)))
+# 
+ merged_paths <- merge(nodelist, groot_df, by.x = "node", by.y = "string_id")
+# 
+# merged_paths |> 
+#   vroom::vroom_write(file = here("results/orthology_data/merged_paths.csv"), delim = ",")
+
+net <- get_network_interaction(merged_paths, "node")
+net <- combine_scores(net, evidences = c("ascore", "escore", "dscore"), confLevel = 0.4)
+
+net <-  net %>%
+  separate(stringId_A,
+           into = c("ncbi_taxon_id", "stringId_A"),
+           sep = "\\.") %>%
+  separate(stringId_B,
+           into = c("ncbi_taxon_id", "stringId_B"),
+           sep = "\\.") 
+
+network_filtered <- net %>%
+  dplyr::select(stringId_A, stringId_B) |>
+  distinct()
+
+pivotada <- df %>% 
+  dplyr::select(external_gene_name, Signature) %>% 
+  dplyr::mutate(n = 1) %>% 
+  tidyr::pivot_wider(
+    id_cols = external_gene_name,
+    names_from = Signature,
+    values_from = n,
+    values_fn = list(n = length),
+    values_fill = list(n = 0),
+  )
+
+source_statements <-
+  colnames(pivotada)[2:length(pivotada)]
+
+nodelist <-
+  data.frame(node = unique(c(network_filtered$stringId_A, network_filtered$stringId_B))) %>%
+  left_join(merged_paths, by = c("node" = "node")) %>%
+  left_join(map_ids, by = c("node" = "stringId")) %>%
+  left_join(pivotada, by = c("queryItem" = "external_gene_name"))
+
+# Network Metrics
+connected_nodes <- rle(sort(c(network_filtered[,1], network_filtered[,2])))
+connected_nodes <- data.frame(count=connected_nodes$lengths, node=connected_nodes$values)
+connected_nodes <- left_join(nodelist, connected_nodes, by = c("node" = "node"))
+
+# nodelist |> 
+#   vroom::vroom_write(file = here("results/orthology_data/nodelist.csv "), delim = ",")
+# 
+# connected_nodes |> 
+#   vroom::vroom_write(file = here("results/orthology_data/connected_nodes.csv"), delim = ",")
+# 
+# network_filtered |> 
+#   vroom::vroom_write(file = here("results/orthology_data/network_filtered.csv"), delim = ",")
+
+################################ PLOTING ROOTS #######################################################
+
+library(ggplot2)
+library(ggraph)
+library(dplyr)
+library(tidyr)
+library(igraph)
+library(purrr)
+library(vroom)
+library(paletteer)
+library(easylayout)
+library(UpSetR)
+library(tinter)
+
+color_mappings <- c(
+  "cell adhesion involved in sprouting angiogenesis"   = "#06141FFF"
+  ,"cell adhesion mediated by integrin"                = "#742C14FF"
+  ,"cell adhesion mediator activity"                   = "#3D4F7DFF"
+  ,"cell-substrate adhesion"                           = "#E48C2AFF"
+  ,"negative regulation of cell adhesion"              ="#72874EFF"
+  ,"positive regulation of cell adhesion"              ="#046E8FFF"
+  ,"protein complex involved in cell adhesion"         = "red"
+  ,"regulation of cell adhesion"                       = "green"
+)
+
+subset_graph_by_root <-
+  function(geneplast_result, root_number, graph) {
+    filtered <- geneplast_result %>%
+      filter(root >= root_number) %>%
+      pull(node)
+    
+    induced_subgraph(graph, which(V(graph)$name %in% filtered))
+  }
+
+adjust_color_by_root <- function(geneplast_result, root_number, graph) {
+  filtered <- geneplast_result %>%
+    filter(root == root_number) %>%
+    pull(node)
+  
+  V(graph)$color <- ifelse(V(graph)$name %in% filtered, "black", "gray")
+  return(graph)
+}
+
+# Configure graph collors by genes incrementation
+subset_and_adjust_color_by_root <- function(geneplast_result, root_number, graph) {
+  subgraph <- subset_graph_by_root(geneplast_result, root_number, graph)
+  adjusted_graph <- adjust_color_by_root(geneplast_result, root_number, subgraph)
+  return(adjusted_graph)
+}
+
+plot_network <- function(graph, title, nodelist, xlims, ylims, legend = "none") {
+  
+  # Generate color map
+  source_statements <-
+    colnames(nodelist)[10:length(nodelist)]
+  
+  color_mappings <- c(
+    "cell adhesion involved in sprouting angiogenesis"   = "#06141FFF"
+    ,"cell adhesion mediated by integrin"                = "#742C14FF"
+    ,"cell adhesion mediator activity"                   = "#3D4F7DFF"
+    ,"cell-substrate adhesion"                           = "#E48C2AFF"
+    ,"negative regulation of cell adhesion"              ="#72874EFF"
+    ,"positive regulation of cell adhesion"              ="#046E8FFF"
+    ,"protein complex involved in cell adhesion"         = "red"
+    ,"regulation of cell adhesion"                       = "green"
+  )
+  
+  vertices <- igraph::as_data_frame(graph, "vertices")
+  
+  ggraph:: ggraph(graph,
+                  "manual",
+                  x = V(graph)$x,
+                  y = V(graph)$y) +
+    ggraph::geom_edge_link0(edge_width = 0.2, color = "#90909020") +
+    ggraph::geom_node_point(ggplot2::aes(color = I(V(graph)$color)), size = 0.5) +
+    scatterpie::geom_scatterpie(
+      aes(x=x, y=y, r=18),
+      cols = source_statements,
+      data = vertices[rownames(vertices) %in% V(graph)$name[V(graph)$color == "black"],],
+      colour = NA,
+      pie_scale = 1
+    ) +
+    geom_node_text(aes(label = ifelse(V(graph)$color == "black", V(graph)$queryItem, NA)), 
+                   nudge_x = 1, nudge_y = 1, size = 0.5, colour = "#BFBEBF") +
+    ggplot2::scale_fill_manual(values = color_mappings, drop = FALSE) +
+    ggplot2::coord_fixed() +
+    ggplot2::scale_x_continuous(limits = xlims) +
+    ggplot2::scale_y_continuous(limits = ylims) +
+    ggplot2::theme_void() +
+    ggplot2::theme(
+      legend.position = legend,
+      legend.key.size = ggplot2::unit(0.5, 'cm'),
+      legend.key.height = ggplot2::unit(0.5, 'cm'),
+      legend.key.width = ggplot2::unit(0.5, 'cm'),
+      legend.title = ggplot2::element_text(size=6),
+      legend.text = ggplot2::element_text(size=6),
+      panel.border = ggplot2::element_rect(
+        colour = "#161616",
+        fill = NA,
+        linewidth = 1
+      ),
+      plot.title = ggplot2::element_text(size = 8, face = "bold")
+    ) +
+    ggplot2::guides(
+      color = "none",
+      fill = "none"
+    ) +
+    ggplot2::labs(fill = "Source:", title = title)
+}
+
+source_statements <- colnames(nodelist)[10:length(nodelist)]
+
+upset(dplyr::select(as.data.frame(nodelist), 
+                   "queryItem", 
+                   "cell adhesion involved in sprouting angiogenesis"
+                   ,"cell adhesion mediated by integrin"
+                   ,"cell adhesion mediator activity"
+                   ,"cell-substrate adhesion"
+                   ,"negative regulation of cell adhesion"
+                   ,"positive regulation of cell adhesion"
+                   ,"protein complex involved in cell adhesion"
+                   ,"regulation of cell adhesion"),
+     nsets = 50, nintersects = NA,
+     #sets.bar.color = c("#06141FFF", "#72874EFF", "#3D4F7DFF",
+     #                   "#742C14FF","#046E8FFF", "#E48C2AFF"), 
+     mainbar.y.label = "Biological Process \nIntersections",
+     sets.x.label = "Set Size")
+
+graph <-
+  graph_from_data_frame(network_filtered, directed = FALSE, vertices = nodelist)
+
+layout <- easylayout::easylayout(graph)
+V(graph)$x <- layout[, 1]
+V(graph)$y <- layout[, 2]
+
+
+
+
+
+calculate_cumulative_genes <- function(nodelist) {
+  
+  # Obter todas as categorias possíveis de clade_name
+  all_clades <- node_annotation %>%
+    arrange(desc(root)) %>%
+    dplyr:: select(clade_name) %>%
+    unique()
+  
+  # Definir as colunas de interesse
+  process_columns <- c("queryItem", "root", "clade_name", 
+                       "cell adhesion involved in sprouting angiogenesis"
+                       ,"cell adhesion mediated by integrin"
+                       ,"cell adhesion mediator activity"
+                       ,"cell-substrate adhesion"
+                       ,"negative regulation of cell adhesion"
+                       ,"positive regulation of cell adhesion"
+                       ,"protein complex involved in cell adhesion"
+                       ,"regulation of cell adhesion")
+  
+  # Calcular o cumulativo agrupando por clade_name
+  cumulative_genes <- nodelist %>%
+    arrange(desc(root)) %>%
+    dplyr::select(all_of(process_columns)) %>%
+    group_by(clade_name, root) %>%
+    summarise(count_genes = n(), .groups = "drop") %>%
+    arrange(desc(root)) %>%
+    mutate(cumulative_sum = cumsum(count_genes)) %>%
+    right_join(all_clades, by = "clade_name") %>%
+    fill(cumulative_sum, .direction = "down")
+  
+  return(cumulative_genes)
+}
+
+calculate_cumulative_bp <- function(nodelist) {
+  
+  # Obter todas as categorias possíveis de clade_name
+  all_clades <- node_annotation %>%
+    arrange(desc(root)) %>%
+    dplyr:: select(clade_name) %>%
+    unique()
+  
+  # Definir as colunas de interesse
+  process_columns <- c("queryItem", "root", "clade_name", 
+                       "cell adhesion involved in sprouting angiogenesis"
+                       ,"cell adhesion mediated by integrin"
+                       ,"cell adhesion mediator activity"
+                       ,"cell-substrate adhesion"
+                       ,"negative regulation of cell adhesion"
+                       ,"positive regulation of cell adhesion"
+                       ,"protein complex involved in cell adhesion"
+                       ,"regulation of cell adhesion")
+  
+  # Calcular a soma cumulativa para cada processo biológico
+  cumulative_bp <- nodelist %>%
+    dplyr::select(all_of(process_columns)) %>%
+    distinct(root, queryItem, .keep_all = TRUE) %>%
+    mutate(across(all_of(process_columns[-c(1:3)]), ~ as.numeric(.))) %>%
+    group_by(root, clade_name) %>%
+    summarise(across(all_of(process_columns[-c(1:3)]), 
+                     ~ sum(. , na.rm = TRUE)),
+              .groups = "drop") %>%
+    arrange(desc(root)) %>%
+    mutate(across(all_of(process_columns[-c(1:3)]), ~ cumsum(.))) %>%
+    right_join(all_clades, by = "clade_name") %>%
+    fill(everything(), .direction = "down")
+  
+  return(cumulative_bp)
+}
+
+node_annotation <- nodelist %>%
+  inner_join(gene_cogs, by = c("node" = "string_id", "cog_id")) %>%
+  inner_join(df, by = c("queryItem" = "external_gene_name")) %>%
+  distinct(queryItem, cog_id, Signature, root, clade_name)
+
+cumulative_genes <- calculate_cumulative_genes(nodelist) 
+cumulative_bp <- calculate_cumulative_bp(nodelist)
+
+cumulative_data <- left_join(cumulative_genes, cumulative_bp)
+
+
+long_data <- cumulative_data %>%
+  pivot_longer(cols = 5:12, 
+               names_to = "Process", 
+               values_to = "Value")
+
+#a <-
+ggplot() +
+  # Gráfico de barras para cumulative_sum
+  geom_bar(data = cumulative_data, 
+           aes(x = factor(clade_name, levels = clade_name), y = cumulative_sum), 
+           stat = "identity", fill = "darkgray", colour = NA) +
+  geom_text(data = cumulative_data, 
+            aes(x = factor(clade_name, levels = clade_name), y = cumulative_sum, label = cumulative_sum), 
+            vjust = -0.5, size = 3, color = "darkgray") +
+  scale_color_manual(values = color_mappings) +
+  
+  labs(x = "Clade Name", y = "Cumulative Sum", 
+       title = "Cumulative Sum and Biological Processes",
+       fill = "Cumulative Sum",
+       color = "Biological Processes") +
+  
+  theme_main +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#b <- 
+ggplot() +
+  # Gráfico de barras para cumulative_sum
+  geom_bar(data = cumulative_data, 
+           aes(x = factor(-root), y = cumulative_sum), 
+           stat = "identity", fill = "darkgray", colour = NA) +
+  geom_text(data = cumulative_data, 
+            aes(x = factor(-root), y = cumulative_sum, label = cumulative_sum), 
+            vjust = -0.5, linewidth = 3, color = "darkgray") +
+  
+  # Gráfico de linhas para os processos biológicos
+  geom_line(data = long_data, 
+            aes(x = factor(-root), y = Value, color = Process, group = Process), 
+            linewidth = 1) +
+  
+  # Usar a paleta de cores definida
+  scale_color_manual(values = color_mappings) +
+  
+  labs(x = "Clade Name", y = "Cumulative Sum", 
+       title = "Cumulative Sum and Biological Processes",
+       fill = "Cumulative Sum",
+       color = "Biological Processes") +
+  
+  theme_main +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
