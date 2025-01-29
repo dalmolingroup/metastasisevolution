@@ -91,7 +91,7 @@ library(here)
 
 # Function to download needed files
 download_if_missing <- function(url, filename = basename(url)) {
-  filename <- here::here("rstudio-scratch/metastasisevolution/assets/", filename)
+  filename <- here::here("assets/", filename)
   if (!file.exists(filename)) {
     download.file(url, filename)
   }
@@ -484,9 +484,68 @@ upset(dplyr::select(as.data.frame(nodelist),
 graph <-
   graph_from_data_frame(network_filtered, directed = FALSE, vertices = nodelist)
 
-layout <- easylayout::easylayout(graph)
-V(graph)$x <- layout[, 1]
-V(graph)$y <- layout[, 2]
+#layout <- easylayout::easylayout(graph)
+#V(graph)$x <- layout[, 1]
+#V(graph)$y <- layout[, 2]
+
+#save(graph, file="_dev/graph_celladhesion.Rdata")
+
+ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
+  geom_edge_link0(color = "#90909020") +
+  geom_node_point(aes(color = -root), size = 2) +
+  theme_void() +
+  theme(legend.position = "left")
+
+
+
+geneplast_roots <- merged_paths |>
+  arrange(root)
+
+buffer <- c(-50, 50)
+xlims <- ceiling(range(V(graph)$x)) + buffer
+ylims <- ceiling(range(V(graph)$y)) + buffer
+
+roots <- unique(geneplast_roots$root) %>%
+  set_names(unique(geneplast_roots$clade_name))
+
+# Subset graphs by LCAs
+subsets <-
+  map(roots, ~ subset_and_adjust_color_by_root(geneplast_roots, .x, graph))
+
+# Plot titles
+titles <- names(roots)
+
+plots <-
+  map2(
+    subsets,
+    titles,
+    plot_network,
+    nodelist = nodelist,
+    xlims = xlims,
+    ylims = ylims,
+    legend = "right"
+  ) %>%
+  discard(is.null)
+
+design <-
+  '123'
+
+#net_all_roots <-
+patchwork::wrap_plots(
+  plots$Metamonada, plots$Choanoflagellata, plots$Actinopterygii,
+  design = design,
+  nrow = 6,
+  ncol = 6
+)
+
+
+
+
+
+
+
+
+
 
 
 
