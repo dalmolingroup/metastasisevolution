@@ -30,4 +30,4 @@ cell-substrate adhesion,GO:0021833 cell-matrix adhesion involved in tangential m
 cell-substrate adhesion,GO:0010810 regulation of cell-substrate adhesion
 cell-substrate adhesion,GO:0007162 negative regulation of cell adhesion
 cell-substrate adhesion,GO:0045785 positive regulation of cell adhesion
-cell-substrate adhesion,[capable_of part of relation]GO:0098636 protein complex involved in cell adhesion
+cell-substrate adhesion,GO:0098636 protein complex involved in cell adhesion
