@@ -1,33 +1,33 @@
 Description,GO_id
-GO:0120078 cell adhesion involved in sprouting angiogenesis,GO:0120078 cell adhesion involved in sprouting angiogenesis
-GO:0033627 cell adhesion mediated by integrin,GO:0033627 cell adhesion mediated by integrin
-GO:0098631 cell adhesion mediator activity,GO:0098631 cell adhesion mediator activity
-GO:0140039 cell-cell adhesion in response to extracellular stimulus,GO:0140039 cell-cell adhesion in response to extracellular stimulus
-GO:0060607 cell-cell adhesion involved in sealing an epithelial fold,GO:0060607 cell-cell adhesion involved in sealing an epithelial fold
-GO:0044331 cell-cell adhesion mediated by cadherin,GO:0044331 cell-cell adhesion mediated by cadherin
-GO:0033631 cell-cell adhesion mediated by integrin,GO:0033631 cell-cell adhesion mediated by integrin
-GO:0098632 cell-cell adhesion mediator activity,GO:0098632 cell-cell adhesion mediator activity
-GO:0098742 cell-cell adhesion via plasma-membrane adhesion molecules,GO:0098742 cell-cell adhesion via plasma-membrane adhesion molecules
-GO:0090136 epithelial cell-cell adhesion,GO:0071603 endothelial cell-cell adhesion
-GO:0090136 epithelial cell-cell adhesion,GO:0090137 epithelial cell-cell adhesion involved in epithelium migration
-GO:0034113 heterotypic cell-cell adhesion,GO:0034115 negative regulation of heterotypic cell-cell adhesion
-GO:0034113 heterotypic cell-cell adhesion,GO:0160015 platelet rolling
-GO:0034113 heterotypic cell-cell adhesion,GO:0034116 positive regulation of heterotypic cell-cell adhesion
-GO:0034113 heterotypic cell-cell adhesion,GO:0086080 protein binding involved in heterotypic cell-cell adhesion
-GO:0034113 heterotypic cell-cell adhesion,GO:0034114 regulation of heterotypic cell-cell adhesion
-GO:0034109 homotypic cell-cell adhesion,GO:0034111 negative regulation of homotypic cell-cell adhesion
-GO:0034109 homotypic cell-cell adhesion,GO:0070527 platelet aggregation
-GO:0034109 homotypic cell-cell adhesion,GO:0034112 positive regulation of homotypic cell-cell adhesion
-GO:0034109 homotypic cell-cell adhesion,GO:0034110 regulation of homotypic cell-cell adhesion
-GO:0007159 leukocyte cell-cell adhesion,GO:0007159 leukocyte cell-cell adhesion
-GO:0022408 negative regulation of cell-cell adhesion,GO:0022408 negative regulation of cell-cell adhesion
-GO:0022409 positive regulation of cell-cell adhesion,GO:0022409 positive regulation of cell-cell adhesion
-GO:0098635 protein complex involved in cell-cell adhesion,GO:0098635 protein complex involved in cell-cell adhesion
-GO:0090138 regulation of actin cytoskeleton organization by cell-cell adhesion,GO:0090138 regulation of actin cytoskeleton organization by cell-cell adhesion
-GO:0022407 regulation of cell-cell adhesion,GO:0022407 regulation of cell-cell adhesion
-GO:0031589 cell-substrate adhesion,GO:0007160 cell-matrix adhesion
-GO:0031589 cell-substrate adhesion,GO:0021833 cell-matrix adhesion involved in tangential migration using cell-cell interactions
-GO:0031589 cell-substrate adhesion,GO:0010810 regulation of cell-substrate adhesion
-GO:0031589 cell-substrate adhesion,GO:0007162 negative regulation of cell adhesion
-GO:0031589 cell-substrate adhesion,GO:0045785 positive regulation of cell adhesion
-GO:0031589 cell-substrate adhesion,[capable_of part of relation]GO:0098636 protein complex involved in cell adhesion
+cell adhesion involved in sprouting angiogenesis,GO:0120078 cell adhesion involved in sprouting angiogenesis
+cell adhesion mediated by integrin,GO:0033627 cell adhesion mediated by integrin
+cell adhesion mediator activity,GO:0098631 cell adhesion mediator activity
+cell-cell adhesion in response to extracellular stimulus,GO:0140039 cell-cell adhesion in response to extracellular stimulus
+cell-cell adhesion involved in sealing an epithelial fold,GO:0060607 cell-cell adhesion involved in sealing an epithelial fold
+cell-cell adhesion mediated by cadherin,GO:0044331 cell-cell adhesion mediated by cadherin
+cell-cell adhesion mediated by integrin,GO:0033631 cell-cell adhesion mediated by integrin
+cell-cell adhesion mediator activity,GO:0098632 cell-cell adhesion mediator activity
+cell-cell adhesion via plasma-membrane adhesion molecules,GO:0098742 cell-cell adhesion via plasma-membrane adhesion molecules
+epithelial cell-cell adhesion,GO:0071603 endothelial cell-cell adhesion
+epithelial cell-cell adhesion,GO:0090137 epithelial cell-cell adhesion involved in epithelium migration
+heterotypic cell-cell adhesion,GO:0034115 negative regulation of heterotypic cell-cell adhesion
+heterotypic cell-cell adhesion,GO:0160015 platelet rolling
+heterotypic cell-cell adhesion,GO:0034116 positive regulation of heterotypic cell-cell adhesion
+heterotypic cell-cell adhesion,GO:0086080 protein binding involved in heterotypic cell-cell adhesion
+heterotypic cell-cell adhesion,GO:0034114 regulation of heterotypic cell-cell adhesion
+homotypic cell-cell adhesion,GO:0034111 negative regulation of homotypic cell-cell adhesion
+homotypic cell-cell adhesion,GO:0070527 platelet aggregation
+homotypic cell-cell adhesion,GO:0034112 positive regulation of homotypic cell-cell adhesion
+homotypic cell-cell adhesion,GO:0034110 regulation of homotypic cell-cell adhesion
+leukocyte cell-cell adhesion,GO:0007159 leukocyte cell-cell adhesion
+negative regulation of cell-cell adhesion,GO:0022408 negative regulation of cell-cell adhesion
+positive regulation of cell-cell adhesion,GO:0022409 positive regulation of cell-cell adhesion
+protein complex involved in cell-cell adhesion,GO:0098635 protein complex involved in cell-cell adhesion
+regulation of actin cytoskeleton organization by cell-cell adhesion,GO:0090138 regulation of actin cytoskeleton organization by cell-cell adhesion
+regulation of cell-cell adhesion,GO:0022407 regulation of cell-cell adhesion
+cell-substrate adhesion,GO:0007160 cell-matrix adhesion
+cell-substrate adhesion,GO:0021833 cell-matrix adhesion involved in tangential migration using cell-cell interactions
+cell-substrate adhesion,GO:0010810 regulation of cell-substrate adhesion
+cell-substrate adhesion,GO:0007162 negative regulation of cell adhesion
+cell-substrate adhesion,GO:0045785 positive regulation of cell adhesion
+cell-substrate adhesion,[capable_of part of relation]GO:0098636 protein complex involved in cell adhesion
