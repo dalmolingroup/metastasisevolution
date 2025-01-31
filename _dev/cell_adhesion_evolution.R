@@ -54,8 +54,8 @@ list_to_df <- function(genesPerTerm, ids) {
 
 
 
-cell_adhesion <- vroom::vroom("_dev/cell_adhesion.csv")
-cell_adhesion <- separate(cell_adhesion, Signature, into = c("GO_id", "Description"), sep = 10, extra = "merge")
+cell_adhesion <- vroom::vroom("_dev/cell_adhesion_BP.csv")
+cell_adhesion <- separate(cell_adhesion, GO_id, into = c("GO_id", "term"), sep = 10, extra = "merge")
 
 # Get genes per GOid
 genesPerTerm <- get_genes_by_GOid(cell_adhesion$GO_id)
@@ -70,6 +70,20 @@ result |>
   vroom::vroom_write(file = here("_dev/cell_adhesion_genes.csv"), delim = ",")
 
 head(result)
+
+#Upset Plot
+pivotada <- result %>% 
+  dplyr::select(external_gene_name, Signature) %>% 
+  dplyr::mutate(n = 1) %>% 
+  tidyr::pivot_wider(
+    id_cols = external_gene_name,
+    names_from = Signature,
+    values_from = n,
+    values_fn = list(n = length),
+    values_fill = list(n = 0),
+  )
+
+UpSetR::upset(as.data.frame(pivotada), nsets = 50, nintersects = NA)
 
 ################################## ORTHOLOGY ROOTING ###############################################
 
@@ -220,12 +234,11 @@ gene_cogs %>% filter(n > 1)
 # Resolving main proteins
 gene_cogs_resolved <- tribble(
   ~string_id, ~cog_id,
-  "ENSP00000239462", "KOG1225",     
-  "ENSP00000265131", "KOG1225",     
-  "ENSP00000265562", "KOG2220", 
-  "ENSP00000359085", "KOG3512", 
-  "ENSP00000361467", "KOG3528",    
-  "ENSP00000418112", "COG5599"    
+  "ENSP00000264808",	"KOG1721",	
+  "ENSP00000359085",  "KOG3512",		
+  "ENSP00000361467",  "KOG3528",		
+  "ENSP00000418112",	"COG5599",		
+  "ENSP00000422533",	"KOG3545"
 )
 
 # Removing unresolved cases and adding manual assignments
@@ -368,14 +381,24 @@ library(UpSetR)
 library(tinter)
 
 color_mappings <- c(
-  "cell adhesion involved in sprouting angiogenesis"   = "#06141FFF"
-  ,"cell adhesion mediated by integrin"                = "#742C14FF"
-  ,"cell adhesion mediator activity"                   = "#3D4F7DFF"
-  ,"cell-substrate adhesion"                           = "#E48C2AFF"
-  ,"negative regulation of cell adhesion"              ="#72874EFF"
-  ,"positive regulation of cell adhesion"              ="#046E8FFF"
-  ,"protein complex involved in cell adhesion"         = "red"
-  ,"regulation of cell adhesion"                       = "green"
+  "cell adhesion involved in sprouting angiogenesis" = "#e01a20",        
+  "cell adhesion mediated by integrin" =  "#75a3cb",                      
+  "cell adhesion mediator activity"   = "#4caf4a",                       
+  
+  "cell-cell adhesion mediated by cadherin"  = "#fbca91",                
+  "cell-cell adhesion mediated by integrin"  = "#fe7f0a",                
+  "cell-cell adhesion mediator activity"     = "#fdfe35",                
+  "cell-cell adhesion via plasma-membrane adhesion molecules"   = "#feffb3",
+  "epithelial cell-cell adhesion"                            = "#f583c1",
+  "heterotypic cell-cell adhesion"                           = "#984ea2",
+  "homotypic cell-cell adhesion"                             = "#fe7f72",
+  "leukocyte cell-cell adhesion"                             = "#fcca92",
+  "negative regulation of cell-cell adhesion"                = "#fadaea",
+  "positive regulation of cell-cell adhesion"                = "#bebbda",
+  "protein complex involved in cell-cell adhesion"           = "#ba81b8",
+ 
+   "regulation of cell-cell adhesion"                         = "#a75327",
+  "cell-substrate adhesion"    = "#979897"
 )
 
 subset_graph_by_root <-
@@ -410,14 +433,24 @@ plot_network <- function(graph, title, nodelist, xlims, ylims, legend = "none") 
     colnames(nodelist)[10:length(nodelist)]
   
   color_mappings <- c(
-    "cell adhesion involved in sprouting angiogenesis"   = "#06141FFF"
-    ,"cell adhesion mediated by integrin"                = "#742C14FF"
-    ,"cell adhesion mediator activity"                   = "#3D4F7DFF"
-    ,"cell-substrate adhesion"                           = "#E48C2AFF"
-    ,"negative regulation of cell adhesion"              ="#72874EFF"
-    ,"positive regulation of cell adhesion"              ="#046E8FFF"
-    ,"protein complex involved in cell adhesion"         = "red"
-    ,"regulation of cell adhesion"                       = "green"
+    "cell adhesion involved in sprouting angiogenesis" = "#e01a20",        
+    "cell adhesion mediated by integrin" =  "#75a3cb",                      
+    "cell adhesion mediator activity"   = "#4caf4a",                       
+    
+    "cell-cell adhesion mediated by cadherin"  = "#fbca91",                
+    "cell-cell adhesion mediated by integrin"  = "#fe7f0a",                
+    "cell-cell adhesion mediator activity"     = "#fdfe35",                
+    "cell-cell adhesion via plasma-membrane adhesion molecules"   = "#feffb3",
+    "epithelial cell-cell adhesion"                            = "#f583c1",
+    "heterotypic cell-cell adhesion"                           = "#984ea2",
+    "homotypic cell-cell adhesion"                             = "#fe7f72",
+    "leukocyte cell-cell adhesion"                             = "#fcca92",
+    "negative regulation of cell-cell adhesion"                = "#fadaea",
+    "positive regulation of cell-cell adhesion"                = "#bebbda",
+    "protein complex involved in cell-cell adhesion"           = "#ba81b8",
+    
+    "regulation of cell-cell adhesion"                         = "#a75327",
+    "cell-substrate adhesion"    = "#979897"
   )
   
   vertices <- igraph::as_data_frame(graph, "vertices")
@@ -467,14 +500,21 @@ source_statements <- colnames(nodelist)[10:length(nodelist)]
 
 upset(dplyr::select(as.data.frame(nodelist), 
                    "queryItem", 
-                   "cell adhesion involved in sprouting angiogenesis"
-                   ,"cell adhesion mediated by integrin"
-                   ,"cell adhesion mediator activity"
-                   ,"cell-substrate adhesion"
-                   ,"negative regulation of cell adhesion"
-                   ,"positive regulation of cell adhesion"
-                   ,"protein complex involved in cell adhesion"
-                   ,"regulation of cell adhesion"),
+                   "cell adhesion involved in sprouting angiogenesis"         
+                   ,"cell adhesion mediated by integrin"                       
+                   ,"cell adhesion mediator activity"                          
+                   ,"cell-cell adhesion mediated by cadherin"                  
+                   ,"cell-cell adhesion mediated by integrin"                  
+                   ,"cell-cell adhesion mediator activity"                     
+                   ,"cell-cell adhesion via plasma-membrane adhesion molecules"
+                   ,"epithelial cell-cell adhesion"                            
+                   ,"heterotypic cell-cell adhesion"                           
+                   ,"homotypic cell-cell adhesion"                             
+                   ,"leukocyte cell-cell adhesion"                             
+                   ,"negative regulation of cell-cell adhesion"                
+                   ,"positive regulation of cell-cell adhesion"                
+                   ,"protein complex involved in cell-cell adhesion"           
+                   ,"regulation of cell-cell adhesion"   ),
      nsets = 50, nintersects = NA,
      #sets.bar.color = c("#06141FFF", "#72874EFF", "#3D4F7DFF",
      #                   "#742C14FF","#046E8FFF", "#E48C2AFF"), 
@@ -489,6 +529,8 @@ graph <-
 #V(graph)$y <- layout[, 2]
 
 #save(graph, file="_dev/graph_celladhesion.Rdata")
+
+load("_dev/graph_celladhesion.Rdata")
 
 ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   geom_edge_link0(color = "#90909020") +
@@ -561,14 +603,21 @@ calculate_cumulative_genes <- function(nodelist) {
   
   # Definir as colunas de interesse
   process_columns <- c("queryItem", "root", "clade_name", 
-                       "cell adhesion involved in sprouting angiogenesis"
-                       ,"cell adhesion mediated by integrin"
-                       ,"cell adhesion mediator activity"
-                       ,"cell-substrate adhesion"
-                       ,"negative regulation of cell adhesion"
-                       ,"positive regulation of cell adhesion"
-                       ,"protein complex involved in cell adhesion"
-                       ,"regulation of cell adhesion")
+                       "cell adhesion involved in sprouting angiogenesis"         
+                       ,"cell adhesion mediated by integrin"                       
+                       ,"cell adhesion mediator activity"                          
+                       ,"cell-cell adhesion mediated by cadherin"                  
+                       ,"cell-cell adhesion mediated by integrin"                  
+                       ,"cell-cell adhesion mediator activity"                     
+                       ,"cell-cell adhesion via plasma-membrane adhesion molecules"
+                       ,"epithelial cell-cell adhesion"                            
+                       ,"heterotypic cell-cell adhesion"                           
+                       ,"homotypic cell-cell adhesion"                             
+                       ,"leukocyte cell-cell adhesion"                             
+                       ,"negative regulation of cell-cell adhesion"                
+                       ,"positive regulation of cell-cell adhesion"                
+                       ,"protein complex involved in cell-cell adhesion"           
+                       ,"regulation of cell-cell adhesion")
   
   # Calcular o cumulativo agrupando por clade_name
   cumulative_genes <- nodelist %>%
@@ -594,14 +643,21 @@ calculate_cumulative_bp <- function(nodelist) {
   
   # Definir as colunas de interesse
   process_columns <- c("queryItem", "root", "clade_name", 
-                       "cell adhesion involved in sprouting angiogenesis"
-                       ,"cell adhesion mediated by integrin"
-                       ,"cell adhesion mediator activity"
-                       ,"cell-substrate adhesion"
-                       ,"negative regulation of cell adhesion"
-                       ,"positive regulation of cell adhesion"
-                       ,"protein complex involved in cell adhesion"
-                       ,"regulation of cell adhesion")
+                       "cell adhesion involved in sprouting angiogenesis"         
+                       ,"cell adhesion mediated by integrin"                       
+                       ,"cell adhesion mediator activity"                          
+                       ,"cell-cell adhesion mediated by cadherin"                  
+                       ,"cell-cell adhesion mediated by integrin"                  
+                       ,"cell-cell adhesion mediator activity"                     
+                       ,"cell-cell adhesion via plasma-membrane adhesion molecules"
+                       ,"epithelial cell-cell adhesion"                            
+                       ,"heterotypic cell-cell adhesion"                           
+                       ,"homotypic cell-cell adhesion"                             
+                       ,"leukocyte cell-cell adhesion"                             
+                       ,"negative regulation of cell-cell adhesion"                
+                       ,"positive regulation of cell-cell adhesion"                
+                       ,"protein complex involved in cell-cell adhesion"           
+                       ,"regulation of cell-cell adhesion")
   
   # Calcular a soma cumulativa para cada processo biológico
   cumulative_bp <- nodelist %>%
@@ -620,6 +676,23 @@ calculate_cumulative_bp <- function(nodelist) {
   return(cumulative_bp)
 }
 
+theme_main <- theme(
+  panel.spacing      = unit(2.5, "pt")
+  ,strip.background   = element_blank()
+  ,panel.grid.major.x = element_blank()
+  ,panel.grid.major.y = element_line(linewidth = 0.25, linetype = "dotted", color = "#E0E0E0")
+  ,strip.text.x       = element_text(size = 9, angle = 90, hjust = 0, vjust = 0.5, color = "#757575")
+  ,strip.text.y       = element_text(size = 10, angle = 0, hjust = 0, vjust = 0.5, color = "#757575")
+  ,axis.title         = element_text(size = 15, color = "#424242")
+  ,axis.ticks.x       = element_blank()
+  ,axis.text.x        = element_blank()
+  ,axis.text.y        = element_text(size = 5.5)
+  ,legend.position    = "none"
+)
+
+
+
+
 node_annotation <- nodelist %>%
   inner_join(gene_cogs, by = c("node" = "string_id", "cog_id")) %>%
   inner_join(df, by = c("queryItem" = "external_gene_name")) %>%
@@ -632,7 +705,7 @@ cumulative_data <- left_join(cumulative_genes, cumulative_bp)
 
 
 long_data <- cumulative_data %>%
-  pivot_longer(cols = 5:12, 
+  pivot_longer(cols = 5:19, 
                names_to = "Process", 
                values_to = "Value")
 
