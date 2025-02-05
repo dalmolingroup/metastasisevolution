@@ -1,10 +1,15 @@
 setwd("/home/gleison/Documents/metastasisevolution/")
 
 load("results/plots/graph")
-nodelist <- vroom::vroom("results/orthology_data/nodelist.csv")
+nodelist <- vroom::vroom("results/orthology_data/nodelist.csv") %>%
+  mutate(node_color = case_when(
+    clade_name == "Metamonada" ~ "#B3E6C6FF",
+    clade_name == "Choanoflagellata" ~ "#FFCCCCFF",
+    clade_name == "Actinopterygii" ~ "#99CCFFFF",
+    TRUE ~ "#999999FF"
+  ))
 
-
-
+library(dplyr)
 library(RedeR)
 library(igraph)
 
@@ -16,76 +21,78 @@ resetRedeR()
 
 g3 <- subg(g = graph, dat = nodelist[nodelist$root %in% 20:37, ], refcol = 1, connected = F, maincomp = F, transdat = T)
 g3  <- att.setv(g=g3, from="queryItem", to="nodeLabel")
-V(g3)$nodeColor <- ifelse(V(g3)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
+#g3 <- att.setv(g=g3, from = "node_color", to="nodeColor")
+#V(g3)$nodeColor <- ifelse(V(g3)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
+V(g3)$nodeColor <- V(g3)$node_color
+V(g3)$nodeSize <- 35
 
 g2 <- subg(g = graph, dat = nodelist[nodelist$root %in% 30:37, ], refcol = 1, connected = F, maincomp = F, transdat = T)
 g2  <- att.setv(g=g2, from="queryItem", to="nodeLabel")
-V(g2)$nodeColor <- ifelse(V(g2)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
-
+#g2 <- att.setv(g=g2, from = "node_color", to="nodeColor")
+#V(g2)$nodeColor <- ifelse(V(g2)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
+V(g2)$nodeColor <- V(g2)$node_color
+V(g2)$nodeSize <- 35
 
 g1 <- subg(g = graph, dat = nodelist[nodelist$root %in% 37, ], refcol = 1, connected = F, maincomp = F, transdat = T)
 g1  <- att.setv(g=g1, from="queryItem", to="nodeLabel")
-V(g1)$nodeColor <- ifelse(V(g1)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
+#g1 <- att.setv(g=g1, from = "node_color", to="nodeColor")
+#V(g1)$nodeColor <- ifelse(V(g1)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
+V(g1)$nodeColor <- V(g1)$node_color
+V(g1)$nodeSize <- 35
+
+#g1$nestAlias <- "Human-Actinopterygii"
+#g2$nestAlias <- "LCA"
+# g3$nestAlias <- "LCA"
+
+#N1 <- addGraphToRedeR( g1, gcoord=c(10,25), gscale=20, isNested=TRUE, theme='tm1', zoom=30)
+#N2 <- addGraphToRedeR( g2, gcoord=c(20,70), gscale=50, isNested=TRUE, theme='tm1', zoom=30)
+
+N3 <- addGraphToRedeR( g3, gcoord=c(0,0), gscale=80, isNested=FALSE, theme='tm1', zoom=30)
+N3 <- nestNodes(nodes = V(g3)$name, parent = N3, theme = 'tm1', gatt = list(nestLabel = "Human-Actinopterygii",
+                                                                            nestShape = "Circle",
+                                                                            nestSize = 3000,
+                                                                            nestLabelSize = 80,
+                                                                            nestLabelColor = "#99CCFFFF",
+                                                                            nestLabelCoords = c(x=-10, y=-2000),
+                                                                            nestLineType = "SOLID",
+                                                                            nestLineWidth = 15,
+                                                                            nestLineColor = "#99CCFFFF"))
+  
+
+#N4 <- nestNodes( nodes=V(g1)$name, parent=N2, theme='tm1', status = "transparent")
+N5 <- nestNodes(nodes=V(g2)$name, gcoord = c(40, 57), parent=N3, theme='tm1', gatt = list(nestLabel = "Human-Choanoflagellata",
+                                                                       nestShape = "Circle",
+                                                                       nestSize = 2300,
+                                                                       nestLabelSize = 80,
+                                                                       nestLabelColor = "#FFCCCCFF",
+                                                                       nestLabelCoords = c(x=-9, y=-1780),
+                                                                       nestLineType = "SOLID",
+                                                                       nestLineWidth = 15,
+                                                                       nestLineColor = "#FFCCCCFF"))
 
 
+nestNodes( nodes=V(g1)$name, gcoord = c(41, 62), parent=N5, theme='tm1', gatt = list(nestLabel = "Human-Metamonada",
+                                                               nestShape = "Circle",
+                                                               nestSize = 1600,
+                                                               nestLabelSize = 80,
+                                                               nestLabelColor = "#B3E6C6FF",
+                                                               nestLabelCoords = c(x=-7, y=-1500),
+                                                               nestLineType = "SOLID",
+                                                               nestLineWidth = 15,
+                                                               nestLineColor = "#B3E6C6FF"))
 
-g1$nestAlias <- "LCA"
-g2$nestAlias <- "LCA"
-g3$nestAlias <- "LCA"
+mergeOutEdges( nlevels=2)
 
-N1 <- addGraphToRedeR( g1, gcoord=c(10,25), gscale=20, isNested=TRUE, theme='tm1', zoom=30)
-N2 <- addGraphToRedeR( g2, gcoord=c(20,70), gscale=50, isNested=TRUE, theme='tm1', zoom=30)
-N3 <- addGraphToRedeR( g3, gcoord=c(70,55), gscale=80, isNested=TRUE, theme='tm1', zoom=30)
+# RedeR force-directed parameters
+#p1: 800
+#p2: 500
+#p3: 100
+#p4: 200
+#p5: 50
+#p6: 10
+#p7: 500
+#p8: 400
+#p9: 500
 
-N4 <- nestNodes( nodes=V(g1)$name, parent=N2, theme='tm1', status = "transparent")
-N5 <- nestNodes( nodes=V(g2)$name, parent=N3, theme='tm1')
-nestNodes( nodes=V(g1)$name, parent=N5, theme='tm1')
+a <- getGraphFromRedeR(status = "all", attribs = "all", type = "all")
 
-#mergeOutEdges( nlevels=2)
-
-
-#relax(rdp, p1=100, p2=100, p3=5, p4=150, p5=5, p8=10, p9=20)
-#selectNodes(rdp,"RET")
-
-
-
-# library("RedeR")
-# library("igraph")
-# 
-# resetRedeR()
-# 
-# #############################################################3
-# g1 <- subg(g = graph, dat = nodelist[nodelist$root %in% 37, ], refcol = 1)
-# g1  <- att.setv(g=g1, from="queryItem", to="nodeLabel")
-# V(g1)$nodeColor <- ifelse(V(g1)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
-# 
-# g2 <- subg(g = graph, dat = nodelist[nodelist$root %in% 31:37, ], refcol = 1)
-# g2  <- att.setv(g=g2, from="queryItem", to="nodeLabel")
-# V(g2)$nodeColor <- ifelse(V(g2)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
-# 
-# g3 <- subg(g = graph, dat = nodelist[nodelist$root %in% 30:37, ], refcol = 1)
-# g3  <- att.setv(g=g3, from="queryItem", to="nodeLabel")
-# V(g3)$nodeColor <- ifelse(V(g3)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
-# 
-# g4 <- subg(g = graph, dat = nodelist[nodelist$root %in% 21:37, ], refcol = 1)
-# g4  <- att.setv(g=g4, from="queryItem", to="nodeLabel")
-# V(g4)$nodeColor <- ifelse(V(g4)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
-# 
-# g5 <- subg(g = graph, dat = nodelist[nodelist$root %in% 20:37, ], refcol = 1)
-# g5  <- att.setv(g=g5, from="queryItem", to="nodeLabel")
-# V(g5)$nodeColor <- ifelse(V(g5)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
-# 
-# N1 <- addGraphToRedeR( g1, gcoord=c(10,25), gscale=20, isNested=TRUE, theme='tm1', zoom=30)
-# N2 <- addGraphToRedeR( g2, gcoord=c(20,70), gscale=50, isNested=TRUE, theme='tm1', zoom=30)
-# N3 <- addGraphToRedeR( g3, gcoord=c(70,55), gscale=80, isNested=TRUE, theme='tm1', zoom=30)
-# N4 <- addGraphToRedeR( g4, gcoord=c(70,55), gscale=80, isNested=TRUE, theme='tm1', zoom=30)
-# N5 <- addGraphToRedeR( g5, gcoord=c(70,55), gscale=80, isNested=TRUE, theme='tm1', zoom=30)
-# 
-# 
-# N6 <- nestNodes( nodes=V(g4)$name, parent=N5, theme='tm1')
-# N7 <- nestNodes( nodes=V(g3)$name, parent=N6, theme='tm1')
-# N8 <- nestNodes( nodes=V(g2)$name, parent=N8, theme='tm1')
-# 
-# nestNodes( nodes=V(g1)$name, parent=N7 , theme='tm1')
-# 
-# 
