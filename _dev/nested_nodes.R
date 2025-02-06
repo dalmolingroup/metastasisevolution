@@ -84,15 +84,16 @@ nestNodes( nodes=V(g1)$name, gcoord = c(41, 62), parent=N5, theme='tm1', gatt = 
 mergeOutEdges( nlevels=2)
 
 # RedeR force-directed parameters
-#p1: 800
-#p2: 500
-#p3: 100
-#p4: 200
-#p5: 50
-#p6: 10
-#p7: 500
-#p8: 400
-#p9: 500
-
+# relaxRedeR(
+#p1 = 800,
+#p2 = 500,
+#p3 = 100,
+#p4 = 200,
+#p5 = 50,
+#p6 = 10,
+#p7 = 500,
+#p8 = 400,
+#p9 = 500
+#)
 a <- getGraphFromRedeR(status = "all", attribs = "all", type = "all")
 
