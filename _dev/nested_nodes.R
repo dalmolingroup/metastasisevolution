@@ -1,3 +1,7 @@
+library(dplyr)
+library(RedeR)
+library(igraph)
+
 setwd("/home/gleison/Documents/metastasisevolution/")
 
 load("results/plots/graph")
@@ -7,14 +11,12 @@ nodelist <- vroom::vroom("results/orthology_data/nodelist.csv") %>%
     clade_name == "Choanoflagellata" ~ "#FFCCCCFF",
     clade_name == "Actinopterygii" ~ "#99CCFFFF",
     TRUE ~ "#999999FF"
+  )) %>%
+  mutate(node_size = case_when(
+    clade_name %in% c("Metamonada","Choanoflagellata","Actinopterygii") ~ 50,
+    TRUE ~ 35
   ))
 
-library(dplyr)
-library(RedeR)
-library(igraph)
-
-#rdp <- RedPort()
-#calld(rdp)
 startRedeR()
 
 resetRedeR()
@@ -24,21 +26,21 @@ g3  <- att.setv(g=g3, from="queryItem", to="nodeLabel")
 #g3 <- att.setv(g=g3, from = "node_color", to="nodeColor")
 #V(g3)$nodeColor <- ifelse(V(g3)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
 V(g3)$nodeColor <- V(g3)$node_color
-V(g3)$nodeSize <- 35
+V(g3)$nodeSize <- V(g3)$node_size
 
 g2 <- subg(g = graph, dat = nodelist[nodelist$root %in% 30:37, ], refcol = 1, connected = F, maincomp = F, transdat = T)
 g2  <- att.setv(g=g2, from="queryItem", to="nodeLabel")
 #g2 <- att.setv(g=g2, from = "node_color", to="nodeColor")
 #V(g2)$nodeColor <- ifelse(V(g2)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
 V(g2)$nodeColor <- V(g2)$node_color
-V(g2)$nodeSize <- 35
+V(g2)$nodeSize <- V(g2)$node_size
 
 g1 <- subg(g = graph, dat = nodelist[nodelist$root %in% 37, ], refcol = 1, connected = F, maincomp = F, transdat = T)
 g1  <- att.setv(g=g1, from="queryItem", to="nodeLabel")
 #g1 <- att.setv(g=g1, from = "node_color", to="nodeColor")
 #V(g1)$nodeColor <- ifelse(V(g1)$clade_name  %in% c("Metamonada","Choanoflagellata", "Actinopterygii"), "black", "gray")
 V(g1)$nodeColor <- V(g1)$node_color
-V(g1)$nodeSize <- 35
+V(g1)$nodeSize <- V(g1)$node_size
 
 #g1$nestAlias <- "Human-Actinopterygii"
 #g2$nestAlias <- "LCA"
@@ -84,16 +86,17 @@ nestNodes( nodes=V(g1)$name, gcoord = c(41, 62), parent=N5, theme='tm1', gatt = 
 mergeOutEdges( nlevels=2)
 
 # RedeR force-directed parameters
-# relaxRedeR(
-#p1 = 800,
-#p2 = 500,
-#p3 = 100,
-#p4 = 200,
-#p5 = 50,
-#p6 = 10,
-#p7 = 500,
-#p8 = 400,
-#p9 = 500
-#)
-a <- getGraphFromRedeR(status = "all", attribs = "all", type = "all")
-
+ relaxRedeR(
+p1 = 200,
+p2 = 500,
+p3 = 200,
+p4 = 350,
+p5 = 50,
+p6 = 75,
+p7 = 100,
+p8 = 300,
+p9 = 1500
+)
+ 
+a <- getGraphFromRedeR()
+b <- graph_from_edgelist(a, vertices = nodelist, directed = F)
