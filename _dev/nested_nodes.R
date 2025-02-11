@@ -99,14 +99,14 @@ p9 = 1500
 )
  
 a <- getGraphFromRedeR()
-b <- graph_from_edgelist(a, vertices = nodelist, directed = F)
 
 
 
 #########################################################################################################3
-
+library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(scales)
 
 nodelist <- vroom::vroom("results/orthology_data/nodelist.csv")
 
@@ -167,33 +167,93 @@ plot_stacked_bar_chart <- function(data) {
   clados_interesse <- c("Metamonada", "Actinopterygii", "Choanoflagellata")
   
   filtered_data <- data %>%
-    filter(clade_name %in% clados_interesse)
+    filter(clade_name %in% clados_interesse) %>%
+    mutate(clade_name = factor(clade_name, levels = clados_interesse)) 
   
   # Criar o gráfico de barras empilhadas
   ggplot(filtered_data, aes(x = clade_name, y = proportion, fill = process)) +
-    geom_bar(stat = "identity", color = "black", width = 0.7) +
+    geom_bar(position = "fill", stat = "identity", color = "black", width = 0.7) +
     theme_minimal() +
     labs(
-      title = "Distribuição dos Processos Biológicos por Clado",
-      x = "Clado",
-      y = "Proporção de Genes",
-      fill = "Processo Biológico"
+      title = "Percent BP by Clades",
+      x="",
+      y = "Genes Proportion",
+      fill = "Biological Processes"
     ) +
-    scale_fill_brewer(palette = "Paired") +
+    paletteer::scale_fill_paletteer_d("nationalparkcolors::Acadia") +
     theme(
       axis.text = element_text(size = 12),
-      axis.title = element_text(size = 14, face = "bold"),
+      axis.title = element_text(size = 14),
       legend.position = "right",
       plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
     )
 }
 
 # Exemplo de uso:
-# resultado <- contar_processos_por_clado(nodelist)
-# plot_stacked_bar_chart(resultado)
+ resultado <- BP_by_clade(nodelist)
+ plot_stacked_bar_chart(resultado)
 
  # Exemplo de uso:
 # resultado <- contar_processos_por_clado(nodelist)
  plot_donut_chart(df_proportion, "Metamonada")
  plot_donut_chart(df_proportion, "Choanoflagellata")
  plot_donut_chart(df_proportion, "Actinopterygii")
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ plot_stacked_bar_chart <- function(data) {
+   # Definir os grupos de interesse
+   clados_interesse <- c("Metamonada", "Choanoflagellata", "Actinopterygii")
+   
+   # Criar as categorias "Outros" com base nos intervalos de root
+   filtered_data <- data %>%
+     mutate(clade_group = case_when(
+       clade_name == "Metamonada" ~ "Metamonada",
+       root >= 31 & root <= 36 ~ "Intermediate M-C",
+       clade_name == "Choanoflagellata" ~ "Choanoflagellata",
+       root >= 21 & root <= 29 ~ "Intermediate C-A",
+       clade_name == "Actinopterygii" ~ "Actinopterygii",
+       TRUE ~ NA_character_
+     )) %>%
+     filter(!is.na(clade_group)) %>%
+     mutate(clade_group = factor(clade_group, 
+                                 levels = c("Metamonada", "Intermediate M-C", 
+                                            "Choanoflagellata", "Intermediate C-A", 
+                                            "Actinopterygii")))
+   
+   # Ajustar a largura das barras: mais finas para "Outros"
+   filtered_data <- filtered_data %>%
+     mutate(bar_width = ifelse(grepl("Intermediate", clade_group), 0.4, 0.8))
+   
+   # Criar o gráfico de barras empilhadas com larguras ajustadas
+   ggplot(filtered_data, aes(x = clade_group, y = proportion, fill = process, width = bar_width)) +
+     geom_bar(position = "fill", stat = "identity", color = NA) +
+     theme_minimal() +
+     labs(
+       title = "Biological Process Distribution",
+       x="",
+       y = "Genes Proportion",
+       fill = "Biological Processes"
+     ) +
+     paletteer::scale_fill_paletteer_d("nationalparkcolors::Acadia") +
+     scale_y_continuous(labels = scales::percent) +
+     theme(
+       axis.text = element_text(size = 12),
+       axis.title = element_text(size = 14, face = "bold"),
+       legend.position = "right",
+       plot.title = element_text(size = 16, hjust = 0.5),
+       panel.grid = element_blank()
+     )
+ }
+ # Exemplo de uso:
+  resultado <- contar_processos_por_clado(nodelist)
+  plot_stacked_bar_chart(resultado)
+  
