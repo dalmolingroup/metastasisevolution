@@ -100,3 +100,100 @@ p9 = 1500
  
 a <- getGraphFromRedeR()
 b <- graph_from_edgelist(a, vertices = nodelist, directed = F)
+
+
+
+#########################################################################################################3
+
+library(dplyr)
+library(tidyr)
+
+nodelist <- vroom::vroom("results/orthology_data/nodelist.csv")
+
+BP_by_clade <- function(nodelist) {
+  # Selecionar colunas de processos biológicos
+  process_cols <- c("cellular extravasation", "cell junction organization", 
+                    "cell adhesion", "extracellular matrix organization", 
+                    "epithelial to mesenchymal transition", 
+                    "regulation of metallopeptidase activity")
+  
+  # Transformar em formato longo
+  long_df <- nodelist %>%
+    pivot_longer(cols = all_of(process_cols), 
+                 names_to = "process", 
+                 values_to = "participation") %>%
+    filter(participation == 1)  # Considerar apenas genes que participam do processo
+  
+  # Contagem de genes por processo e clado
+  summary_df <- long_df %>%
+    group_by(clade_name, process) %>%
+    summarise(genes_in_process = n(), .groups = 'drop')
+  
+  # Calcular o total de genes por processo (todos os clados)
+  total_genes_per_process <- long_df %>%
+    group_by(process) %>%
+    summarise(total_genes_in_process = n(), .groups = 'drop')
+  
+  # Juntar as informações e calcular a proporção
+  final_df <- summary_df %>%
+    left_join(total_genes_per_process, by = "process") %>%
+    mutate(proportion = genes_in_process / total_genes_in_process)
+  
+  return(final_df)
+}
+
+df_proportion <- BP_by_clade(nodelist)
+
+
+plot_donut_chart <- function(data, clado_selecionado) {
+    # Filtrar o clado de interesse
+    clado_data <- data %>%
+    filter(clade_name == clado_selecionado)
+   
+    # Criar o gráfico do tipo donut
+    ggplot(clado_data, aes(x = 2, y = proportion, fill = process)) +
+       geom_col(width = 0.1, color = "white") +
+       coord_polar(theta = "y") +
+       xlim(0.5, 2.5) +
+       theme_void() +
+       theme(legend.position = "right") +
+       labs(title = paste("Distribuição dos Processos Biológicos em", clado_selecionado),
+            fill = "Processo Biológico") +
+       scale_fill_brewer(palette = "Set3")
+}
+
+plot_stacked_bar_chart <- function(data) {
+  # Filtrar os clados de interesse
+  clados_interesse <- c("Metamonada", "Actinopterygii", "Choanoflagellata")
+  
+  filtered_data <- data %>%
+    filter(clade_name %in% clados_interesse)
+  
+  # Criar o gráfico de barras empilhadas
+  ggplot(filtered_data, aes(x = clade_name, y = proportion, fill = process)) +
+    geom_bar(stat = "identity", color = "black", width = 0.7) +
+    theme_minimal() +
+    labs(
+      title = "Distribuição dos Processos Biológicos por Clado",
+      x = "Clado",
+      y = "Proporção de Genes",
+      fill = "Processo Biológico"
+    ) +
+    scale_fill_brewer(palette = "Paired") +
+    theme(
+      axis.text = element_text(size = 12),
+      axis.title = element_text(size = 14, face = "bold"),
+      legend.position = "right",
+      plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+    )
+}
+
+# Exemplo de uso:
+# resultado <- contar_processos_por_clado(nodelist)
+# plot_stacked_bar_chart(resultado)
+
+ # Exemplo de uso:
+# resultado <- contar_processos_por_clado(nodelist)
+ plot_donut_chart(df_proportion, "Metamonada")
+ plot_donut_chart(df_proportion, "Choanoflagellata")
+ plot_donut_chart(df_proportion, "Actinopterygii")
