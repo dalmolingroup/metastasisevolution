@@ -373,3 +373,21 @@ plot_stacked_bar_chart <- function(data) {
   # Exemplo de chamada da função
    plot_piedonut_chart(resultado)
   
+   
+   ######################################################################################
+   library(phyper)
+   nodelist <- vroom::vroom("results/orthology_data/nodelist.csv") %>% 
+     filter(., root >= 20)
+   
+   
+   # N -> Número de genes total = Universo
+   # M -> Número de genes do set do Gene Ontoloy
+   # n -> Número de genes da sua lista de interesse
+   # k -> Número de genes na interseção entre M e n
+   N <- length(nodelist$queryItem)
+   M <- sum(nodelist$`cell adhesion`)
+   n <- length(nodelist$clade_name == "Choanoflagellata")
+   k <- sum(filter(nodelist, clade_name == "Choanoflagellata")$`cell adhesion`)
+   
+   a <- 1 - phyper(k - 1, M, N - M, n)
+   
