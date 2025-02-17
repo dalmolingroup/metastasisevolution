@@ -395,7 +395,7 @@ plot_stacked_bar_chart <- function(data) {
    
   ######################################################################################
    # Definir clados de interesse e processos
-   clados_interesse <- c("Choanoflagellata", "Metamonada", "Actinopterygii") # Defina os clados que deseja comparar
+   clados_interesse <- unique(nodelist$clade_name) # Defina os clados que deseja comparar
    processos <- c("cell adhesion", "extracellular matrix organization", 
                   "epithelial to mesenchymal transition", "regulation of metallopeptidase activity", 
                   "cell junction organization", "cellular extravasation")

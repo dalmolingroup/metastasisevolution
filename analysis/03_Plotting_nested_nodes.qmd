@@ -25,6 +25,7 @@ library(ggraph)
 library(ggforce)
 library(tidyr)
 library(scales)
+library(ggtext)
 ```
 
 ## Load Data
@@ -303,54 +304,74 @@ plot_stacked_bar_chart(df_proportion)
 ## Hipergeometric Test
 
 ```{r}
- clades <- c("Choanoflagellata", "Metamonada", "Actinopterygii") # Defina os clados que deseja comparar
+nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
+
+   clades <- unique(nodelist$clade_name) # Defina os clados que deseja comparar
    processes <- c("cell adhesion", "extracellular matrix organization", 
                   "epithelial to mesenchymal transition", "regulation of metallopeptidase activity", 
                   "cell junction organization", "cellular extravasation")
    
-   # Criar uma lista para armazenar os resultados
+  
    result <- list()
    
-   # Calcular o teste hipergeométrico para cada combinação de processo e clado
    for (process in processes) {
      for (clade in clades) {
        
-       # Calcular valores N, M, n, k para o teste hipergeométrico
-       N <- length(nodelist$queryItem)  # Número total de genes
-       M <- sum(nodelist[[process]])  # Número de genes do Gene Ontology para o processo
-       n <- length(which(nodelist$clade_name == clade))  # Número de genes no clado de interesse
-       k <- sum(filter(nodelist, clade_name == clade)[[process]])  # Número de genes no clado de interesse para o processo
+       N <- length(nodelist$queryItem)  
+       M <- sum(nodelist[[process]])  
+       n <- length(which(nodelist$clade_name == clade))  
+       k <- sum(filter(nodelist, clade_name == clade)[[process]])  
        
-       # Realizar o teste hipergeométrico
        p_valor <- 1 - phyper(k - 1, M, N - M, n)
        
-       # Armazenar os resultados
        result[[paste(process, clade, sep = "_")]] <- c(process, clade, k, M, N, n, p_valor)
      }
    }
    
-   # Converter os resultados em um data frame
    hipergeometric_df <- do.call(rbind, result) %>%
      as.data.frame() %>%
-     setNames(c("Processo", "Clado", "k", "M", "N", "n", "P_valor")) %>% 
-     rownames(NA)
+     setNames(c("Process", "clade_name", "k", "M", "N", "n", "p.val")) %>% 
+     arrange(p.val)
+     rownames(hipergeometric_df) <- NULL
    
-   # Visualizar o data frame
-   print(hipergeometric_df)
+   head(hipergeometric_df)
 ```
+
+
 ```{r}
-resultado_df$P_valor <- as.numeric(resultado_df$P_valor)
+hipergeometric_df$p.val <- as.numeric(hipergeometric_df$p.val)
+hipergeometric_df$p.val_color <- ifelse(hipergeometric_df$p.val > 0.05, "gray", "red")
 
-resultado_df$P_valor_cor <- ifelse(resultado_df$P_valor > 0.05, "gray", "red")
+i <- nodelist %>% 
+  select(clade_name, root) %>% 
+  unique()
 
-# Criar o gráfico
-ggplot(resultado_df, aes(x = Processo, y = Clado, size = n, color = P_valor_cor)) +
+hipergeometric_df <- hipergeometric_df %>%
+  inner_join(i, by = "clade_name")
+
+hipergeometric_df$clade_name <- factor(hipergeometric_df$clade_name, 
+    levels = unique(hipergeometric_df$clade_name[order(hipergeometric_df$root)]))
+
+
+ggplot(hipergeometric_df, aes(x = Process, 
+                              y = clade_name, 
+                              size = as.numeric(n), 
+                              color = p.val_color)) +
   geom_point() +
   scale_color_manual(values = c("gray" = "gray", "red" = "red"), 
                      labels = c("Not Significant", "Significant")) +  
   labs(x = "Biological Process", y = "Clade", size = "Number of Genes", color = "Significance") +
+  scale_size_continuous(breaks = c(10, 50, 98), labels = c("10 genes", "50 genes", "100 genes")) + 
   theme_minimal() +
-  ggtitle("Dot Plot: Biological Processes and Clades") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+  ggtitle("Hipergeometric Test") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major.x = element_blank()) +
+  scale_y_discrete(labels = function(x) {
+    x <- gsub("Metamonada", "<b>Metamonada</b>", x)
+    x <- gsub("Actinopterygii", "<b>Actinopterygii</b>", x)
+    x <- gsub("Choanoflagellata", "<b>Choanoflagellata</b>", x)
+    return(x)
+  }) +
+  theme(axis.text.y = ggtext::element_markdown())
 ```
 
