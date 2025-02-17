@@ -375,8 +375,8 @@ plot_stacked_bar_chart <- function(data) {
   
    
    ######################################################################################
-   library(phyper)
-   nodelist <- vroom::vroom("results/orthology_data/nodelist.csv") %>% 
+
+   nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv") #%>% 
      filter(., root >= 20)
    
    
@@ -384,10 +384,48 @@ plot_stacked_bar_chart <- function(data) {
    # M -> Número de genes do set do Gene Ontoloy
    # n -> Número de genes da sua lista de interesse
    # k -> Número de genes na interseção entre M e n
+   
    N <- length(nodelist$queryItem)
-   M <- sum(nodelist$`cell adhesion`)
-   n <- length(nodelist$clade_name == "Choanoflagellata")
-   k <- sum(filter(nodelist, clade_name == "Choanoflagellata")$`cell adhesion`)
+   M <- sum(nodelist$`cellular extravasation`)
+   n <- length(which(nodelist$clade_name == "Actinopterygii"))
+   k <- sum(filter(nodelist, clade_name == "Actinopterygii")$`cellular extravasation`)
    
    a <- 1 - phyper(k - 1, M, N - M, n)
+  
+   
+  ######################################################################################
+   # Definir clados de interesse e processos
+   clados_interesse <- c("Choanoflagellata", "Metamonada", "Actinopterygii") # Defina os clados que deseja comparar
+   processos <- c("cell adhesion", "extracellular matrix organization", 
+                  "epithelial to mesenchymal transition", "regulation of metallopeptidase activity", 
+                  "cell junction organization", "cellular extravasation")
+   
+   # Criar uma lista para armazenar os resultados
+   resultados <- list()
+   
+   # Calcular o teste hipergeométrico para cada combinação de processo e clado
+   for (processo in processos) {
+     for (clado in clados_interesse) {
+       
+       # Calcular valores N, M, n, k para o teste hipergeométrico
+       N <- length(nodelist$queryItem)  # Número total de genes
+       M <- sum(nodelist[[processo]])  # Número de genes do Gene Ontology para o processo
+       n <- length(which(nodelist$clade_name == clado))  # Número de genes no clado de interesse
+       k <- sum(filter(nodelist, clade_name == clado)[[processo]])  # Número de genes no clado de interesse para o processo
+       
+       # Realizar o teste hipergeométrico
+       p_valor <- 1 - phyper(k - 1, M, N - M, n)
+       
+       # Armazenar os resultados
+       resultados[[paste(processo, clado, sep = "_")]] <- c(processo, clado, k, M, N, n, p_valor)
+     }
+   }
+   
+   # Converter os resultados em um data frame
+   resultado_df <- do.call(rbind, resultados) %>%
+     as.data.frame() %>%
+     setNames(c("Processo", "Clado", "k", "M", "N", "n", "P_valor"))
+   
+   # Visualizar o data frame
+   print(resultado_df)
    

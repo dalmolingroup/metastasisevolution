@@ -31,9 +31,7 @@ library(scales)
 
 ```{r}
 load("../results/plots/graph_RedeR")
-# Consertar isso:
-graph <- a 
-V(graph)$name <- gsub("\\..*", "", V(graph)$name)
+
   
 nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv") %>%
   mutate(node_color = case_when(
@@ -134,28 +132,29 @@ p9 = 1500
 ## Get RedeR Graph
 
 ```{r}
-a <- getGraphFromRedeR(type = "node",)
+graph <- getGraphFromRedeR(type = "node",)
+V(graph)$name <- gsub("\\..*", "", V(graph)$name)
 
- index_match <- match(V(a)$nodeLabel, V(g3)$nodeLabel)
+ index_match <- match(V(graph)$nodeLabel, V(g3)$nodeLabel)
  
  # Setting graph attributes
- V(a)$cog_id        <- V(g3)$cog_id[index_match]
- V(a)$root          <- V(g3)$root[index_match]
- V(a)$clade         <- V(g3)$clade_name[index_match]
- V(a)$queryItem     <- V(g3)$queryItem[index_match]
- V(a)$taxonId       <- V(g3)$ncbiTaxonId[index_match]
- V(a)$taxonName     <- V(g3)$taxonName[index_match]
- V(a)$preferredName <- V(g3)$preferredName[index_match]
- V(a)$annotation    <- V(g3)$annotation[index_match]
+ V(graph)$cog_id        <- V(g3)$cog_id[index_match]
+ V(graph)$root          <- V(g3)$root[index_match]
+ V(graph)$clade         <- V(g3)$clade_name[index_match]
+ V(graph)$queryItem     <- V(g3)$queryItem[index_match]
+ V(graph)$taxonId       <- V(g3)$ncbiTaxonId[index_match]
+ V(graph)$taxonName     <- V(g3)$taxonName[index_match]
+ V(graph)$preferredName <- V(g3)$preferredName[index_match]
+ V(graph)$annotation    <- V(g3)$annotation[index_match]
  #
- V(a)$`cellular extravasation`                  <- V(g3)$`cellular extravasation`[index_match]
- V(a)$`cell junction organization`              <- V(g3)$`cell junction organization`[index_match]
- V(a)$`cell adhesion`                           <- V(g3)$`cell adhesion`[index_match]
- V(a)$`extracellular matrix organization`       <- V(g3)$`extracellular matrix organization`[index_match]
- V(a)$`epithelial to mesenchymal transition`    <- V(g3)$`epithelial to mesenchymal transition`[index_match]
- V(a)$`regulation of metallopeptidase activity` <- V(g3)$`regulation of metallopeptidase activity`[index_match]
+ V(graph)$`cellular extravasation`                  <- V(g3)$`cellular extravasation`[index_match]
+ V(graph)$`cell junction organization`              <- V(g3)$`cell junction organization`[index_match]
+ V(graph)$`cell adhesion`                           <- V(g3)$`cell adhesion`[index_match]
+ V(graph)$`extracellular matrix organization`       <- V(g3)$`extracellular matrix organization`[index_match]
+ V(graph)$`epithelial to mesenchymal transition`    <- V(g3)$`epithelial to mesenchymal transition`[index_match]
+ V(graph)$`regulation of metallopeptidase activity` <- V(g3)$`regulation of metallopeptidase activity`[index_match]
  
-#save(a, file = "../results/plots/graph_RedeR")
+#save(graph, file = "../results/plots/graph_RedeR")
 ```
 
 # Plot Nested Network
@@ -168,19 +167,51 @@ circles <- data.frame(
   color = c("#B3E6C6FF", "#FFCCCCFF", "#99CCFFFF")
 )
 
-ggraph::ggraph(a,
+ggraph::ggraph(graph,
                "manual",
-               x = V(a)$x,
-               y = V(a)$y) +
+               x = V(graph)$x,
+               y = V(graph)$y) +
   ggraph:: geom_edge_link0(edge_width = 0.8, color = "#90909020") +
-  geom_node_point(aes(color = I(nodeColor)), size = V(a)$nodeSize/17) +
-  geom_node_text(aes(label = V(a)$queryItem), 
+  geom_node_point(aes(color = I(nodeColor)), size = V(graph)$nodeSize/17) +
+  geom_node_text(aes(label = V(graph)$queryItem), 
                  colour = "red", nudge_x = 0.8, nudge_y = 0.8, size = 0.5) +
   geom_circle(data = circles, aes(x0 = x, y0 = y, r = r, color = I(color))) + 
   
   theme_void() +
   coord_fixed()
 ```
+
+```{r}
+process_colors <- c(
+  "cell adhesion"                              = "#06141FFF",
+  "extracellular matrix organization"          = "#742C14FF",
+  "epithelial to mesenchymal transition"       = "#3D4F7DFF",
+  "cell junction organization"                 = "#72874EFF",
+  "regulation of metallopeptidase activity"    = "#E48C2AFF",
+  "cellular extravasation"                     = "#046E8FFF"
+)
+
+for (process in names(process_colors)) {
+  
+V(graph)$tempColor <- ifelse(V(graph)$nodeSize == 35, "lightgray", 
+                               ifelse(vertex_attr(graph, process) == 1, 
+                                      process_colors[process], "darkgray"))
+
+
+p <- ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
+    geom_edge_link0(edge_width = 0.8, color = "#90909020") +
+    geom_node_point(aes(color = I(tempColor)), size = V(graph)$nodeSize / 17) +
+    geom_node_text(aes(label = V(graph)$queryItem), 
+                   colour = "red", nudge_x = 0.8, nudge_y = 0.8, size = 0.5) +
+    geom_circle(data = circles, aes(x0 = x, y0 = y, color = I(color), r = r)) + 
+    theme_void() +
+    coord_fixed() +
+    ggtitle(paste("Biological Process:", process))
+
+print(p)
+}
+```
+
 
 # Distribution
 
@@ -267,5 +298,59 @@ df_proportion <- BP_by_clade(nodelist)
 
 ```{r}
 plot_stacked_bar_chart(df_proportion)
+```
+
+## Hipergeometric Test
+
+```{r}
+ clades <- c("Choanoflagellata", "Metamonada", "Actinopterygii") # Defina os clados que deseja comparar
+   processes <- c("cell adhesion", "extracellular matrix organization", 
+                  "epithelial to mesenchymal transition", "regulation of metallopeptidase activity", 
+                  "cell junction organization", "cellular extravasation")
+   
+   # Criar uma lista para armazenar os resultados
+   result <- list()
+   
+   # Calcular o teste hipergeométrico para cada combinação de processo e clado
+   for (process in processes) {
+     for (clade in clades) {
+       
+       # Calcular valores N, M, n, k para o teste hipergeométrico
+       N <- length(nodelist$queryItem)  # Número total de genes
+       M <- sum(nodelist[[process]])  # Número de genes do Gene Ontology para o processo
+       n <- length(which(nodelist$clade_name == clade))  # Número de genes no clado de interesse
+       k <- sum(filter(nodelist, clade_name == clade)[[process]])  # Número de genes no clado de interesse para o processo
+       
+       # Realizar o teste hipergeométrico
+       p_valor <- 1 - phyper(k - 1, M, N - M, n)
+       
+       # Armazenar os resultados
+       result[[paste(process, clade, sep = "_")]] <- c(process, clade, k, M, N, n, p_valor)
+     }
+   }
+   
+   # Converter os resultados em um data frame
+   hipergeometric_df <- do.call(rbind, result) %>%
+     as.data.frame() %>%
+     setNames(c("Processo", "Clado", "k", "M", "N", "n", "P_valor")) %>% 
+     rownames(NA)
+   
+   # Visualizar o data frame
+   print(hipergeometric_df)
+```
+```{r}
+resultado_df$P_valor <- as.numeric(resultado_df$P_valor)
+
+resultado_df$P_valor_cor <- ifelse(resultado_df$P_valor > 0.05, "gray", "red")
+
+# Criar o gráfico
+ggplot(resultado_df, aes(x = Processo, y = Clado, size = n, color = P_valor_cor)) +
+  geom_point() +
+  scale_color_manual(values = c("gray" = "gray", "red" = "red"), 
+                     labels = c("Not Significant", "Significant")) +  
+  labs(x = "Biological Process", y = "Clade", size = "Number of Genes", color = "Significance") +
+  theme_minimal() +
+  ggtitle("Dot Plot: Biological Processes and Clades") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 ```
 
