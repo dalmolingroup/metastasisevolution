@@ -177,7 +177,6 @@ ggraph::ggraph(graph,
   geom_node_text(aes(label = V(graph)$queryItem), 
                  colour = "red", nudge_x = 0.8, nudge_y = 0.8, size = 0.5) +
   geom_circle(data = circles, aes(x0 = x, y0 = y, r = r, color = I(color))) + 
-  
   theme_void() +
   coord_fixed()
 ```
@@ -205,9 +204,10 @@ p <- ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
     geom_node_text(aes(label = V(graph)$queryItem), 
                    colour = "red", nudge_x = 0.8, nudge_y = 0.8, size = 0.5) +
     geom_circle(data = circles, aes(x0 = x, y0 = y, color = I(color), r = r)) + 
+    ggtitle(paste("Biological Process:", process)) +
     theme_void() +
-    coord_fixed() +
-    ggtitle(paste("Biological Process:", process))
+    coord_fixed()
+    
 
 print(p)
 }
@@ -306,7 +306,7 @@ plot_stacked_bar_chart(df_proportion)
 ```{r}
 nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
 
-   clades <- unique(nodelist$clade_name) # Defina os clados que deseja comparar
+   clades <- unique(nodelist$clade_name)
    processes <- c("cell adhesion", "extracellular matrix organization", 
                   "epithelial to mesenchymal transition", "regulation of metallopeptidase activity", 
                   "cell junction organization", "cellular extravasation")
@@ -365,7 +365,8 @@ ggplot(hipergeometric_df, aes(x = Process,
   theme_minimal() +
   ggtitle("Hipergeometric Test") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        panel.grid.major.x = element_blank()) +
+        panel.grid.major.x = element_blank(),
+        panel.grid.major.y = element_blank()) +
   scale_y_discrete(labels = function(x) {
     x <- gsub("Metamonada", "<b>Metamonada</b>", x)
     x <- gsub("Actinopterygii", "<b>Actinopterygii</b>", x)

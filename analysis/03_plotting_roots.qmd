@@ -72,7 +72,7 @@ plot_network <- function(graph, title, nodelist, xlims, ylims, legend = "none") 
   
   # Generate color map
   source_statements <-
-    colnames(nodelist)[10:length(nodelist)]
+    colnames(nodelist)[10:15]
   
   color_mappings <- c(
   "cell adhesion"                               = "#06141FFF"
@@ -173,15 +173,24 @@ source_statements <- colnames(nodelist)[10:length(nodelist)]
 ```{r plots2}
 load("../results/plots/graph")
 
+circles <- data.frame(
+  x = c(33, 40, 50),
+  y = c(30, 39.7, 47.5),
+  r = c(27.5, 39.5, 52),
+  color = c("#B3E6C6FF", "#FFCCCCFF", "#99CCFFFF")
+)
+
 ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   geom_edge_link0(color = "#90909020") +  
   geom_node_point(aes(color = -root), size = 2) +  
+  geom_circle(data = circles, aes(x0 = x, y0 = y, r = r, color = I(color))) +
   theme_void() + 
-  theme(legend.position = "left")
+  theme(legend.position = "left") +
+  coord_fixed()
 
 ```
-The color of the nodes in the graph reflects the distance from the Human-LCA of all the analyzed clades. The darker the node, the older it is from the Human clade. In contrast, lighter nodes, represented by soft blue colors, correspond to newer clades, closer to the Human-LCA. This color gradient illustrates the evolutionary depth of different clades.
 
+The color of the nodes in the graph reflects the distance from the Human-LCA of all the analyzed clades. The darker the node, the older it is from the Human clade. In contrast, lighter nodes, represented by soft blue colors, correspond to newer clades, closer to the Human-LCA. This color gradient illustrates the evolutionary depth of different clades.
 
 ```{r plots3}
 # Criando uma coluna para a legenda
@@ -196,6 +205,7 @@ V(graph)$color_group <- case_when(
 ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   geom_edge_link0(color = "#90909020") +
   geom_node_point(aes(color = color_group), size = 2) +
+  geom_circle(data = circles, aes(x0 = x, y0 = y, r = r, color = I(color))) +
   coord_fixed() +
   theme_void() +
   theme(legend.position = "left") +
@@ -216,8 +226,8 @@ ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   )
 
 ```
-The colors in the graph represent nodes that belong to specific clades within the phylogenetic tree. Nodes in red correspond to those in the Metamonada clade, which are also present in the Choanoflagellata and Actinopterygii clades. Green nodes represent genes that belong to the clade that spans from Metamonada to Choanoflagellata, encompassing shared evolutionary traits. Nodes in blue indicate genes that span from Choanoflagellata to Actinopterygii, further illustrating the gradual divergence between these groups. Finally, black nodes are genes that rooted after Actinopterygii, representing more recent evolutionary rooting. It is important to note that the nodes in Metamonada are also present in Choanoflagellata and Actinopterygii, while those in Choanoflagellata are encompassed by the Actinopterygii clade. This relationship is made more evident in the Euler diagram that follows.
 
+The colors in the graph represent nodes that belong to specific clades within the phylogenetic tree. Nodes in red correspond to those in the Metamonada clade, which are also present in the Choanoflagellata and Actinopterygii clades. Green nodes represent genes that belong to the clade that spans from Metamonada to Choanoflagellata, encompassing shared evolutionary traits. Nodes in blue indicate genes that span from Choanoflagellata to Actinopterygii, further illustrating the gradual divergence between these groups. Finally, black nodes are genes that rooted after Actinopterygii, representing more recent evolutionary rooting. It is important to note that the nodes in Metamonada are also present in Choanoflagellata and Actinopterygii, while those in Choanoflagellata are encompassed by the Actinopterygii clade. This relationship is made more evident in the Euler diagram that follows.
 
 ```{r euler}
 library(eulerr)
@@ -244,6 +254,7 @@ V(graph)$color_group <- case_when(
 ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   geom_edge_link0(color = "#90909020") +
   geom_node_point(aes(color = color_group), size = 2) +
+  geom_circle(data = circles, aes(x0 = x, y0 = y, r = r, color = I(color))) +
   coord_fixed() +
   theme_void() +
   theme(legend.position = "left") +
@@ -264,12 +275,19 @@ ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
   )
 
 ```
-The colors of the nodes in the graph represent the evolutionary clades to which the genes belong, reflecting their hierarchical origin. Each node corresponds to a gene, and its color indicates the specific clade to which it is rooted, based on the evolutionary timeline.
 
+The colors of the nodes in the graph represent the evolutionary clades to which the genes belong, reflecting their hierarchical origin. Each node corresponds to a gene, and its color indicates the specific clade to which it is rooted, based on the evolutionary timeline.
 
 ## Plotting Human PPI Network
 
 ```{r plots5}
+circles <- data.frame(
+  x = c(33, 40, 50),
+  y = c(30, 39.7, 47.5),
+  r = c(27.5, 39.5, 52),
+  color = c("#B3E6C6FF", "#FFCCCCFF", "#99CCFFFF")
+)
+
 #ppi_labaled <-
 ggraph::ggraph(graph,
                "manual",
@@ -282,8 +300,11 @@ ggraph::ggraph(graph,
     colour = NA,
     pie_scale = 0.40
   ) +
+  geom_circle(data = circles, aes(x0 = x, y0 = y, r = r, color = I(color))) +
   geom_node_text(aes(label = nodelist$queryItem, colour = "red"), nudge_x = 0.8, nudge_y = 0.8, size = 2) +
-  ggplot2::scale_fill_manual(values = color_mappings, drop = FALSE)
+  ggplot2::scale_fill_manual(values = color_mappings, drop = FALSE) +
+  coord_fixed() +
+  theme_void()
 
 #ppi <- 
   ggraph::ggraph(graph,
@@ -297,11 +318,16 @@ ggraph::ggraph(graph,
     colour = NA,
     pie_scale = 0.40
   ) +
-  ggplot2::scale_fill_manual(values = color_mappings, drop = FALSE)
+  geom_circle(data = circles, aes(x0 = x, y0 = y, r = r, color = I(color))) +
+  ggplot2::scale_fill_manual(values = color_mappings, drop = FALSE) +
+    coord_fixed() +
+    theme_void()
+
 
 #ggsave(file="../results/plots/human_ppi.svg", plot=ppi,  width=15, height=10)
 #ggsave(file="../results/plots/human_ppi_labaled.svg", plot=ppi_labaled, width=15, height=10)
 ```
+
 Human PPI Network
 
 ```{r plots6}
@@ -344,7 +370,7 @@ design <-
 #net_all_roots <-
 patchwork::wrap_plots(
   rev(plots),
-  design = design,
+  #design = design,
   nrow = 6,
   ncol = 6
 )
