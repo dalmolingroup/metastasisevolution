@@ -1,3 +1,15 @@
+library(TreeAndLeaf)
+library(GOSemSim)
+library(RedeR)
+library(igraph)
+
+metastasis_ids <- vroom::vroom("../assets/Detatch_and_Dissemination.csv")
+metastasis_ids$Signature <- substr(metastasis_ids$Signature, 12, nchar(metastasis_ids$Signature))
+metastasis_ids <- separate(metastasis_ids, GO_id, into = c("GO_id", "Description"), sep = 10, extra = "merge")
+
+ids <- c("GO:0098631", "GO:0098632", "GO:0098632", "GO:0098636")
+b <- filter(metastasis_ids, GO_id != ids)
+
 color_palette <- c(
    "cell adhesion"                              = "#06141F"
   ,"extracellular matrix organization"          = "#742C14"
@@ -11,6 +23,7 @@ color_palette <- c(
 metastasis_ids <- metastasis_ids %>%
   mutate(color = color_palette[Signature])
 
+semData <- godata(ont = "BP")
 mSim <- mgoSim(metastasis_ids$GO_id, metastasis_ids$GO_id, semData = semData, measure = "Wang", combine = NULL)
 
 # Setting nodes sizes

@@ -42,10 +42,6 @@ Motility and Invasion,GO:0007155 cell adhesion,GO:0071603 endothelial cell-cell
 "Cellular arrest, vascular adhesion, and extravasation",GO:0045123 cellular extravasation,GO:0072683 T cell extravasation
 Intravasation,GO:0030198 extracellular matrix organization,GO:0085029 extracellular matrix assembly
 Intravasation,GO:0030198 extracellular matrix organization,GO:0090091 positive regulation of extracellular matrix disassembly
-Motility and Invasion,GO:0007155 cell adhesion,GO:0098631 cell adhesion mediator activity
-Motility and Invasion,GO:0007155 cell adhesion,GO:0098632 cell-cell adhesion mediator activity
-Motility and Invasion,GO:0007155 cell adhesion,GO:0098635 protein complex involved in cell-cell adhesion
-Motility and Invasion,GO:0007155 cell adhesion,GO:0098636 protein complex involved in cell adhesion
 Motility and Invasion,GO:0007155 cell adhesion,GO:0098742 cell-cell adhesion via plasma-membrane adhesion molecules
 Intravasation,GO:0030198 extracellular matrix organization,GO:0110011 regulation of basement membrane organization
 "Cellular arrest, vascular adhesion, and extravasation",GO:0034330 cell junction organization,GO:0120193 tight junction organization
