@@ -33,7 +33,7 @@ library(ggtext)
 ```{r}
 load("../results/plots/graph_RedeR")
 
-  
+  #Mudar nome da variável - nodelist_filtered
 nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv") %>%
   mutate(node_color = case_when(
     clade_name == "Metamonada" ~ "#B3E6C6FF",
@@ -213,7 +213,6 @@ print(p)
 }
 ```
 
-
 # Distribution
 
 # Defining Functions
@@ -337,7 +336,6 @@ nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
    head(hipergeometric_df)
 ```
 
-
 ```{r}
 hipergeometric_df$p.val <- as.numeric(hipergeometric_df$p.val)
 hipergeometric_df$p.val_color <- ifelse(hipergeometric_df$p.val > 0.05, "gray", "red")
@@ -352,6 +350,14 @@ hipergeometric_df <- hipergeometric_df %>%
 hipergeometric_df$clade_name <- factor(hipergeometric_df$clade_name, 
     levels = unique(hipergeometric_df$clade_name[order(hipergeometric_df$root)]))
 
+
+hipergeometric_df$Process <- factor(hipergeometric_df$Process, 
+                                    levels = c("extracellular matrix organization", 
+                                               "epithelial to mesenchymal transition", 
+                                               "cell junction organization",
+                                               "regulation of metallopeptidase activity",
+                                               "cell adhesion", 
+                                               "cellular extravasation"))
 
 ggplot(hipergeometric_df, aes(x = Process, 
                               y = clade_name, 
@@ -375,4 +381,3 @@ ggplot(hipergeometric_df, aes(x = Process,
   }) +
   theme(axis.text.y = ggtext::element_markdown())
 ```
-
