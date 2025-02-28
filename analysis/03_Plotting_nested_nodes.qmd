@@ -31,10 +31,10 @@ library(ggtext)
 ## Load Data
 
 ```{r}
-load("../results/plots/graph_RedeR")
+load("../results/plots/graph")
 
   #Mudar nome da variável - nodelist_filtered
-nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv") %>%
+nodelist_filtered <- vroom::vroom("../results/orthology_data/nodelist.csv") %>%
   mutate(node_color = case_when(
     clade_name == "Metamonada" ~ "#B3E6C6FF",
     clade_name == "Choanoflagellata" ~ "#FFCCCCFF",
@@ -52,21 +52,21 @@ nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv") %>%
 
 ```{r}
 # Actinopterygii subgraph
-g3 <- subg(g = graph, dat = nodelist[nodelist$root %in% 20:37, ], refcol = 1, connected = F, maincomp = F, transdat = T) %>%
+g3 <- subg(g = graph, dat = nodelist_filtered[nodelist_filtered$root %in% 20:37, ], refcol = 1, connected = F, maincomp = F, transdat = T) %>%
       att.setv(from="queryItem", to="nodeLabel")
 
 V(g3)$nodeColor <- V(g3)$node_color
 V(g3)$nodeSize  <- V(g3)$node_size
 
 # Choanoflagellata subgraph
-g2 <- subg(g = graph, dat = nodelist[nodelist$root %in% 30:37, ], refcol = 1, connected = F, maincomp = F, transdat = T) %>% 
+g2 <- subg(g = graph, dat = nodelist_filtered[nodelist_filtered$root %in% 30:37, ], refcol = 1, connected = F, maincomp = F, transdat = T) %>% 
       att.setv(from="queryItem", to="nodeLabel")
 
 V(g2)$nodeColor <- V(g2)$node_color
 V(g2)$nodeSize  <- V(g2)$node_size
 
 # Metamonada subgraph
-g1 <- subg(g = graph, dat = nodelist[nodelist$root %in% 37, ], refcol = 1, connected = F, maincomp = F, transdat = T) %>% 
+g1 <- subg(g = graph, dat = nodelist_filtered[nodelist_filtered$root %in% 37, ], refcol = 1, connected = F, maincomp = F, transdat = T) %>% 
       att.setv(from="queryItem", to="nodeLabel")
 
 V(g1)$nodeColor <- V(g1)$node_color
@@ -133,49 +133,63 @@ p9 = 1500
 ## Get RedeR Graph
 
 ```{r}
-graph <- getGraphFromRedeR(type = "node",)
-V(graph)$name <- gsub("\\..*", "", V(graph)$name)
+graph_RedeR <- getGraphFromRedeR(type = "node",unit = 'npc' )
+V(graph_RedeR)$name <- gsub("\\..*", "", V(graph_RedeR)$name)
 
- index_match <- match(V(graph)$nodeLabel, V(g3)$nodeLabel)
+# Setting graph2 attributes
+graph_ggplot <- graph_RedeR
+
+index_match <- match(V(graph_RedeR)$nodeLabel, V(g3)$nodeLabel)
+
+ V(graph_ggplot)$cog_id        <- V(g3)$cog_id[index_match]
+ V(graph_ggplot)$root          <- V(g3)$root[index_match]
+ V(graph_ggplot)$clade         <- V(g3)$clade_name[index_match]
+ V(graph_ggplot)$queryItem     <- V(g3)$queryItem[index_match]
+ V(graph_ggplot)$taxonId       <- V(g3)$ncbiTaxonId[index_match]
+ V(graph_ggplot)$taxonName     <- V(g3)$taxonName[index_match]
+ V(graph_ggplot)$preferredName <- V(g3)$preferredName[index_match]
+ V(graph_ggplot)$annotation    <- V(g3)$annotation[index_match]
+
+ V(graph_ggplot)$`cellular extravasation`                  <- V(g3)$`cellular extravasation`[index_match]
+ V(graph_ggplot)$`cell junction organization`              <- V(g3)$`cell junction organization`[index_match]
+ V(graph_ggplot)$`cell adhesion`                           <- V(g3)$`cell adhesion`[index_match]
+ V(graph_ggplot)$`extracellular matrix organization`       <- V(g3)$`extracellular matrix organization`[index_match]
+ V(graph_ggplot)$`epithelial to mesenchymal transition`    <- V(g3)$`epithelial to mesenchymal transition`[index_match]
+ V(graph_ggplot)$`regulation of metallopeptidase activity` <- V(g3)$`regulation of metallopeptidase activity`[index_match]
+
+#save(graph_ggplot, file = "../results/plots/graph_ggplot")
  
- # Setting graph attributes
- V(graph)$cog_id        <- V(g3)$cog_id[index_match]
- V(graph)$root          <- V(g3)$root[index_match]
- V(graph)$clade         <- V(g3)$clade_name[index_match]
- V(graph)$queryItem     <- V(g3)$queryItem[index_match]
- V(graph)$taxonId       <- V(g3)$ncbiTaxonId[index_match]
- V(graph)$taxonName     <- V(g3)$taxonName[index_match]
- V(graph)$preferredName <- V(g3)$preferredName[index_match]
- V(graph)$annotation    <- V(g3)$annotation[index_match]
- #
- V(graph)$`cellular extravasation`                  <- V(g3)$`cellular extravasation`[index_match]
- V(graph)$`cell junction organization`              <- V(g3)$`cell junction organization`[index_match]
- V(graph)$`cell adhesion`                           <- V(g3)$`cell adhesion`[index_match]
- V(graph)$`extracellular matrix organization`       <- V(g3)$`extracellular matrix organization`[index_match]
- V(graph)$`epithelial to mesenchymal transition`    <- V(g3)$`epithelial to mesenchymal transition`[index_match]
- V(graph)$`regulation of metallopeptidase activity` <- V(g3)$`regulation of metallopeptidase activity`[index_match]
+ # Setting graph1 attributes
+index_match <- match( V(g3)$nodeLabel,V(graph_RedeR)$nodeLabel) 
  
-#save(graph, file = "../results/plots/graph_RedeR")
+V(g3)$x <- V(graph_RedeR)$x[index_match]
+V(g3)$y <- V(graph_RedeR)$y[index_match]
+
+#graph_RedeR <- g3
+
+#save(graph_RedeR, file = "../results/plots/graph_RedeR")
 ```
 
 # Plot Nested Network
 
 ```{r}
+load("../results/plots/graph_ggplot")
+
 circles <- data.frame(
   x = c(33, 40, 50),
-  y = c(30, 39.7, 47.5),
+  y = c(33, 42.7, 50.5),
   r = c(27.5, 39.5, 52),
   color = c("#B3E6C6FF", "#FFCCCCFF", "#99CCFFFF")
 )
 
-ggraph::ggraph(graph,
+ggraph::ggraph(graph_ggplot,
                "manual",
-               x = V(graph)$x,
-               y = V(graph)$y) +
+               x = V(graph_ggplot)$x,
+               y = V(graph_ggplot)$y) +
   ggraph:: geom_edge_link0(edge_width = 0.8, color = "#90909020") +
-  geom_node_point(aes(color = I(nodeColor)), size = V(graph)$nodeSize/17) +
-  geom_node_text(aes(label = V(graph)$queryItem), 
-                 colour = "red", nudge_x = 0.8, nudge_y = 0.8, size = 0.5) +
+  geom_node_point(aes(color = I(nodeColor)), size = V(graph_ggplot)$nodeSize/1.5) +
+  geom_node_text(aes(label = V(graph_ggplot)$queryItem), 
+                 colour = "red", nudge_x = 0.8, nudge_y = 0.8, size = 2) +
   geom_circle(data = circles, aes(x0 = x, y0 = y, r = r, color = I(color))) + 
   theme_void() +
   coord_fixed()
@@ -193,16 +207,16 @@ process_colors <- c(
 
 for (process in names(process_colors)) {
   
-V(graph)$tempColor <- ifelse(V(graph)$nodeSize == 35, "lightgray", 
-                               ifelse(vertex_attr(graph, process) == 1, 
+V(graph_ggplot)$tempColor <- ifelse(V(graph_ggplot)$nodeSize == 35, "lightgray", 
+                               ifelse(vertex_attr(graph_ggplot, process) == 1, 
                                       process_colors[process], "darkgray"))
 
 
-p <- ggraph(graph, "manual", x = V(graph)$x, y = V(graph)$y) +
+p <- ggraph(graph_ggplot, "manual", x = V(graph_ggplot)$x, y = V(graph_ggplot)$y) +
     geom_edge_link0(edge_width = 0.8, color = "#90909020") +
-    geom_node_point(aes(color = I(tempColor)), size = V(graph)$nodeSize / 17) +
-    geom_node_text(aes(label = V(graph)$queryItem), 
-                   colour = "red", nudge_x = 0.8, nudge_y = 0.8, size = 0.5) +
+    geom_node_point(aes(color = I(tempColor)), size = V(graph_ggplot)$nodeSize / 1.5) +
+    geom_node_text(aes(label = V(graph_ggplot)$queryItem), 
+                   colour = "red", nudge_x = 0.8, nudge_y = 0.8, size = 2) +
     geom_circle(data = circles, aes(x0 = x, y0 = y, color = I(color), r = r)) + 
     ggtitle(paste("Biological Process:", process)) +
     theme_void() +
@@ -293,7 +307,7 @@ plot_stacked_bar_chart <- function(data) {
 ```
 
 ```{r}
-df_proportion <- BP_by_clade(nodelist)
+df_proportion <- BP_by_clade(nodelist_filtered)
 ```
 
 ```{r}
