@@ -27,6 +27,10 @@ Motility and Invasion,GO:0007155 cell adhesion,GO:0034112 positive regulation o
 Motility and Invasion,GO:0007155 cell adhesion,GO:0034114 regulation of heterotypic cell-cell adhesion
 Motility and Invasion,GO:0007155 cell adhesion,GO:0034115 negative regulation of heterotypic cell-cell adhesion
 Motility and Invasion,GO:0007155 cell adhesion,GO:0034116 positive regulation of heterotypic cell-cell adhesion
+Motility and Invasion,GO:0007155 cell adhesion,GO:0098631 cell adhesion mediator activity
+Motility and Invasion,GO:0007155 cell adhesion,GO:0098632 cell-cell adhesion mediator activity
+Motility and Invasion,GO:0007155 cell adhesion,GO:0098635 protein complex involved in cell-cell adhesion
+Motility and Invasion,GO:0007155 cell adhesion,GO:0098636 protein complex involved in cell adhesion
 "Cellular arrest, vascular adhesion, and extravasation",GO:0034330 cell junction organization,GO:0034332 adherens junction organization
 Motility and Invasion,GO:0007155 cell adhesion,GO:0034446 substrate adhesion-dependent cell spreading
 Intravasation,GO:0030198 extracellular matrix organization,GO:0034769 basement membrane disassembly

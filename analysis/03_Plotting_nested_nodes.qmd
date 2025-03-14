@@ -32,9 +32,16 @@ library(ggtext)
 
 ```{r}
 load("../results/plots/graph")
+metastasis_genes <- vroom::vroom("../_dev/gene_publication.csv", delim = ",")
+nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
+```
 
-  #Mudar nome da variável - nodelist_filtered
-nodelist_filtered <- vroom::vroom("../results/orthology_data/nodelist.csv") %>%
+```{r}
+list_intersect <- as.data.frame(intersect(nodelist$preferredName, metastasis_genes$gene))
+colnames(list_intersect) <- "gene"
+
+
+nodelist_filtered <- nodelist %>%
   mutate(node_color = case_when(
     clade_name == "Metamonada" ~ "#B3E6C6FF",
     clade_name == "Choanoflagellata" ~ "#FFCCCCFF",
@@ -45,7 +52,18 @@ nodelist_filtered <- vroom::vroom("../results/orthology_data/nodelist.csv") %>%
     clade_name %in% c("Metamonada","Choanoflagellata","Actinopterygii") ~ 50,
     TRUE ~ 35
   )) %>% 
+  mutate(node_linecolor = case_when(
+    preferredName %in% metastasis_genes$gene ~ "#6A0DAD", 
+    TRUE ~ "#999999FF"
+  )) %>%
+    mutate(node_linewidth = case_when(
+    preferredName %in% metastasis_genes$gene ~ 3, 
+    TRUE ~ 1
+    )) %>%
   filter(root >= 20)
+
+list_intersect |> 
+  vroom::vroom_write(file = "../_dev/metastasis_intersect.csv", delim = ",")
 ```
 
 ## Create Subgraphs
@@ -55,22 +73,28 @@ nodelist_filtered <- vroom::vroom("../results/orthology_data/nodelist.csv") %>%
 g3 <- subg(g = graph, dat = nodelist_filtered[nodelist_filtered$root %in% 20:37, ], refcol = 1, connected = F, maincomp = F, transdat = T) %>%
       att.setv(from="queryItem", to="nodeLabel")
 
-V(g3)$nodeColor <- V(g3)$node_color
-V(g3)$nodeSize  <- V(g3)$node_size
+V(g3)$nodeColor      <- V(g3)$node_color
+V(g3)$nodeSize       <- V(g3)$node_size
+V(g3)$nodeLineColor  <- V(g3)$node_linecolor
+V(g3)$nodeLineWidth  <- V(g3)$node_linewidth
 
 # Choanoflagellata subgraph
 g2 <- subg(g = graph, dat = nodelist_filtered[nodelist_filtered$root %in% 30:37, ], refcol = 1, connected = F, maincomp = F, transdat = T) %>% 
       att.setv(from="queryItem", to="nodeLabel")
 
-V(g2)$nodeColor <- V(g2)$node_color
-V(g2)$nodeSize  <- V(g2)$node_size
+V(g2)$nodeColor      <- V(g2)$node_color
+V(g2)$nodeSize       <- V(g2)$node_size
+V(g2)$nodeLineColor  <- V(g2)$node_linecolor
+V(g2)$nodeLineWidth  <- V(g2)$node_linewidth
 
 # Metamonada subgraph
 g1 <- subg(g = graph, dat = nodelist_filtered[nodelist_filtered$root %in% 37, ], refcol = 1, connected = F, maincomp = F, transdat = T) %>% 
       att.setv(from="queryItem", to="nodeLabel")
 
-V(g1)$nodeColor <- V(g1)$node_color
-V(g1)$nodeSize  <- V(g1)$node_size
+V(g1)$nodeColor      <- V(g1)$node_color
+V(g1)$nodeSize       <- V(g1)$node_size
+V(g1)$nodeLineColor  <- V(g1)$node_linecolor
+V(g1)$nodeLineWidth  <- V(g1)$node_linewidth
 ```
 
 ## Start RedeR
@@ -133,7 +157,7 @@ p9 = 1500
 ## Get RedeR Graph
 
 ```{r}
-graph_RedeR <- getGraphFromRedeR(type = "node",unit = 'npc' )
+graph_RedeR <- getGraphFromRedeR(type = "node")
 V(graph_RedeR)$name <- gsub("\\..*", "", V(graph_RedeR)$name)
 
 # Setting graph2 attributes
