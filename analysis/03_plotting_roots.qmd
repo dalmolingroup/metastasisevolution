@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 
 ```{r libs}
 library(ggplot2)
+library(ggforce)
 library(ggraph)
 library(dplyr)
 library(tidyr)
@@ -146,7 +147,7 @@ source_statements <- colnames(nodelist)[10:length(nodelist)]
                     "extracellular matrix organization",      
                     "epithelial to mesenchymal transition",   
                     "regulation of metallopeptidase activity",
-                    "cell junction organization",             
+                    "cell junction organization",
                     "cellular extravasation"),
                     nsets = 50, nintersects = NA,
       sets.bar.color = c("#06141FFF", "#72874EFF", "#3D4F7DFF",
@@ -158,14 +159,14 @@ source_statements <- colnames(nodelist)[10:length(nodelist)]
 ## Graph Build
 
 ```{r graph}
-#graph <-
-#  graph_from_data_frame(network_filtered, directed = FALSE, vertices = nodelist)
+graph <-
+  graph_from_data_frame(network_filtered, directed = FALSE, vertices = nodelist)
 
-#layout <- easylayout::easylayout(graph)
-#V(graph)$x <- layout[, 1]
-#V(graph)$y <- layout[, 2]
+layout <- easylayout::easylayout(graph)
+V(graph)$x <- layout[, 1]
+V(graph)$y <- layout[, 2]
 
-#save(graph, file = "../results/plots/graph")
+save(graph, file = "../results/plots/graph")
 ```
 
 ## Plotting Network By Root
@@ -360,17 +361,10 @@ plots <-
   ) %>%
   discard(is.null)
 
-design <- 
-  '01234
-   56789
-   ABCDE
-   FGHIJ
-   KLMNO'
 
 #net_all_roots <-
 patchwork::wrap_plots(
   rev(plots),
-  #design = design,
   nrow = 6,
   ncol = 6
 )

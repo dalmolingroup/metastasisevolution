@@ -83,6 +83,10 @@ metastasis_ids <- vroom::vroom("../assets/Detatch_and_Dissemination.csv")
 metastasis_ids$Signature <- substr(metastasis_ids$Signature, 12, nchar(metastasis_ids$Signature))
 metastasis_ids <- separate(metastasis_ids, GO_id, into = c("GO_id", "Description"), sep = 10, extra = "merge")
 
+metastasis_related <- vroom::vroom("../_dev/metastasis_intersect.csv", delim = ",")
+colnames(metastasis_related) <- "external_gene_name"
+metastasis_related$Signature <- "metastasis related"
+
 head(metastasis_ids)
 ```
 
@@ -98,6 +102,7 @@ genesPerTerm <- get_genes_by_GOid(metastasis_ids$GO_id)
 result <- data.frame(external_gene_name = character(), Signature = character(), stringsAsFactors = FALSE)
 
 result <- list_to_df(genesPerTerm, metastasis_ids) %>%
+  bind_rows(metastasis_related) %>%
   unique()
 
 result |> 

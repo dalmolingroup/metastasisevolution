@@ -181,7 +181,7 @@ index_match <- match(V(graph_RedeR)$nodeLabel, V(g3)$nodeLabel)
  V(graph_ggplot)$`epithelial to mesenchymal transition`    <- V(g3)$`epithelial to mesenchymal transition`[index_match]
  V(graph_ggplot)$`regulation of metallopeptidase activity` <- V(g3)$`regulation of metallopeptidase activity`[index_match]
 
-#save(graph_ggplot, file = "../results/plots/graph_ggplot")
+save(graph_ggplot, file = "../results/plots/graph_ggplot")
  
  # Setting graph1 attributes
 index_match <- match( V(g3)$nodeLabel,V(graph_RedeR)$nodeLabel) 
@@ -191,7 +191,7 @@ V(g3)$y <- V(graph_RedeR)$y[index_match]
 
 #graph_RedeR <- g3
 
-#save(graph_RedeR, file = "../results/plots/graph_RedeR")
+save(graph_RedeR, file = "../results/plots/graph_RedeR")
 ```
 
 # Plot Nested Network
@@ -200,8 +200,8 @@ V(g3)$y <- V(graph_RedeR)$y[index_match]
 load("../results/plots/graph_ggplot")
 
 circles <- data.frame(
-  x = c(33, 40, 50),
-  y = c(33, 42.7, 50.5),
+  x = c(35, 43, 50),
+  y = c(29, 38.7, 48.5),
   r = c(27.5, 39.5, 52),
   color = c("#B3E6C6FF", "#FFCCCCFF", "#99CCFFFF")
 )
@@ -211,7 +211,7 @@ ggraph::ggraph(graph_ggplot,
                x = V(graph_ggplot)$x,
                y = V(graph_ggplot)$y) +
   ggraph:: geom_edge_link0(edge_width = 0.8, color = "#90909020") +
-  geom_node_point(aes(color = I(nodeColor)), size = V(graph_ggplot)$nodeSize/1.5) +
+  geom_node_point(aes(color = I(nodeColor)), size = V(graph_ggplot)$nodeSize/12) +
   geom_node_text(aes(label = V(graph_ggplot)$queryItem), 
                  colour = "red", nudge_x = 0.8, nudge_y = 0.8, size = 2) +
   geom_circle(data = circles, aes(x0 = x, y0 = y, r = r, color = I(color))) + 
@@ -238,7 +238,7 @@ V(graph_ggplot)$tempColor <- ifelse(V(graph_ggplot)$nodeSize == 35, "lightgray",
 
 p <- ggraph(graph_ggplot, "manual", x = V(graph_ggplot)$x, y = V(graph_ggplot)$y) +
     geom_edge_link0(edge_width = 0.8, color = "#90909020") +
-    geom_node_point(aes(color = I(tempColor)), size = V(graph_ggplot)$nodeSize / 1.5) +
+    geom_node_point(aes(color = I(tempColor)), size = V(graph_ggplot)$nodeSize / 12) +
     geom_node_text(aes(label = V(graph_ggplot)$queryItem), 
                    colour = "red", nudge_x = 0.8, nudge_y = 0.8, size = 2) +
     geom_circle(data = circles, aes(x0 = x, y0 = y, color = I(color), r = r)) + 
