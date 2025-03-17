@@ -43,9 +43,9 @@ colnames(list_intersect) <- "gene"
 
 nodelist_filtered <- nodelist %>%
   mutate(node_color = case_when(
-    clade_name == "Metamonada" ~ "#B3E6C6FF",
-    clade_name == "Choanoflagellata" ~ "#FFCCCCFF",
-    clade_name == "Actinopterygii" ~ "#99CCFFFF",
+    clade_name == "Metamonada" ~ "#4CA375",
+    clade_name == "Choanoflagellata" ~ "#D17878",
+    clade_name == "Actinopterygii" ~ "#4A85C2"
     TRUE ~ "#999999FF"
   )) %>%
   mutate(node_size = case_when(
@@ -111,32 +111,32 @@ N3 <- nestNodes(nodes = V(g3)$name, parent = N3, theme = 'tm1', gatt = list(nest
                                                                             nestShape = "Circle",
                                                                             nestSize = 3000,
                                                                             nestLabelSize = 80,
-                                                                            nestLabelColor = "#99CCFFFF",
+                                                                            nestLabelColor = "#4A85C2",
                                                                             nestLabelCoords = c(x=-10, y=-2000),
                                                                             nestLineType = "SOLID",
                                                                             nestLineWidth = 15,
-                                                                            nestLineColor = "#99CCFFFF"))
+                                                                            nestLineColor = "#4A85C2"))
   
 N5 <- nestNodes(nodes=V(g2)$name, gcoord = c(40, 57), parent=N3, theme='tm1', gatt = list(nestLabel = "Human-Choanoflagellata",
                                                                        nestShape = "Circle",
                                                                        nestSize = 2300,
                                                                        nestLabelSize = 80,
-                                                                       nestLabelColor = "#FFCCCCFF",
+                                                                       nestLabelColor = "#D17878",
                                                                        nestLabelCoords = c(x=-9, y=-1780),
                                                                        nestLineType = "SOLID",
                                                                        nestLineWidth = 15,
-                                                                       nestLineColor = "#FFCCCCFF"))
+                                                                       nestLineColor = "#D17878"))
 
 
 nestNodes( nodes=V(g1)$name, gcoord = c(41, 62), parent=N5, theme='tm1', gatt = list(nestLabel = "Human-Metamonada",
                                                                nestShape = "Circle",
                                                                nestSize = 1600,
                                                                nestLabelSize = 80,
-                                                               nestLabelColor = "#B3E6C6FF",
+                                                               nestLabelColor = "#4CA375",
                                                                nestLabelCoords = c(x=-7, y=-1500),
                                                                nestLineType = "SOLID",
                                                                nestLineWidth = 15,
-                                                               nestLineColor = "#B3E6C6FF"))
+                                                               nestLineColor = "#4CA375"))
 
 mergeOutEdges( nlevels=2)
 
@@ -203,7 +203,7 @@ circles <- data.frame(
   x = c(35, 43, 50),
   y = c(29, 38.7, 48.5),
   r = c(27.5, 39.5, 52),
-  color = c("#B3E6C6FF", "#FFCCCCFF", "#99CCFFFF")
+  color = c("#4CA375", "#D17878", "#4A85C2")
 )
 
 ggraph::ggraph(graph_ggplot,
