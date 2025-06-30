@@ -1,0 +1,501 @@
+---
+title: "Plotting Roots"
+author: "Dalmolin Systems Biology Group"
+format: html
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  results = FALSE
+)
+```
+
+## Import libraries
+
+```{r libs}
+library(RedeR)
+library(dplyr)
+library(igraph)
+library(ggplot2)
+library(ggraph)
+library(ggforce)
+library(tidyr)
+library(scales)
+library(forcats)
+library(ggtext)
+```
+
+# Distribution
+
+## Load Data
+
+```{r}
+load("../results/plots/graph")
+metastasis_genes <- vroom::vroom("../_dev/gene_publication.csv", delim = ",")
+nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
+
+#CLADE_NAMES <- "https://raw.githubusercontent.com/dalmolingroup/neurotransmissionevolution/ctenophora_before_porifera/analysis/geneplast_clade_names.tsv"
+#lca_names <- read_table(CLADE_NAMES)
+#lca_names %<>% rename("lca" = root)
+
+node_annotation <- dplyr::select(nodelist, c("queryItem","cog_id",
+                                             "root", "clade_name"))
+  
+```
+
+# Defining Functions
+
+```{r themes}
+# Plotting colors and labels
+annotation_colors <- c(
+  "cell adhesion"                               = "#06141FFF"
+  ,"extracellular matrix organization"          = "#742C14FF"
+  ,"epithelial to mesenchymal transition"       = "#3D4F7DFF"
+  ,"regulation of metallopeptidase activity"    = "#E48C2AFF"
+  ,"cell junction organization"                  ="#72874EFF"
+  ,"cellular extravasation"                      ="#046E8FFF"
+)
+
+annotation_labels <- c(
+   "cell adhesion"                              = "Adesão celular"
+  ,"extracellular matrix organization"          = "Organização da matriz \nextracelular" 
+  ,"epithelial to mesenchymal transition"       = "Transição \nepitélio-mesênquimal"
+  ,"regulation of metallopeptidase activity"    = "Regulação da atividade \nda metalopeptidase"
+  ,"cell junction organization"                 = "Organização da \njunção celular"
+  ,"cellular extravasation"                     = "Extravasão celular"
+)
+
+# This vertical line indicates the first metazoan (Amphimedon queenslandica / Ctenophora)
+choanoflagellata_line <- geom_vline(
+  xintercept = "Sphaeroforma arctica"
+  ,color      = "#FF0000"
+  ,linetype   = "11"
+  ,alpha      = 1
+  ,linewidth  = 0.25
+)
+
+# Plotting
+theme_main <- theme(
+  panel.spacing      = unit(2.5, "pt")
+  ,strip.background   = element_blank()
+  ,panel.grid.major.x = element_blank()
+  ,panel.grid.major.y = element_line(linewidth = 0.25, linetype = "dotted", color = "#E0E0E0")
+  ,strip.text.x       = element_text(size = 9, angle = 90, hjust = 0, vjust = 0.5, color = "#757575")
+  ,strip.text.y       = element_text(size = 10, angle = 0, hjust = 0, vjust = 0.5, color = "#757575")
+  ,axis.title         = element_text(size = 15, color = "#424242")
+  ,axis.ticks.x       = element_blank()
+  ,axis.text.x        = element_blank()
+  ,axis.text.y        = element_text(size = 5.5)
+  ,legend.position    = "none"
+)
+
+theme_supplementary <- theme(
+  panel.grid.major.x = element_line(color = "#E0E0E0", linewidth = 0.25, linetype = "dotted")
+  ,panel.grid.major.y = element_blank()
+  ,strip.text.y       = element_text(size = 7, angle = 0, hjust = 0, vjust = 0.5, color = "#757575")
+  ,strip.text.x       = element_text(size = 7, angle = 90, hjust = 0, vjust = 0.5, color = "#757575")
+  ,axis.title         = element_text(size = 12, color = "#424242")
+  ,axis.ticks         = element_line(colour = "grey20")
+  ,axis.text.y        = element_text(size = 6, angle = 0, hjust = 1, vjust = 0.5, color = "#757575")
+  ,axis.text.x        = element_text(size = 6)
+)
+
+theme_average <- theme(
+  panel.spacing      = unit(1, "pt")
+  ,axis.title         = element_text(color = "#424242")
+  ,axis.text          = element_text(color = "#757575")
+  ,axis.text.x        = element_text(size = 7, angle = -45, vjust = 0, hjust = 0)
+  ,axis.text.y        = element_text(size = 5)
+  ,strip.background   = element_blank()
+  ,strip.text         = element_text(color = "#757575")
+  ,strip.text.y       = element_text(angle = 0, hjust = 0, vjust = 0.5)
+)
+
+theme_big <- theme(
+  panel.spacing      = unit(0.5, "pt")
+  ,panel.grid.major.x = element_line(linewidth = 0.1, linetype = "dashed")
+  ,panel.grid.major.y = element_blank()
+  ,strip.background   = element_blank()
+  ,strip.text.x       = element_text(size = 8, angle = 90, hjust = 0.5, vjust = 0)
+  ,strip.text.y       = element_text(size = 8, angle = 0, hjust = 0, vjust = 0.5)
+  ,axis.text.x        = element_text(size = 6, angle = 90, vjust = 0, hjust = 0)
+  ,axis.text.y        = element_text(size = 4.5)
+  ,axis.ticks         = element_line(size = 0.1)
+)
+```
+
+
+```{r}
+# Custom tick function
+tick_function <- function(x) {
+  seq(x[2], 0, length.out = 3) %>% head(-1) %>% tail(-1) %>% { ceiling(./5)*5 }
+}
+
+calculate_cumulative_genes <- function(nodelist) {
+  
+    # Obter todas as categorias possíveis de clade_name
+  all_clades <- node_annotation %>%
+    arrange(desc(root)) %>%
+    dplyr:: select(clade_name) %>%
+    unique()
+  
+  # Definir as colunas de interesse
+  process_columns <- c("queryItem", "root", "clade_name", 
+                       "cellular extravasation", 
+                       "cell junction organization",           
+                       "cell adhesion",                          
+                       "extracellular matrix organization",     
+                       "epithelial to mesenchymal transition",  
+                       "regulation of metallopeptidase activity")
+  
+  # Calcular o cumulativo agrupando por clade_name
+  cumulative_genes <- nodelist %>%
+    arrange(desc(root)) %>%
+    dplyr::select(all_of(process_columns)) %>%
+    group_by(clade_name, root) %>%
+    summarise(count_genes = n(), .groups = "drop") %>%
+    arrange(desc(root)) %>%
+    mutate(cumulative_sum = cumsum(count_genes)) %>%
+    right_join(all_clades, by = "clade_name") %>%
+    fill(cumulative_sum, .direction = "down")
+  
+  return(cumulative_genes)
+}
+
+calculate_cumulative_bp <- function(nodelist) {
+    
+  # Obter todas as categorias possíveis de clade_name
+  all_clades <- node_annotation %>%
+    arrange(desc(root)) %>%
+    dplyr:: select(clade_name) %>%
+    unique()
+  
+  # Definir as colunas de interesse
+  process_columns <- c("queryItem", "root", "clade_name", 
+                       "cellular extravasation", 
+                       "cell junction organization",           
+                       "cell adhesion",                          
+                       "extracellular matrix organization",     
+                       "epithelial to mesenchymal transition",  
+                       "regulation of metallopeptidase activity")
+  
+  # Calcular a soma cumulativa para cada processo biológico
+  cumulative_bp <- nodelist %>%
+    dplyr::select(all_of(process_columns)) %>%
+    distinct(root, queryItem, .keep_all = TRUE) %>%
+    mutate(across(all_of(process_columns[-c(1:3)]), ~ as.numeric(.))) %>%
+    group_by(root, clade_name) %>%
+    summarise(across(all_of(process_columns[-c(1:3)]), 
+                     ~ sum(. , na.rm = TRUE)),
+              .groups = "drop") %>%
+    arrange(desc(root)) %>%
+    mutate(across(all_of(process_columns[-c(1:3)]), ~ cumsum(.))) %>%
+    right_join(all_clades, by = "clade_name") %>%
+    fill(everything(), .direction = "down")
+  
+  return(cumulative_bp)
+}
+
+BP_by_clade <- function(data) {
+  data %>%
+    pivot_longer(
+      cols = c(`cellular extravasation`, `cell junction organization`, 
+               `cell adhesion`, `extracellular matrix organization`, 
+               `epithelial to mesenchymal transition`, 
+               `regulation of metallopeptidase activity`),
+      names_to = "process",
+      values_to = "presence"
+    ) %>%
+    filter(presence == 1) %>%
+    group_by(clade_name, process, root) %>% 
+    summarise(count = n(), .groups = "drop") %>%
+    mutate(total_genes = sum(count), .by = process) %>%
+    mutate(proportion = count / total_genes)
+}
+
+plot_stacked_bar_chart <- function(data) {
+   # Definir os grupos de interesse
+   clados_interesse <- c("Metamonada", "SAR", "Choanoflagellata", "Ctenophora", "Actinopterygii")
+   
+   # Criar as categorias "Outros" com base nos intervalos de root
+   filtered_data <- data %>%
+     mutate(clade_group = case_when(
+       clade_name == "Metamonada" ~ "Metamonada",
+       clade_name == "SAR" ~ "SAR",
+       root >= 31 & root <= 35 ~ "Intermediate SAR-Choano",
+       clade_name == "Choanoflagellata" ~ "Choanoflagellata",
+       clade_name == "Ctenophora" ~ "Ctenophora",
+       root >= 21 & root <= 28 ~ "Intermediate Cteno-Actino",
+       clade_name == "Actinopterygii" ~ "Actinopterygii",
+       TRUE ~ NA_character_
+     )) %>%
+     filter(!is.na(clade_group)) %>%
+     mutate(clade_group = factor(clade_group, 
+                              levels = c("Metamonada", "SAR", "Intermediate SAR-Choano",
+                                         "Choanoflagellata", "Ctenophora",
+                                         "Intermediate Cteno-Actino", "Actinopterygii")))
+   
+   # Ajustar a largura das barras: mais finas para "Outros"
+   filtered_data <- filtered_data %>%
+     mutate(bar_width = ifelse(grepl("Intermediate", clade_group), 0.4, 0.8)) %>%
+     mutate(alpha = ifelse(grepl("Intermediate", clade_group), 0.55, 1))
+   
+   # Criar o gráfico de barras empilhadas com larguras ajustadas
+   ggplot(filtered_data, aes(x = clade_group, y = proportion, fill = process, 
+                             width = bar_width)) +
+     geom_bar(position = "fill", stat = "identity", color = NA, alpha = filtered_data$alpha) +
+     theme_minimal() +
+     labs(
+       title = "Biological Process Distribution",
+       x="",
+       y = "Genes Proportion",
+       fill = "Biological Processes"
+     ) +
+     scale_fill_manual(values = c(
+       "cell adhesion"                               = "#06141FFF"
+       ,"extracellular matrix organization"          = "#742C14FF"
+       ,"epithelial to mesenchymal transition"       = "#3D4F7DFF"
+       ,"regulation of metallopeptidase activity"    = "#E48C2AFF"
+       ,"cell junction organization"                  ="#72874EFF"
+       ,"cellular extravasation"                      ="#046E8FFF"
+     )) + 
+     scale_y_continuous(labels = scales::percent) +
+     theme(
+       axis.text = element_text(size = 12),
+       axis.title = element_text(size = 14),
+       axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+       legend.position = "right",
+       plot.title = element_text(size = 16, hjust = 0.5, face = "bold"),
+       panel.grid = element_blank()
+     ) +
+     guides(alpha = "none")
+ }
+```
+
+## Cumulative rooting count
+
+```{r}
+cumulative_genes <- calculate_cumulative_genes(nodelist) 
+cumulative_bp <- calculate_cumulative_bp(nodelist)
+  
+cumulative_data <- left_join(cumulative_genes, cumulative_bp)
+ 
+
+long_data <- cumulative_data %>%
+  pivot_longer(cols = 5:10, 
+               names_to = "Process", 
+               values_to = "Value")
+
+#a <-
+ggplot() +
+  # Gráfico de barras para cumulative_sum
+  geom_bar(data = cumulative_data, 
+           aes(x = factor(clade_name, levels = clade_name), y = cumulative_sum), 
+           stat = "identity", fill = "darkgray", colour = NA) +
+  geom_text(data = cumulative_data, 
+            aes(x = factor(clade_name, levels = clade_name), y = cumulative_sum, label = cumulative_sum), 
+            vjust = -0.5, size = 3, color = "darkgray") +
+  scale_color_manual(values = annotation_colors) +
+  
+  labs(x = "Clade Name", y = "Cumulative Sum", 
+       title = "Cumulative Sum and Biological Processes",
+       fill = "Cumulative Sum",
+       color = "Biological Processes") +
+  
+  theme_main +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#b <- 
+ggplot() +
+  # Gráfico de barras para cumulative_sum
+  geom_bar(data = cumulative_data, 
+           aes(x = factor(-root), y = cumulative_sum), 
+           stat = "identity", fill = "darkgray", colour = NA) +
+  geom_text(data = cumulative_data, 
+            aes(x = factor(-root), y = cumulative_sum, label = cumulative_sum), 
+            vjust = -0.5, size = 3, color = "darkgray") +
+  
+  # Gráfico de linhas para os processos biológicos
+  geom_line(data = long_data, 
+            aes(x = factor(-root), y = Value, color = Process, group = Process), 
+            size = 1) +
+  
+  # Usar a paleta de cores definida
+  scale_color_manual(values = annotation_colors) +
+  
+  labs(x = "Clade Name", y = "Cumulative Sum", 
+       title = "Cumulative Sum and Biological Processes",
+       fill = "Cumulative Sum",
+       color = "Biological Processes") +
+  
+  theme_main +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#ggsave(file = "../results/plots/cumulative.svg", plot=a, width=15, height=8)
+#ggsave(file = "../results/plots/cumulative_bp.svg", plot=b, width=15, height=8)
+```
+
+## Modified z-score
+
+```{r}
+calc_gaps <- nodelist %>%
+  dplyr::select(root, clade_name, queryItem) %>%
+  unique() %>%
+  arrange(root)
+
+calc_gaps2 <- calc_gaps %>%
+  dplyr::group_by(root, clade_name) %>%
+  summarise(n = length(unique(queryItem))) %>%
+  ungroup() %>%
+  arrange(desc(root))
+
+calc_gaps2$acumulado <- cumsum(calc_gaps2$n)
+
+
+gaps <- calc_gaps2$n
+
+############## Calculando o Modified Z-score #################
+mediana <- median(gaps)
+mad <- median(abs(gaps - mediana))
+
+# Fator de escala para aproximar MAD ao desvio padrão (0.6745), valor utilizado como padrão
+# valores de MAD z-score >= 3.5 são considerados significativos
+
+calc_gaps2$modified_z_scores <- 0.6745 * (gaps - mediana) / mad
+
+# transformando de MAD z-score para p-value e p-value ajustado
+calc_gaps2$p_value <- 2 * pnorm(-abs(calc_gaps2$modified_z_scores))
+
+calc_gaps2$p_ajustado <- p.adjust(calc_gaps2$p_value, method = "fdr")
+
+signif_clades <- calc_gaps2[calc_gaps2$p_ajustado <= 0.05,]
+```
+
+
+
+```{r}
+list_intersect <- as.data.frame(intersect(nodelist$preferredName, metastasis_genes$gene))
+colnames(list_intersect) <- "gene"
+
+
+nodelist_filtered <- nodelist %>%
+  mutate(node_color = case_when(
+    clade_name == "Metamonada" ~ "#4CA375",
+    clade_name == "SAR" ~ "#E6B856",
+    clade_name == "Choanoflagellata" ~ "#D17878",
+    clade_name == "Ctenophora" ~ "#8A6BBE",
+    clade_name == "Actinopterygii" ~ "#4A85C2",
+    TRUE ~ "#999999FF"
+  )) %>%
+  mutate(node_size = case_when(
+    clade_name %in% c("Metamonada", "SAR", "Choanoflagellata", "Ctenophora", "Actinopterygii") ~ 50,
+    TRUE ~ 35
+  )) %>% 
+  mutate(node_linecolor = case_when(
+    preferredName %in% metastasis_genes$gene ~ "#6A0DAD", 
+    TRUE ~ "#999999FF"
+  )) %>%
+    mutate(node_linewidth = case_when(
+    preferredName %in% metastasis_genes$gene ~ 3, 
+    TRUE ~ 1
+    )) %>%
+  filter(root >= 20)
+
+list_intersect |> 
+  vroom::vroom_write(file = "../_dev/metastasis_intersect.csv", delim = ",")
+```
+
+
+```{r}
+df_proportion <- BP_by_clade(nodelist_filtered)
+```
+
+```{r}
+plot_stacked_bar_chart(df_proportion)
+```
+
+## Hipergeometric Test
+
+```{r}
+nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
+
+   clades <- unique(nodelist$clade_name)
+   processes <- c("cell adhesion", "extracellular matrix organization", 
+                  "epithelial to mesenchymal transition", "regulation of metallopeptidase activity", 
+                  "cell junction organization", "cellular extravasation")
+   
+  
+   result <- list()
+   
+   for (process in processes) {
+     for (clade in clades) {
+       
+       N <- length(nodelist$queryItem)  
+       M <- sum(nodelist[[process]])  
+       n <- length(which(nodelist$clade_name == clade))  
+       k <- sum(filter(nodelist, clade_name == clade)[[process]])  
+       
+       p_valor <- 1 - phyper(k - 1, M, N - M, n)
+       
+       result[[paste(process, clade, sep = "_")]] <- c(process, clade, k, M, N, n, p_valor)
+     }
+   }
+   
+   hipergeometric_df <- do.call(rbind, result) %>%
+     as.data.frame() %>%
+     setNames(c("Process", "clade_name", "k", "M", "N", "n", "p.val")) %>% 
+     arrange(p.val)
+     rownames(hipergeometric_df) <- NULL
+   
+   head(hipergeometric_df)
+```
+
+```{r}
+hipergeometric_df$p.val <- as.numeric(hipergeometric_df$p.val)
+hipergeometric_df$p.val_color <- ifelse(hipergeometric_df$p.val > 0.05, "gray", "red")
+
+i <- nodelist %>% 
+  dplyr::select(clade_name, root) %>% 
+  unique()
+
+hipergeometric_df <- hipergeometric_df %>%
+  inner_join(i, by = "clade_name")
+
+hipergeometric_df$clade_name <- factor(hipergeometric_df$clade_name, 
+    levels = unique(hipergeometric_df$clade_name[order(hipergeometric_df$root)]))
+
+
+hipergeometric_df$Process <- factor(hipergeometric_df$Process, 
+                                    levels = c("extracellular matrix organization", 
+                                               "epithelial to mesenchymal transition", 
+                                               "cell junction organization",
+                                               "regulation of metallopeptidase activity",
+                                               "cell adhesion", 
+                                               "cellular extravasation"))
+
+ggplot(hipergeometric_df, aes(x = Process, 
+                              y = clade_name, 
+                              size = as.numeric(n), 
+                              color = p.val_color)) +
+  geom_point() +
+  scale_color_manual(values = c("gray" = "gray", "red" = "red"), 
+                     labels = c("Not Significant", "Significant")) +  
+  labs(x = "Biological Process", y = "Clade", size = "Number of Genes", color = "Significance") +
+  scale_size_continuous(breaks = c(10, 50, 98), labels = c("10 genes", "50 genes", "100 genes")) + 
+  theme_minimal() +
+  ggtitle("Hipergeometric Test") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major.x = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  scale_y_discrete(labels = function(x) {
+    x <- gsub("Metamonada", "<b>Metamonada</b>", x)
+    x <- gsub("Actinopterygii", "<b>Actinopterygii</b>", x)
+    x <- gsub("Choanoflagellata", "<b>Choanoflagellata</b>", x)
+    return(x)
+  }) +
+  theme(axis.text.y = ggtext::element_markdown())
+```
