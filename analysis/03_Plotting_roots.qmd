@@ -27,6 +27,7 @@ library(tidyr)
 library(scales)
 library(forcats)
 library(ggtext)
+library(UpSetR)
 ```
 
 # Distribution
@@ -391,6 +392,8 @@ calc_gaps2$p_value <- 2 * pnorm(-abs(calc_gaps2$modified_z_scores))
 calc_gaps2$p_ajustado <- p.adjust(calc_gaps2$p_value, method = "fdr")
 
 signif_clades <- calc_gaps2[calc_gaps2$p_ajustado <= 0.05,]
+
+signif_clades
 ```
 
 ```{r}
@@ -440,7 +443,8 @@ nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
 
    clades <- unique(nodelist$clade_name)
    processes <- c("cell adhesion", "extracellular matrix organization", 
-                  "epithelial to mesenchymal transition", "regulation of metallopeptidase activity", 
+                  "epithelial to mesenchymal transition", 
+                  "regulation of metallopeptidase activity", 
                   "cell junction organization", "cellular extravasation")
    
   
