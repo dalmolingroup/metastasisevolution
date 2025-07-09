@@ -36,7 +36,7 @@ library(UpSetR)
 
 ```{r}
 load("../results/plots/graph")
-metastasis_genes <- vroom::vroom("../_dev/gene_publication.csv", delim = ",")
+metastasis_genes <- vroom::vroom("../results/metastasis_genes/metastasis_genes.csv", delim = ",")
 nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
 
 #CLADE_NAMES <- "https://raw.githubusercontent.com/dalmolingroup/neurotransmissionevolution/ctenophora_before_porifera/analysis/geneplast_clade_names.tsv"
@@ -397,10 +397,6 @@ signif_clades
 ```
 
 ```{r}
-list_intersect <- as.data.frame(intersect(nodelist$preferredName, metastasis_genes$gene))
-colnames(list_intersect) <- "gene"
-
-
 nodelist_filtered <- nodelist %>%
   mutate(node_color = case_when(
     clade_name == "Metamonada" ~ "#4CA375",
@@ -423,16 +419,11 @@ nodelist_filtered <- nodelist %>%
     TRUE ~ 1
     )) %>%
   filter(root >= 20)
-
-list_intersect |> 
-  vroom::vroom_write(file = "../_dev/metastasis_intersect.csv", delim = ",")
 ```
 
 ```{r}
 df_proportion <- BP_by_clade(nodelist_filtered)
-```
 
-```{r}
 plot_stacked_bar_chart(df_proportion)
 ```
 
@@ -453,8 +444,8 @@ nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
    for (process in processes) {
      for (clade in clades) {
        
-       N <- length(nodelist$queryItem)  
-       M <- sum(nodelist[[process]])  
+       N <- length(unique(metastasis_genes$external_gene_name))  
+       M <- sum(metastasis_genes$Signature == process)  
        n <- length(which(nodelist$clade_name == clade))  
        k <- sum(filter(nodelist, clade_name == clade)[[process]])  
        
@@ -469,7 +460,10 @@ nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
      setNames(c("Process", "clade_name", "k", "M", "N", "n", "p.val")) %>% 
      arrange(p.val)
      rownames(hipergeometric_df) <- NULL
-   
+
+   hipergeometric_df <- hipergeometric_df %>%
+     mutate(across(all_of(c("k", "M", "N", "n", "p.val")), as.numeric))   
+        
    head(hipergeometric_df)
 ```
 
