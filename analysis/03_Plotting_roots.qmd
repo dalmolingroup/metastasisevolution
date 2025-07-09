@@ -219,14 +219,13 @@ BP_by_clade <- function(data) {
 
 plot_stacked_bar_chart <- function(data) {
    # Definir os grupos de interesse
-   clados_interesse <- c("Metamonada", "SAR", "Choanoflagellata", "Ctenophora", "Actinopterygii")
+   clados_interesse <- c("Metamonada", "Choanoflagellata", "Ctenophora", "Actinopterygii")
    
    # Criar as categorias "Outros" com base nos intervalos de root
    filtered_data <- data %>%
      mutate(clade_group = case_when(
        clade_name == "Metamonada" ~ "Metamonada",
-       clade_name == "SAR" ~ "SAR",
-       root >= 31 & root <= 35 ~ "Intermediate SAR-Choano",
+       root >= 31 & root <= 36 ~ "Intermediate Metam-Choano",
        clade_name == "Choanoflagellata" ~ "Choanoflagellata",
        clade_name == "Ctenophora" ~ "Ctenophora",
        root >= 21 & root <= 28 ~ "Intermediate Cteno-Actino",
@@ -235,7 +234,7 @@ plot_stacked_bar_chart <- function(data) {
      )) %>%
      filter(!is.na(clade_group)) %>%
      mutate(clade_group = factor(clade_group, 
-                              levels = c("Metamonada", "SAR", "Intermediate SAR-Choano",
+                              levels = c("Metamonada", "Intermediate Metam-Choano",
                                          "Choanoflagellata", "Ctenophora",
                                          "Intermediate Cteno-Actino", "Actinopterygii")))
    
@@ -391,7 +390,8 @@ calc_gaps2$p_value <- 2 * pnorm(-abs(calc_gaps2$modified_z_scores))
 
 calc_gaps2$p_ajustado <- p.adjust(calc_gaps2$p_value, method = "fdr")
 
-signif_clades <- calc_gaps2[calc_gaps2$p_ajustado <= 0.05,]
+signif_clades <- calc_gaps2[calc_gaps2$p_ajustado <= 0.05 & 
+                              abs(calc_gaps2$modified_z_scores) > 3.5,]
 
 signif_clades
 ```
@@ -400,14 +400,13 @@ signif_clades
 nodelist_filtered <- nodelist %>%
   mutate(node_color = case_when(
     clade_name == "Metamonada" ~ "#4CA375",
-    clade_name == "SAR" ~ "#E6B856",
     clade_name == "Choanoflagellata" ~ "#D17878",
     clade_name == "Ctenophora" ~ "#8A6BBE",
     clade_name == "Actinopterygii" ~ "#4A85C2",
     TRUE ~ "#999999FF"
   )) %>%
   mutate(node_size = case_when(
-    clade_name %in% c("Metamonada", "SAR", "Choanoflagellata", "Ctenophora", "Actinopterygii") ~ 50,
+    clade_name %in% c("Metamonada", "Choanoflagellata", "Ctenophora", "Actinopterygii") ~ 50,
     TRUE ~ 35
   )) %>% 
   mutate(node_linecolor = case_when(
@@ -506,8 +505,9 @@ ggplot(hipergeometric_df, aes(x = Process,
         panel.grid.major.y = element_blank()) +
   scale_y_discrete(labels = function(x) {
     x <- gsub("Metamonada", "<b>Metamonada</b>", x)
-    x <- gsub("Actinopterygii", "<b>Actinopterygii</b>", x)
     x <- gsub("Choanoflagellata", "<b>Choanoflagellata</b>", x)
+    x <- gsub("Ctenophora", "<b>Ctenophora</b>", x)
+    x <- gsub("Actinopterygii", "<b>Actinopterygii</b>", x)
     return(x)
   }) +
   theme(axis.text.y = ggtext::element_markdown())
