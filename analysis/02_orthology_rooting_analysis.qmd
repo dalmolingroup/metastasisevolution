@@ -48,23 +48,63 @@ download_if_missing <- function(url, filename = basename(url)) {
 
 get_string_ids <- function(genes_hgnc, species_id = "9606") {
   
-  aliases <- vroom::vroom(
+  # --- 1. Ler protein.info ---
+  protein_info <- vroom::vroom(
     paste0(
-      "https://stringdb-downloads.org/download/protein.aliases.v12.0/",
-      species_id, ".protein.aliases.v12.0.txt.gz"
+      "https://stringdb-static.org/download/protein.info.v11.0/",
+      species_id, ".protein.info.v11.0.txt.gz"
     ),
-    col_types = "ccc"
+    col_types = "ccc",
+    delim = "\t",
+    comment = "##"
   )
   
-  map_ids <- aliases %>%
-    dplyr::filter(alias %in% genes_hgnc) %>%
-    dplyr::select(stringId = `#string_protein_id`, queryItem = alias) %>%
+  # Mapeamento direto pelo preferred_name
+  map_info <- protein_info %>%
+    dplyr::filter(preferred_name %in% genes_hgnc) %>%
+    dplyr::select(stringId = protein_external_id, queryItem = preferred_name) %>%
     dplyr::distinct()
   
-  map_ids$stringId <- sub(paste0("^", species_id, "\\."), "", map_ids$stringId)
+  # Remover prefixo species
+  map_info$stringId <- sub(paste0("^", species_id, "\\."), "", map_info$stringId)
+  
+  # Genes que não foram mapeados no protein.info
+  not_mapped <- setdiff(genes_hgnc, map_info$queryItem)
+  
+  # --- 2. Ler protein.aliases ---
+  aliases <- vroom::vroom(
+    paste0(
+      "https://stringdb-static.org/download/protein.aliases.v11.0/",
+      species_id, ".protein.aliases.v11.0.txt.gz"
+    ),
+    col_types = "ccc",
+    delim = "\t",
+    comment = "##",
+    col_names = c("string_protein_id", "alias", "source")
+  )
+  
+  # Mapeamento pelos aliases
+  map_aliases <- aliases %>%
+    dplyr::filter(alias %in% not_mapped) %>%
+    dplyr::select(stringId = string_protein_id, queryItem = alias) %>%
+    dplyr::distinct()
+  
+  # Remover prefixo species
+  map_aliases$stringId <- sub(paste0("^", species_id, "\\."), "", map_aliases$stringId)
+  
+  # --- 3. Unir resultados ---
+  map_ids <- dplyr::bind_rows(map_info, map_aliases) %>%
+    dplyr::distinct()
+  
+  # --- 4. Checar duplicados ---
+  dup_genes <- map_ids$queryItem[duplicated(map_ids$queryItem)]
+  if (length(dup_genes) > 0) {
+    warning("Genes mapeados para múltiplos stringIds: ", paste(unique(dup_genes), collapse = ", "))
+  }
   
   return(map_ids)
 }
+
 
  # Get STRING interactions
  get_network_interaction <- function(map_ids, stringId, species_id = "9606") {
