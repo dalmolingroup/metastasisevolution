@@ -182,7 +182,7 @@ cogdata <- dplyr::select(cogdata, "protein_id", "ssp_id", "og_id" = "cog_id")
 
 ```{r run}
 # Query by STRING API
-map_ids <- get_string_ids(df$external_gene_name) 
+map_ids <- get_string_ids(unique(df$external_gene_name))
 
 # Spliting first column into taxid and string_id
 separated_ids <- cogs %$% stri_split_fixed(taxid.string_id, pattern = ".", n = 2, simplify = T)
@@ -223,7 +223,8 @@ gene_cogs_resolved <- tribble(
 "ENSP00000323856",	"COG5069",		
 "ENSP00000359085",  "KOG3512",		
 "ENSP00000361467",  "KOG3528",		
-"ENSP00000363317",	"KOG3528",		
+"ENSP00000363317",	"KOG3528",
+"ENSP00000367408" , "KOG0033",          
 "ENSP00000383042",  "KOG0685",		
 "ENSP00000418112",	"COG5599",		
 "ENSP00000422533",	"KOG3545"
@@ -349,19 +350,27 @@ pivotada <- df %>%
 source_statements <-
   colnames(pivotada)[2:length(pivotada)]
 
-nodelist <-
+network_nodelist <-
   data.frame(node = unique(c(network_filtered$stringId_A, network_filtered$stringId_B))) %>%
   left_join(merged_paths, by = c("node" = "node")) %>%
   left_join(map_ids, by = c("node" = "stringId")) %>%
   left_join(pivotada, by = c("queryItem" = "external_gene_name"))
 
+nodelist <-
+  groot_df %>%
+  left_join(map_ids, by = c("string_id" = "stringId")) %>%
+  left_join(pivotada, by = c("queryItem" = "external_gene_name"))
+
 # Network Metrics
 connected_nodes <- rle(sort(c(network_filtered[,1], network_filtered[,2])))
 connected_nodes <- data.frame(count=connected_nodes$lengths, node=connected_nodes$values)
-connected_nodes <- left_join(nodelist, connected_nodes, by = c("node" = "node"))
+connected_nodes <- left_join(network_nodelist, connected_nodes, by = c("node" = "node"))
 
 nodelist |> 
   vroom::vroom_write(file = here("results/orthology_data/nodelist.csv"), delim = ",")
+
+network_nodelist |> 
+  vroom::vroom_write(file = here("results/orthology_data/network_nodelist.csv"), delim = ",")
 
 connected_nodes |> 
   vroom::vroom_write(file = here("results/orthology_data/connected_nodes.csv"), delim = ",")
