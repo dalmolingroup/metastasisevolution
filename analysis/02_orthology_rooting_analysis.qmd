@@ -46,22 +46,22 @@ download_if_missing <- function(url, filename = basename(url)) {
   }
 }
 
-# get IDs from STRING DB
 get_string_ids <- function(genes_hgnc, species_id = "9606") {
-
-    req <- RCurl::postForm(
-    "https://string-db.org/api/tsv/get_string_ids",
-    identifiers = paste(genes_hgnc, collapse = "%0D"),  
-    echo_query = "1",
-    species = species_id, 
-    .opts = list(ssl.verifypeer = FALSE)
+  
+  aliases <- vroom::vroom(
+    paste0(
+      "https://stringdb-downloads.org/download/protein.aliases.v12.0/",
+      species_id, ".protein.aliases.v12.0.txt.gz"
+    ),
+    col_types = "ccc"
   )
   
-  map_ids <- read.table(text = req, sep = "\t", header = TRUE, quote = "") %>%
-    dplyr::select(-queryIndex) %>%
-    unique()
+  map_ids <- aliases %>%
+    dplyr::filter(alias %in% genes_hgnc) %>%
+    dplyr::select(stringId = `#string_protein_id`, queryItem = alias) %>%
+    dplyr::distinct()
   
-  map_ids$stringId <- substring(map_ids$stringId, 6, 1000)
+  map_ids$stringId <- sub(paste0("^", species_id, "\\."), "", map_ids$stringId)
   
   return(map_ids)
 }
@@ -321,7 +321,7 @@ connected_nodes <- data.frame(count=connected_nodes$lengths, node=connected_node
 connected_nodes <- left_join(nodelist, connected_nodes, by = c("node" = "node"))
 
 nodelist |> 
-  vroom::vroom_write(file = here("results/orthology_data/nodelist.csv "), delim = ",")
+  vroom::vroom_write(file = here("results/orthology_data/nodelist.csv"), delim = ",")
 
 connected_nodes |> 
   vroom::vroom_write(file = here("results/orthology_data/connected_nodes.csv"), delim = ",")

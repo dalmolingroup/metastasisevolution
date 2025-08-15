@@ -2,7 +2,7 @@
 title: "Plotting Roots"
 author: "Dalmolin Systems Biology Group"
 format: html
-editor: visual
+editor: source
 ---
 
 ```{r setup, include=FALSE}
@@ -36,8 +36,8 @@ library(UpSetR)
 
 ```{r}
 load("../results/plots/graph")
-metastasis_genes <- vroom::vroom("../results/metastasis_genes/metastasis_genes.csv", delim = ",")
-nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
+metastasis_genes <- vroom::vroom(here("results/metastasis_genes/metastasis_genes.csv"), delim = ",")
+nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
 
 #CLADE_NAMES <- "https://raw.githubusercontent.com/dalmolingroup/neurotransmissionevolution/ctenophora_before_porifera/analysis/geneplast_clade_names.tsv"
 #lca_names <- read_table(CLADE_NAMES)
@@ -293,7 +293,6 @@ plot_stacked_bar_chart <- function(data) {
       sets.x.label = "Set Size")
 ```
 
-
 ## Cumulative rooting count
 
 ```{r}
@@ -410,11 +409,11 @@ nodelist_filtered <- nodelist %>%
     TRUE ~ 35
   )) %>% 
   mutate(node_linecolor = case_when(
-    preferredName %in% metastasis_genes$gene ~ "#6A0DAD", 
+    queryItem %in% metastasis_genes$gene ~ "#6A0DAD", 
     TRUE ~ "#999999FF"
   )) %>%
     mutate(node_linewidth = case_when(
-    preferredName %in% metastasis_genes$gene ~ 3, 
+    queryItem %in% metastasis_genes$gene ~ 3, 
     TRUE ~ 1
     )) %>%
   filter(root >= 20)
@@ -429,7 +428,8 @@ plot_stacked_bar_chart(df_proportion)
 ## Hipergeometric Test
 
 ```{r}
-nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
+nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
+map_ids <- vroom::vroom(here("results/orthology_data/map_ids.csv"))
 
    clades <- unique(nodelist$clade_name)
    processes <- c("cell adhesion", "extracellular matrix organization", 
@@ -443,7 +443,8 @@ nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
    for (process in processes) {
      for (clade in clades) {
        
-       N <- length(unique(metastasis_genes$external_gene_name))  
+      # N <- length(unique(metastasis_genes$external_gene_name))
+       N <- length(unique(map_ids$stringId))
        M <- sum(metastasis_genes$Signature == process)  
        n <- length(which(nodelist$clade_name == clade))  
        k <- sum(filter(nodelist, clade_name == clade)[[process]])  
