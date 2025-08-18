@@ -28,6 +28,7 @@ library(scales)
 library(forcats)
 library(ggtext)
 library(UpSetR)
+library(here)
 ```
 
 # Distribution
@@ -35,7 +36,7 @@ library(UpSetR)
 ## Load Data
 
 ```{r}
-load("../results/plots/graph")
+#load("../results/plots/graph")
 metastasis_genes <- vroom::vroom(here("results/metastasis_genes/metastasis_genes.csv"), delim = ",")
 nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
 
@@ -130,6 +131,152 @@ theme_big <- theme(
 ```
 
 ```{r}
+# # Custom tick function
+# tick_function <- function(x) {
+#   seq(x[2], 0, length.out = 3) %>% head(-1) %>% tail(-1) %>% { ceiling(./5)*5 }
+# }
+# 
+# calculate_cumulative_genes <- function(nodelist) {
+#   
+#     # Obter todas as categorias possíveis de clade_name
+#   all_clades <- node_annotation %>%
+#     arrange(desc(root)) %>%
+#     dplyr:: select(clade_name) %>%
+#     unique()
+#   
+#   # Definir as colunas de interesse
+#   process_columns <- c("queryItem", "root", "clade_name", 
+#                        "cellular extravasation", 
+#                        "cell junction organization",           
+#                        "cell adhesion",                          
+#                        "extracellular matrix organization",     
+#                        "epithelial to mesenchymal transition",  
+#                        "regulation of metallopeptidase activity")
+#   
+#   # Calcular o cumulativo agrupando por clade_name
+#   cumulative_genes <- nodelist %>%
+#     arrange(desc(root)) %>%
+#     dplyr::select(all_of(process_columns)) %>%
+#     group_by(clade_name, root) %>%
+#     summarise(count_genes = n(), .groups = "drop") %>%
+#     arrange(desc(root)) %>%
+#     mutate(cumulative_sum = cumsum(count_genes)) %>%
+#     right_join(all_clades, by = "clade_name") %>%
+#     fill(cumulative_sum, .direction = "down")
+#   
+#   return(cumulative_genes)
+# }
+# 
+# calculate_cumulative_bp <- function(nodelist) {
+#     
+#   # Obter todas as categorias possíveis de clade_name
+#   all_clades <- node_annotation %>%
+#     arrange(desc(root)) %>%
+#     dplyr:: select(clade_name) %>%
+#     unique()
+#   
+#   # Definir as colunas de interesse
+#   process_columns <- c("queryItem", "root", "clade_name", 
+#                        "cellular extravasation", 
+#                        "cell junction organization",           
+#                        "cell adhesion",                          
+#                        "extracellular matrix organization",     
+#                        "epithelial to mesenchymal transition",  
+#                        "regulation of metallopeptidase activity")
+#   
+#   # Calcular a soma cumulativa para cada processo biológico
+#   cumulative_bp <- nodelist %>%
+#     dplyr::select(all_of(process_columns)) %>%
+#     distinct(root, queryItem, .keep_all = TRUE) %>%
+#     mutate(across(all_of(process_columns[-c(1:3)]), ~ as.numeric(.))) %>%
+#     group_by(root, clade_name) %>%
+#     summarise(across(all_of(process_columns[-c(1:3)]), 
+#                      ~ sum(. , na.rm = TRUE)),
+#               .groups = "drop") %>%
+#     arrange(desc(root)) %>%
+#     mutate(across(all_of(process_columns[-c(1:3)]), ~ cumsum(.))) %>%
+#     right_join(all_clades, by = "clade_name") %>%
+#     fill(everything(), .direction = "down")
+#   
+#   return(cumulative_bp)
+# }
+# 
+# BP_by_clade <- function(data) {
+#   data %>%
+#     pivot_longer(
+#       cols = c(`cellular extravasation`, `cell junction organization`, 
+#                `cell adhesion`, `extracellular matrix organization`, 
+#                `epithelial to mesenchymal transition`, 
+#                `regulation of metallopeptidase activity`),
+#       names_to = "process",
+#       values_to = "presence"
+#     ) %>%
+#     filter(presence == 1) %>%
+#     group_by(clade_name, process, root) %>% 
+#     summarise(count = n(), .groups = "drop") %>%
+#     mutate(total_genes = sum(count), .by = process) %>%
+#     mutate(proportion = count / total_genes)
+# }
+# 
+# plot_stacked_bar_chart <- function(data) {
+#    # Definir os grupos de interesse
+#    clados_interesse <- c("Metamonada", "Choanoflagellata", "Ctenophora", "Actinopterygii")
+#    
+#    # Criar as categorias "Outros" com base nos intervalos de root
+#    filtered_data <- data %>%
+#      mutate(clade_group = case_when(
+#        clade_name == "Metamonada" ~ "Metamonada",
+#        root >= 31 & root <= 36 ~ "Intermediate Metam-Choano",
+#        clade_name == "Choanoflagellata" ~ "Choanoflagellata",
+#        clade_name == "Ctenophora" ~ "Ctenophora",
+#        root >= 21 & root <= 28 ~ "Intermediate Cteno-Actino",
+#        clade_name == "Actinopterygii" ~ "Actinopterygii",
+#        TRUE ~ NA_character_
+#      )) %>%
+#      filter(!is.na(clade_group)) %>%
+#      mutate(clade_group = factor(clade_group, 
+#                               levels = c("Metamonada", "Intermediate Metam-Choano",
+#                                          "Choanoflagellata", "Ctenophora",
+#                                          "Intermediate Cteno-Actino", "Actinopterygii")))
+#    
+#    # Ajustar a largura das barras: mais finas para "Outros"
+#    filtered_data <- filtered_data %>%
+#      mutate(bar_width = ifelse(grepl("Intermediate", clade_group), 0.4, 0.8)) %>%
+#      mutate(alpha = ifelse(grepl("Intermediate", clade_group), 0.55, 1))
+#    
+#    # Criar o gráfico de barras empilhadas com larguras ajustadas
+#    ggplot(filtered_data, aes(x = clade_group, y = proportion, fill = process, 
+#                              width = bar_width)) +
+#      geom_bar(position = "fill", stat = "identity", color = NA, alpha = filtered_data$alpha) +
+#      theme_minimal() +
+#      labs(
+#        title = "Biological Process Distribution",
+#        x="",
+#        y = "Genes Proportion",
+#        fill = "Biological Processes"
+#      ) +
+#      scale_fill_manual(values = c(
+#        "cell adhesion"                               = "#06141FFF"
+#        ,"extracellular matrix organization"          = "#742C14FF"
+#        ,"epithelial to mesenchymal transition"       = "#3D4F7DFF"
+#        ,"regulation of metallopeptidase activity"    = "#E48C2AFF"
+#        ,"cell junction organization"                  ="#72874EFF"
+#        ,"cellular extravasation"                      ="#046E8FFF"
+#      )) + 
+#      scale_y_continuous(labels = scales::percent) +
+#      theme(
+#        axis.text = element_text(size = 12),
+#        axis.title = element_text(size = 14),
+#        axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+#        legend.position = "right",
+#        plot.title = element_text(size = 16, hjust = 0.5, face = "bold"),
+#        panel.grid = element_blank()
+#      ) +
+#      guides(alpha = "none")
+#  }
+```
+
+```{r}
 # Custom tick function
 tick_function <- function(x) {
   seq(x[2], 0, length.out = 3) %>% head(-1) %>% tail(-1) %>% { ceiling(./5)*5 }
@@ -219,13 +366,12 @@ BP_by_clade <- function(data) {
 
 plot_stacked_bar_chart <- function(data) {
    # Definir os grupos de interesse
-   clados_interesse <- c("Metamonada", "Choanoflagellata", "Ctenophora", "Actinopterygii")
+   clados_interesse <- c("Choanoflagellata", "Ctenophora", "Actinopterygii")
    
    # Criar as categorias "Outros" com base nos intervalos de root
    filtered_data <- data %>%
      mutate(clade_group = case_when(
-       clade_name == "Metamonada" ~ "Metamonada",
-       root >= 31 & root <= 36 ~ "Intermediate Metam-Choano",
+       root >= 31 & root <= 37 ~ "Intermediate Metam-Choano",
        clade_name == "Choanoflagellata" ~ "Choanoflagellata",
        clade_name == "Ctenophora" ~ "Ctenophora",
        root >= 21 & root <= 28 ~ "Intermediate Cteno-Actino",
@@ -234,7 +380,7 @@ plot_stacked_bar_chart <- function(data) {
      )) %>%
      filter(!is.na(clade_group)) %>%
      mutate(clade_group = factor(clade_group, 
-                              levels = c("Metamonada", "Intermediate Metam-Choano",
+                              levels = c("Intermediate Metam-Choano",
                                          "Choanoflagellata", "Ctenophora",
                                          "Intermediate Cteno-Actino", "Actinopterygii")))
    
@@ -274,6 +420,7 @@ plot_stacked_bar_chart <- function(data) {
      guides(alpha = "none")
  }
 ```
+
 
 ## Gene distribution
 
@@ -370,50 +517,95 @@ calc_gaps2 <- calc_gaps %>%
   ungroup() %>%
   arrange(desc(root))
 
+# acumulado normal
 calc_gaps2$acumulado <- cumsum(calc_gaps2$n)
 
+# baseline: subtrai o valor de Metamonada
+calc_gaps2$acumulado <- calc_gaps2$acumulado - calc_gaps2$acumulado[1]
 
-gaps <- calc_gaps2$n
+# >>>> REMOVE Metamonada do cálculo estatístico <<<<
+gaps <- calc_gaps2$n[-1]
 
 ############## Calculando o Modified Z-score #################
 mediana <- median(gaps)
 mad <- median(abs(gaps - mediana))
 
-# Fator de escala para aproximar MAD ao desvio padrão (0.6745), valor utilizado como padrão
-# valores de MAD z-score >= 3.5 são considerados significativos
+calc_gaps2$modified_z_scores <- NA
+calc_gaps2$p_value <- NA
+calc_gaps2$p_ajustado <- NA
 
-calc_gaps2$modified_z_scores <- 0.6745 * (gaps - mediana) / mad
+calc_gaps2$modified_z_scores[-1] <- 0.6745 * (gaps - mediana) / mad
+calc_gaps2$p_value[-1] <- 2 * pnorm(-abs(calc_gaps2$modified_z_scores[-1]))
+calc_gaps2$p_ajustado[-1] <- p.adjust(calc_gaps2$p_value[-1], method = "fdr")
 
-# transformando de MAD z-score para p-value e p-value ajustado
-calc_gaps2$p_value <- 2 * pnorm(-abs(calc_gaps2$modified_z_scores))
-
-calc_gaps2$p_ajustado <- p.adjust(calc_gaps2$p_value, method = "fdr")
-
-signif_clades <- calc_gaps2[calc_gaps2$p_ajustado <= 0.05 & 
-                              abs(calc_gaps2$modified_z_scores) > 3.5,]
+# filtra clados significativos (exclui metamonada)
+signif_clades <- calc_gaps2 %>%
+  filter(!is.na(p_ajustado),
+         p_ajustado <= 0.05,
+         abs(modified_z_scores) > 3.5)
 
 signif_clades
+
+```
+
+
+```{r}
+# calc_gaps <- nodelist %>%
+#   dplyr::select(root, clade_name, queryItem) %>%
+#   unique() %>%
+#   arrange(root)
+# 
+# calc_gaps2 <- calc_gaps %>%
+#   dplyr::group_by(root, clade_name) %>%
+#   summarise(n = length(unique(queryItem))) %>%
+#   ungroup() %>%
+#   arrange(desc(root))
+# 
+# calc_gaps2$acumulado <- cumsum(calc_gaps2$n)
+# 
+# 
+# gaps <- calc_gaps2$n
+# 
+# ############## Calculando o Modified Z-score #################
+# mediana <- median(gaps)
+# mad <- median(abs(gaps - mediana))
+# 
+# # Fator de escala para aproximar MAD ao desvio padrão (0.6745), valor utilizado como padrão
+# # valores de MAD z-score >= 3.5 são considerados significativos
+# 
+# calc_gaps2$modified_z_scores <- 0.6745 * (gaps - mediana) / mad
+# 
+# # transformando de MAD z-score para p-value e p-value ajustado
+# calc_gaps2$p_value <- 2 * pnorm(-abs(calc_gaps2$modified_z_scores))
+# 
+# calc_gaps2$p_ajustado <- p.adjust(calc_gaps2$p_value, method = "fdr")
+# 
+# signif_clades <- calc_gaps2[calc_gaps2$p_ajustado <= 0.05 & 
+#                               abs(calc_gaps2$modified_z_scores) > 3.5,]
+# 
+# signif_clades
 ```
 
 ```{r}
 nodelist_filtered <- nodelist %>%
   mutate(node_color = case_when(
-    clade_name == "Metamonada" ~ "#4CA375",
+   # clade_name == "Metamonada" ~ "#4CA375",
     clade_name == "Choanoflagellata" ~ "#D17878",
     clade_name == "Ctenophora" ~ "#8A6BBE",
     clade_name == "Actinopterygii" ~ "#4A85C2",
     TRUE ~ "#999999FF"
   )) %>%
   mutate(node_size = case_when(
-    clade_name %in% c("Metamonada", "Choanoflagellata", "Ctenophora", "Actinopterygii") ~ 50,
+    clade_name %in% c(#"Metamonada", 
+      "Choanoflagellata", "Ctenophora", "Actinopterygii") ~ 50,
     TRUE ~ 35
   )) %>% 
   mutate(node_linecolor = case_when(
-    queryItem %in% metastasis_genes$gene ~ "#6A0DAD", 
+    queryItem %in% metastasis_genes$external_gene_name ~ "#6A0DAD", 
     TRUE ~ "#999999FF"
   )) %>%
     mutate(node_linewidth = case_when(
-    queryItem %in% metastasis_genes$gene ~ 3, 
+    queryItem %in% metastasis_genes$external_gene_name ~ 3, 
     TRUE ~ 1
     )) %>%
   filter(root >= 20)
@@ -429,7 +621,6 @@ plot_stacked_bar_chart(df_proportion)
 
 ```{r}
 nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
-map_ids <- vroom::vroom(here("results/orthology_data/map_ids.csv"))
 
    clades <- unique(nodelist$clade_name)
    processes <- c("cell adhesion", "extracellular matrix organization", 
@@ -443,9 +634,8 @@ map_ids <- vroom::vroom(here("results/orthology_data/map_ids.csv"))
    for (process in processes) {
      for (clade in clades) {
        
-      # N <- length(unique(metastasis_genes$external_gene_name))
-       N <- length(unique(map_ids$stringId))
-       M <- sum(metastasis_genes$Signature == process)  
+       N <- length(unique(nodelist$string_id))
+       M <- sum(nodelist[ ,process])  
        n <- length(which(nodelist$clade_name == clade))  
        k <- sum(filter(nodelist, clade_name == clade)[[process]])  
        
