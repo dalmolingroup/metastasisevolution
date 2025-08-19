@@ -37,8 +37,8 @@ library(here)
 
 ```{r}
 #load("../results/plots/graph")
-metastasis_genes <- vroom::vroom(here("results/metastasis_genes/metastasis_genes.csv"), delim = ",")
-nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
+metastasis_genes <- vroom::vroom("../results/metastasis_genes/metastasis_genes.csv", delim = ",")
+nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
 
 #CLADE_NAMES <- "https://raw.githubusercontent.com/dalmolingroup/neurotransmissionevolution/ctenophora_before_porifera/analysis/geneplast_clade_names.tsv"
 #lca_names <- read_table(CLADE_NAMES)
@@ -421,7 +421,6 @@ plot_stacked_bar_chart <- function(data) {
  }
 ```
 
-
 ## Gene distribution
 
 ```{r}
@@ -506,48 +505,54 @@ ggplot() +
 ## Modified z-score
 
 ```{r}
+# 1️ Calcular o número de genes únicos por clado
 calc_gaps <- nodelist %>%
   dplyr::select(root, clade_name, queryItem) %>%
   unique() %>%
-  arrange(root)
+  arrange(desc(root))  # do mais recente para o mais basal
 
 calc_gaps2 <- calc_gaps %>%
   dplyr::group_by(root, clade_name) %>%
-  summarise(n = length(unique(queryItem))) %>%
-  ungroup() %>%
+  summarise(n = length(unique(queryItem)), .groups = "drop") %>%
   arrange(desc(root))
 
-# acumulado normal
-calc_gaps2$acumulado <- cumsum(calc_gaps2$n)
+# 2️ Separar Metamonada (baseline) dos clados seguintes
+baseline <- calc_gaps2[1, ]        # Metamonada
+clados <- calc_gaps2[-1, ]         # demais clados para estatística
 
-# baseline: subtrai o valor de Metamonada
-calc_gaps2$acumulado <- calc_gaps2$acumulado - calc_gaps2$acumulado[1]
+# 3️ Calcular Modified Z-score apenas nos clados posteriores
+mediana <- median(clados$n)
+mad <- median(abs(clados$n - mediana))
 
-# >>>> REMOVE Metamonada do cálculo estatístico <<<<
-gaps <- calc_gaps2$n[-1]
+clados <- clados %>%
+  mutate(
+    modified_z_scores = 0.6745 * (n - mediana) / mad,
+    p_value = 2 * pnorm(-abs(modified_z_scores)),
+    p_adjusted = p.adjust(p_value, method = "fdr")
+  )
 
-############## Calculando o Modified Z-score #################
-mediana <- median(gaps)
-mad <- median(abs(gaps - mediana))
-
+# 4️ Reconstruir dataframe final incluindo Metamonada
 calc_gaps2$modified_z_scores <- NA
 calc_gaps2$p_value <- NA
-calc_gaps2$p_ajustado <- NA
+calc_gaps2$p_adjusted <- NA
 
-calc_gaps2$modified_z_scores[-1] <- 0.6745 * (gaps - mediana) / mad
-calc_gaps2$p_value[-1] <- 2 * pnorm(-abs(calc_gaps2$modified_z_scores[-1]))
-calc_gaps2$p_ajustado[-1] <- p.adjust(calc_gaps2$p_value[-1], method = "fdr")
+calc_gaps2$modified_z_scores[-1] <- clados$modified_z_scores
+calc_gaps2$p_value[-1] <- clados$p_value
+calc_gaps2$p_adjusted[-1] <- clados$p_adjusted
 
-# filtra clados significativos (exclui metamonada)
+# 5 Calcular acumulado real de genes (não subtrair baseline)
+calc_gaps2$acumulado <- cumsum(calc_gaps2$n)
+
+# 6 Filtrar clados significativos
 signif_clades <- calc_gaps2 %>%
-  filter(!is.na(p_ajustado),
-         p_ajustado <= 0.05,
+  filter(!is.na(p_adjusted),
+         p_adjusted <= 0.05,
          abs(modified_z_scores) > 3.5)
 
+# Resultado final
+calc_gaps2
 signif_clades
-
 ```
-
 
 ```{r}
 # calc_gaps <- nodelist %>%
@@ -578,13 +583,14 @@ signif_clades
 # # transformando de MAD z-score para p-value e p-value ajustado
 # calc_gaps2$p_value <- 2 * pnorm(-abs(calc_gaps2$modified_z_scores))
 # 
-# calc_gaps2$p_ajustado <- p.adjust(calc_gaps2$p_value, method = "fdr")
+# calc_gaps2$p_ajustado <- p.adjust(calc_gaps2$p_value, method = "BH")
 # 
-# signif_clades <- calc_gaps2[calc_gaps2$p_ajustado <= 0.05 & 
+# signif_clades <- calc_gaps2[calc_gaps2$p_ajustado <= 0.05 &
 #                               abs(calc_gaps2$modified_z_scores) > 3.5,]
 # 
 # signif_clades
 ```
+
 
 ```{r}
 nodelist_filtered <- nodelist %>%
@@ -620,7 +626,7 @@ plot_stacked_bar_chart(df_proportion)
 ## Hipergeometric Test
 
 ```{r}
-nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
+nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
 
    clades <- unique(nodelist$clade_name)
    processes <- c("cell adhesion", "extracellular matrix organization", 
@@ -634,10 +640,10 @@ nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
    for (process in processes) {
      for (clade in clades) {
        
-       N <- length(unique(nodelist$string_id))
-       M <- sum(nodelist[ ,process])  
-       n <- length(which(nodelist$clade_name == clade))  
-       k <- sum(filter(nodelist, clade_name == clade)[[process]])  
+       N <- length(unique(nodelist$string_id))                     # total de genes únicos
+       M <- sum(nodelist[ ,process])                               # número de genes que participam do processo
+       n <- length(which(nodelist$clade_name == clade))            # número de genes no clado
+       k <- sum(filter(nodelist, clade_name == clade)[[process]])  # número de genes do clado que participam do processo
        
        p_valor <- 1 - phyper(k - 1, M, N - M, n)
        
@@ -653,13 +659,16 @@ nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
 
    hipergeometric_df <- hipergeometric_df %>%
      mutate(across(all_of(c("k", "M", "N", "n", "p.val")), as.numeric))   
+   
+   hipergeometric_df <- hipergeometric_df %>%
+    mutate(p.adj = p.adjust(p.val, method = "BH"))
         
    head(hipergeometric_df)
 ```
 
 ```{r}
-hipergeometric_df$p.val <- as.numeric(hipergeometric_df$p.val)
-hipergeometric_df$p.val_color <- ifelse(hipergeometric_df$p.val > 0.05, "gray", "red")
+hipergeometric_df$p.adj <- as.numeric(hipergeometric_df$p.adj)
+hipergeometric_df$p.val_color <- ifelse(hipergeometric_df$p.adj > 0.05, "gray", "red")
 
 i <- nodelist %>% 
   dplyr::select(clade_name, root) %>% 
@@ -687,6 +696,121 @@ ggplot(hipergeometric_df, aes(x = Process,
   geom_point() +
   scale_color_manual(values = c("gray" = "gray", "red" = "red"), 
                      labels = c("Not Significant", "Significant")) +  
+  labs(x = "Biological Process", y = "Clade", size = "Number of Orthologs", color = "Significance") +
+  scale_size_continuous(breaks = c(10, 50, 98), labels = c("10 genes", "50 Orthologs", "100 Orthologs")) + 
+  theme_minimal() +
+  ggtitle("Hipergeometric Test") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major.x = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  scale_y_discrete(labels = function(x) {
+   # x <- gsub("Metamonada", "<b>Metamonada</b>", x)
+    x <- gsub("Choanoflagellata", "<b>Choanoflagellata</b>", x)
+   # x <- gsub("Ctenophora", "<b>Ctenophora</b>", x)
+    x <- gsub("Actinopterygii", "<b>Actinopterygii</b>", x)
+    return(x)
+  }) +
+  theme(axis.text.y = ggtext::element_markdown())
+```
+
+## Ogs Hipergeometric test
+
+```{r}
+# Agregar para nível de COG
+nodelist_cogs <- nodelist %>%
+  group_by(cog_id, root, clade_name) %>%
+  summarise(
+    across(where(is.numeric), ~ as.integer(any(. == 1))),
+    .groups = "drop"
+  )
+
+clades <- unique(nodelist_cogs$clade_name)
+processes <- c(
+  "cell adhesion", 
+  "extracellular matrix organization", 
+  "epithelial to mesenchymal transition", 
+  "regulation of metallopeptidase activity", 
+  "cell junction organization", 
+  "cellular extravasation"
+)
+
+result <- list()
+
+for (process in processes) {
+  for (clade in clades) {
+    
+    # N = total de COGs únicos
+    N <- length(unique(nodelist_cogs$cog_id))
+    
+    # M = total de COGs envolvidos nesse processo
+    M <- sum(
+      nodelist_cogs %>%
+        dplyr::select(all_of(process)) %>%
+        pull() == 1
+    )
+    
+    # n = número de COGs no clado
+    n <- sum(nodelist_cogs$clade_name == clade)
+    
+    # k = número de COGs no clado envolvidos no processo
+    k <- sum(
+      filter(nodelist_cogs, clade_name == clade)[[process]]
+    )
+    
+    # Teste hipergeométrico
+    p_valor <- 1 - phyper(k - 1, M, N - M, n)
+    
+    result[[paste(process, clade, sep = "_")]] <- 
+      c(process, clade, k, M, N, n, p_valor)
+  }
+}
+
+hipergeometric_OGs_df <- do.call(rbind, result) %>%
+  as.data.frame() %>%
+  setNames(c("Process", "clade_name", "k", "M", "N", "n", "p.val")) %>%
+  arrange(p.val)
+
+rownames(hipergeometric_OGs_df) <- NULL
+
+hipergeometric_OGs_df <- hipergeometric_OGs_df %>%
+  mutate(across(c("k", "M", "N", "n", "p.val"), as.numeric))
+
+hipergeometric_OGs_df <- hipergeometric_OGs_df %>%
+  mutate(p.adj = p.adjust(p.val, method = "fdr"))
+
+head(hipergeometric_OGs_df)
+```
+
+```{r}
+hipergeometric_OGs_df$p.adj <- as.numeric(hipergeometric_OGs_df$p.adj)
+hipergeometric_OGs_df$p.val_color <- ifelse(hipergeometric_OGs_df$p.adj > 0.05, "gray", "red")
+
+i <- nodelist %>% 
+  dplyr::select(clade_name, root) %>% 
+  unique()
+
+hipergeometric_OGs_df <- hipergeometric_OGs_df %>%
+  inner_join(i, by = "clade_name")
+
+hipergeometric_OGs_df$clade_name <- factor(hipergeometric_OGs_df$clade_name, 
+    levels = unique(hipergeometric_OGs_df$clade_name[order(hipergeometric_OGs_df$root)]))
+
+
+hipergeometric_OGs_df$Process <- factor(hipergeometric_OGs_df$Process, 
+                                    levels = c("extracellular matrix organization", 
+                                               "epithelial to mesenchymal transition", 
+                                               "cell junction organization",
+                                               "regulation of metallopeptidase activity",
+                                               "cell adhesion", 
+                                               "cellular extravasation"))
+
+ggplot(hipergeometric_OGs_df, aes(x = Process, 
+                              y = clade_name, 
+                              size = as.numeric(n), 
+                              color = p.val_color)) +
+  geom_point() +
+  scale_color_manual(values = c("gray" = "gray", "red" = "red"), 
+                     labels = c("Not Significant", "Significant")) +  
   labs(x = "Biological Process", y = "Clade", size = "Number of Genes", color = "Significance") +
   scale_size_continuous(breaks = c(10, 50, 98), labels = c("10 genes", "50 genes", "100 genes")) + 
   theme_minimal() +
@@ -703,3 +827,6 @@ ggplot(hipergeometric_df, aes(x = Process,
   }) +
   theme(axis.text.y = ggtext::element_markdown())
 ```
+
+
+
