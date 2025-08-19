@@ -37,8 +37,8 @@ library(here)
 
 ```{r}
 #load("../results/plots/graph")
-metastasis_genes <- vroom::vroom("../results/metastasis_genes/metastasis_genes.csv", delim = ",")
-nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
+metastasis_genes <- vroom::vroom("~/scratch/rstudio/tmp_tmp/metastasisevolution/results/metastasis_genes/metastasis_genes.csv", delim = ",")
+nodelist <- vroom::vroom("~/scratch/rstudio/tmp_tmp/metastasisevolution/results/orthology_data/nodelist.csv")
 
 #CLADE_NAMES <- "https://raw.githubusercontent.com/dalmolingroup/neurotransmissionevolution/ctenophora_before_porifera/analysis/geneplast_clade_names.tsv"
 #lca_names <- read_table(CLADE_NAMES)
@@ -697,7 +697,7 @@ ggplot(hipergeometric_df, aes(x = Process,
   scale_color_manual(values = c("gray" = "gray", "red" = "red"), 
                      labels = c("Not Significant", "Significant")) +  
   labs(x = "Biological Process", y = "Clade", size = "Number of Orthologs", color = "Significance") +
-  scale_size_continuous(breaks = c(10, 50, 98), labels = c("10 genes", "50 Orthologs", "100 Orthologs")) + 
+  scale_size_continuous(breaks = c(10, 50, 100), labels = c("10 Orthologs", "50 Orthologs", "100 Orthologs")) + 
   theme_minimal() +
   ggtitle("Hipergeometric Test") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
@@ -706,7 +706,7 @@ ggplot(hipergeometric_df, aes(x = Process,
   scale_y_discrete(labels = function(x) {
    # x <- gsub("Metamonada", "<b>Metamonada</b>", x)
     x <- gsub("Choanoflagellata", "<b>Choanoflagellata</b>", x)
-   # x <- gsub("Ctenophora", "<b>Ctenophora</b>", x)
+    x <- gsub("Ctenophora", "<b>Ctenophora</b>", x)
     x <- gsub("Actinopterygii", "<b>Actinopterygii</b>", x)
     return(x)
   }) +
