@@ -37,8 +37,8 @@ library(here)
 
 ```{r}
 #load("../results/plots/graph")
-metastasis_genes <- vroom::vroom("~/scratch/rstudio/tmp_tmp/metastasisevolution/results/metastasis_genes/metastasis_genes.csv", delim = ",")
-nodelist <- vroom::vroom("~/scratch/rstudio/tmp_tmp/metastasisevolution/results/orthology_data/nodelist.csv")
+metastasis_genes <- vroom::vroom("../results/metastasis_genes/metastasis_genes.csv", delim = ",")
+nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
 
 #CLADE_NAMES <- "https://raw.githubusercontent.com/dalmolingroup/neurotransmissionevolution/ctenophora_before_porifera/analysis/geneplast_clade_names.tsv"
 #lca_names <- read_table(CLADE_NAMES)
