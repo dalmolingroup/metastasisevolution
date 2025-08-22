@@ -1,20 +1,21 @@
 # Reconstruction of the Evolutionary Landscape of Biological Processes Involved in the Early Stages of the Metastatic Cascade
 
-This repository contains an ongoing analysis focused on understanding the evolutionary origins of genes involved in the early stages of the metastatic cascade.
+This repository hosts the analysis and resources supporting the study of the evolutionary origins of biological processes underlying the early stages of the metastatic cascade.
 
-Metastasis is a complex process where neoplastic cells spread from a primary tumor to distant tissues, forming secondary tumors. Despite significant efforts to decipher the biological mechanisms underlying metastasis, the evolutionary history of the genes associated with this process remains insufficiently explored.
+Metastasis is a multistep process through which tumor cells disseminate from the primary site and colonize distant tissues. While the molecular mechanisms of metastasis are well studied, the evolutionary history of the genes and pathways enabling these processes remains underexplored. This project addresses that gap using phylogenetic reconstruction.
 
 ## Abstract
 
-This project aims to evaluate the evolution of orthologous genes implicated in key biological pathways involved in the initial steps of metastasis, such as cell adhesion, cell junction organization, cell extravasation, epithelial-mesenchymal transition, and matrix metalloproteinase regulation.
+This study investigates the evolutionary trajectory of orthologous genes involved in six fundamental biological processes associated with the initial metastatic cascade: cell adhesion, extracellular matrix (ECM) organization, epithelial-mesenchymal transition (EMT), cell junction organization, metalloproteinase regulation, and cellular extravasation.
 
-The analysis reconstructs the evolutionary scenario of 470 orthologous genes across 476 eukaryotic species. Results suggest that the evolutionary complexity of metastatic mechanisms developed progressively across taxa.
+Using Gene Ontology (GO)-based selection, 668 protein-coding genes were mapped across 476 eukaryotic species and rooted with the GeneBridge algorithm. The results reveal a layered evolutionary assembly of metastasis-related modules:
 
--   **Human-Metamonada**: Genes related to cytoskeleton modulation and cell motility were rooted.\
+-   **Human-Discoba LCA**: Early enrichment of ECM organization genes linked to aggregative multicellularity.\
+-   **Human-Porifera LCA**: Emergence of junctional machinery for epithelial integrity.
 -   **Human-Choanoflagellata**: Genes involved in cell-cell and extracellular matrix adhesion were rooted.\
 -   **Human-Actinopterygii**: Genes tied to cell extravasation and the major histocompatibility complex were predominantly rooted.
 
-These findings indicate that metastatic mechanisms emerged through evolutionary gains of function in distinct lineages. The study provides new perspectives on the evolutionary origins of metastasis-related genes and their role in cancer progression.
+Findings suggest that metastasis does not represent a novel cancer-specific innovation, but rather the pathological reconfiguration of deeply conserved biological programs, progressively assembled during eukaryotic and metazoan evolution.
 
 ## Repository Structure
 ├── _dev                     
