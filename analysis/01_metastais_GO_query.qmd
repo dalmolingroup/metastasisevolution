@@ -108,6 +108,12 @@ result <- list_to_df(genesPerTerm, metastasis_ids) %>%
 result |> 
   vroom::vroom_write(file = here("results/metastasis_genes/metastasis_genes.csv"), delim = ",")
 
+table1 <- dplyr::select(metastasis_ids, -Hallmark) %>%
+  unique()
+
+table1 |>
+  vroom::vroom_write(file = here("results/paper_data/table1.csv"), delim = ",")
+
 head(result)
 ```
 

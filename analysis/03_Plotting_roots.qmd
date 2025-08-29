@@ -549,6 +549,12 @@ signif_clades <- calc_gaps2 %>%
          p_adjusted <= 0.05,
          abs(modified_z_scores) > 3.5)
 
+suppl_table1 <- calc_gaps2 %>%
+  filter(!is.na(p_adjusted))
+
+suppl_table1 |> 
+  vroom::vroom_write(file = here("results/paper_data/suppl_table1.csv"), delim = ",")
+
 # Resultado final
 calc_gaps2
 signif_clades

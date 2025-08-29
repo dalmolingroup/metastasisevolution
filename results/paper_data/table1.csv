@@ -1,0 +1,66 @@
+Signature,GO_id,Description
+cellular extravasation,GO:0002691, regulation of cellular extravasation
+cellular extravasation,GO:0002692, negative regulation of cellular extravasation
+cellular extravasation,GO:0002693, positive regulation of cellular extravasation
+cell junction organization,GO:0002934, desmosome organization
+cell junction organization,GO:0007043, cell-cell junction assembly
+cell junction organization,GO:0007044, cell-substrate junction assembly
+cell adhesion,GO:0007159, leukocyte cell-cell adhesion
+cell adhesion,GO:0007160, cell-matrix adhesion
+extracellular matrix organization,GO:0010715, regulation of extracellular matrix disassembly
+extracellular matrix organization,GO:0010716, negative regulation of extracellular matrix disassembly
+epithelial to mesenchymal transition,GO:0010717, regulation of epithelial to mesenchymal transition
+epithelial to mesenchymal transition,GO:0010718, positive regulation of epithelial to mesenchymal transition
+epithelial to mesenchymal transition,GO:0010719, negative regulation of epithelial to mesenchymal transition
+cell adhesion,GO:0010810, regulation of cell-substrate adhesion
+cell adhesion,GO:0010811, positive regulation of cell-substrate adhesion
+cell adhesion,GO:0010812, negative regulation of cell-substrate adhesion
+cell adhesion,GO:0022407, regulation of cell-cell adhesion
+cell adhesion,GO:0022408, negative regulation of cell-cell adhesion
+cell adhesion,GO:0022409, positive regulation of cell-cell adhesion
+extracellular matrix organization,GO:0030199, collagen fibril organization
+cell adhesion,GO:0033627, cell adhesion mediated by integrin
+cell adhesion,GO:0033631, cell-cell adhesion mediated by integrin
+cell adhesion,GO:0034110, regulation of homotypic cell-cell adhesion
+cell adhesion,GO:0034111, negative regulation of homotypic cell-cell adhesion
+cell adhesion,GO:0034112, positive regulation of homotypic cell-cell adhesion
+cell adhesion,GO:0034114, regulation of heterotypic cell-cell adhesion
+cell adhesion,GO:0034115, negative regulation of heterotypic cell-cell adhesion
+cell adhesion,GO:0034116, positive regulation of heterotypic cell-cell adhesion
+cell adhesion,GO:0098631, cell adhesion mediator activity
+cell adhesion,GO:0098632, cell-cell adhesion mediator activity
+cell adhesion,GO:0098635, protein complex involved in cell-cell adhesion
+cell adhesion,GO:0098636, protein complex involved in cell adhesion
+cell junction organization,GO:0034332, adherens junction organization
+cell adhesion,GO:0034446, substrate adhesion-dependent cell spreading
+extracellular matrix organization,GO:0034769, basement membrane disassembly
+cellular extravasation,GO:0035696, monocyte extravasation
+cell adhesion,GO:0044331, cell-cell adhesion mediated by cadherin
+cell junction organization,GO:0045217, cell-cell junction maintenance
+extracellular matrix organization,GO:0048251, elastic fiber assembly
+cellular extravasation,GO:0050901, leukocyte tethering or rolling
+cellular extravasation,GO:0050904, diapedesis
+extracellular matrix organization,GO:0070831, basement membrane assembly
+cell adhesion,GO:0071603, endothelial cell-cell adhesion
+cellular extravasation,GO:0072672, neutrophil extravasation
+cellular extravasation,GO:0072683, T cell extravasation
+extracellular matrix organization,GO:0085029, extracellular matrix assembly
+extracellular matrix organization,GO:0090091, positive regulation of extracellular matrix disassembly
+cell adhesion,GO:0098742, cell-cell adhesion via plasma-membrane adhesion molecules
+extracellular matrix organization,GO:0110011, regulation of basement membrane organization
+cell junction organization,GO:0120193, tight junction organization
+cell junction organization,GO:0150116, regulation of cell-substrate junction organization
+cell junction organization,GO:0150117, positive regulation of cell-substrate junction organization
+cell junction organization,GO:0150118, negative regulation of cell-substrate junction organization
+cell junction organization,GO:0150146, cell junction disassembly
+cell junction organization,GO:0150147, cell-cell junction disassembly
+extracellular matrix organization,GO:1901201, regulation of extracellular matrix assembly
+extracellular matrix organization,GO:1901202, negative regulation of extracellular matrix assembly
+extracellular matrix organization,GO:1901203, positive regulation of extracellular matrix assembly
+cell junction organization,GO:1901888, regulation of cell junction assembly
+cell junction organization,GO:1901889, negative regulation of cell junction assembly
+cell junction organization,GO:1901890, positive regulation of cell junction assembly
+extracellular matrix organization,GO:1903053, regulation of extracellular matrix organization
+extracellular matrix organization,GO:1903054, negative regulation of extracellular matrix organization
+extracellular matrix organization,GO:1903055, positive regulation of extracellular matrix organization
+regulation of metallopeptidase activity,GO:1905048, regulation of metallopeptidase activity
