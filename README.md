@@ -42,7 +42,3 @@ Findings suggest that metastasis does not represent a novel cancer-specific inno
   - **metastasis_genes**: Results focusing on genes implicated in metastasis-related pathways.  
   - **orthology_data**: Results of orthologous genes in the evolutionary analyses.  
   - **plots**: Generated plots for exploratory or final reporting purposes.  
-
-## Notes  
-
-This repository is a research compendium ensuring reproducibility and extensibility of the analyses. The project is still under development, and results may evolve as the research progresses.  
