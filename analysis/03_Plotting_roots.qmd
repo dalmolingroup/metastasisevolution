@@ -60,6 +60,7 @@ annotation_colors <- c(
   ,"regulation of metallopeptidase activity"    = "#E48C2AFF"
   ,"cell junction organization"                  ="#72874EFF"
   ,"cellular extravasation"                      ="#046E8FFF"
+  ,"metastasis suppressor"                       ="#9B2335FF"
 )
 
 annotation_labels <- c(
@@ -69,6 +70,7 @@ annotation_labels <- c(
   ,"regulation of metallopeptidase activity"    = "Regulação da atividade \nda metalopeptidase"
   ,"cell junction organization"                 = "Organização da \njunção celular"
   ,"cellular extravasation"                     = "Extravasão celular"
+  ,"metastasis suppressor"                      = "Supressor de metástase"
 )
 
 # This vertical line indicates the first metazoan (Amphimedon queenslandica / Ctenophora)
@@ -297,7 +299,8 @@ calculate_cumulative_genes <- function(nodelist) {
                        "cell adhesion",                          
                        "extracellular matrix organization",     
                        "epithelial to mesenchymal transition",  
-                       "regulation of metallopeptidase activity")
+                       "regulation of metallopeptidase activity",
+                       "metastasis suppressor")
   
   # Calcular o cumulativo agrupando por clade_name
   cumulative_genes <- nodelist %>%
@@ -328,7 +331,8 @@ calculate_cumulative_bp <- function(nodelist) {
                        "cell adhesion",                          
                        "extracellular matrix organization",     
                        "epithelial to mesenchymal transition",  
-                       "regulation of metallopeptidase activity")
+                       "regulation of metallopeptidase activity",
+                       "metastasis suppressor")
   
   # Calcular a soma cumulativa para cada processo biológico
   cumulative_bp <- nodelist %>%
@@ -353,7 +357,8 @@ BP_by_clade <- function(data) {
       cols = c(`cellular extravasation`, `cell junction organization`, 
                `cell adhesion`, `extracellular matrix organization`, 
                `epithelial to mesenchymal transition`, 
-               `regulation of metallopeptidase activity`),
+               `regulation of metallopeptidase activity`,
+               `metastasis suppressor`),
       names_to = "process",
       values_to = "presence"
     ) %>%
@@ -407,6 +412,7 @@ plot_stacked_bar_chart <- function(data) {
        ,"regulation of metallopeptidase activity"    = "#E48C2AFF"
        ,"cell junction organization"                  ="#72874EFF"
        ,"cellular extravasation"                      ="#046E8FFF"
+       ,"metastasis suppressor"                       ="#9B2335FF"
      )) + 
      scale_y_continuous(labels = scales::percent) +
      theme(
@@ -431,10 +437,11 @@ plot_stacked_bar_chart <- function(data) {
                     "epithelial to mesenchymal transition",   
                     "regulation of metallopeptidase activity",
                     "cell junction organization",
-                    "cellular extravasation"),
+                    "cellular extravasation",
+                    "metastasis suppressor"),
                     nsets = 50, nintersects = NA,
       sets.bar.color = c("#06141FFF", "#72874EFF", "#3D4F7DFF",
-                         "#742C14FF","#046E8FFF", "#E48C2AFF"), 
+                         "#742C14FF","#046E8FFF", "#E48C2AFF", "#9B2335FF"), 
       mainbar.y.label = "Biological Process \nIntersections",
       sets.x.label = "Set Size")
 ```
@@ -634,11 +641,15 @@ plot_stacked_bar_chart(df_proportion)
 ```{r}
 nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
 
+# Filter out genes that are ONLY metastasis suppressors (exclude from statistical test)
+# Keep genes that have at least one of the 6 original biological processes
+
    clades <- unique(nodelist$clade_name)
    processes <- c("cell adhesion", "extracellular matrix organization", 
                   "epithelial to mesenchymal transition", 
                   "regulation of metallopeptidase activity", 
-                  "cell junction organization", "cellular extravasation")
+                  "cell junction organization", "cellular extravasation",
+                  "metastasis suppressor")
    
   
    result <- list()
@@ -693,7 +704,8 @@ hipergeometric_df$Process <- factor(hipergeometric_df$Process,
                                                "cell junction organization",
                                                "regulation of metallopeptidase activity",
                                                "cell adhesion", 
-                                               "cellular extravasation"))
+                                               "cellular extravasation",
+                                               "metastasis suppressor"))
 
 ggplot(hipergeometric_df, aes(x = Process, 
                               y = clade_name, 
@@ -717,122 +729,432 @@ ggplot(hipergeometric_df, aes(x = Process,
     return(x)
   }) +
   theme(axis.text.y = ggtext::element_markdown())
+
+# Export hypergeometric results for use in script 04
+hipergeometric_df %>%
+  vroom::vroom_write(file = here("results/paper_data/hipergeometric_all_genes.csv"), delim = ",")
 ```
 
-## Ogs Hipergeometric test
+## Comparative Analysis: All Genes vs Metastasis Suppressors
 
 ```{r}
-# Agregar para nível de COG
-nodelist_cogs <- nodelist %>%
-  group_by(cog_id, root, clade_name) %>%
-  summarise(
-    across(where(is.numeric), ~ as.integer(any(. == 1))),
-    .groups = "drop"
-  )
+# Filter nodelist to get only metastasis suppressor genes
+nodelist_suppressors <- nodelist %>%
+  filter(`metastasis suppressor` == 1)
 
-clades <- unique(nodelist_cogs$clade_name)
-processes <- c(
-  "cell adhesion", 
-  "extracellular matrix organization", 
-  "epithelial to mesenchymal transition", 
-  "regulation of metallopeptidase activity", 
-  "cell junction organization", 
-  "cellular extravasation"
-)
+# Filter nodelist to exclude metastasis suppressor genes (for fair comparison)
+nodelist_no_suppressors <- nodelist %>%
+  filter(`metastasis suppressor` == 0 | is.na(`metastasis suppressor`))
 
-result <- list()
+# Calculate cumulative percentage for all genes (EXCLUDING metastasis suppressors)
+total_all <- length(unique(nodelist_no_suppressors$queryItem))
+calc_cumulative_all <- nodelist_no_suppressors %>%
+  dplyr::select(root, clade_name, queryItem) %>%
+  unique() %>%
+  arrange(desc(root)) %>%
+  group_by(root, clade_name) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  arrange(desc(root)) %>%
+  mutate(cumulative = cumsum(n),
+         percentage = (cumulative / total_all) * 100,
+         dataset = "Metastasis genes")
 
-for (process in processes) {
-  for (clade in clades) {
-    
-    # N = total de COGs únicos
-    N <- length(unique(nodelist_cogs$cog_id))
-    
-    # M = total de COGs envolvidos nesse processo
-    M <- sum(
-      nodelist_cogs %>%
-        dplyr::select(all_of(process)) %>%
-        pull() == 1
-    )
-    
-    # n = número de COGs no clado
-    n <- sum(nodelist_cogs$clade_name == clade)
-    
-    # k = número de COGs no clado envolvidos no processo
-    k <- sum(
-      filter(nodelist_cogs, clade_name == clade)[[process]]
-    )
-    
-    # Teste hipergeométrico
-    p_valor <- 1 - phyper(k - 1, M, N - M, n)
-    
-    result[[paste(process, clade, sep = "_")]] <- 
-      c(process, clade, k, M, N, n, p_valor)
-  }
-}
+# Calculate cumulative percentage for suppressors only
+total_supp <- length(unique(nodelist_suppressors$queryItem))
+calc_cumulative_supp <- nodelist_suppressors %>%
+  dplyr::select(root, clade_name, queryItem) %>%
+  unique() %>%
+  arrange(desc(root)) %>%
+  group_by(root, clade_name) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  arrange(desc(root)) %>%
+  mutate(cumulative = cumsum(n),
+         percentage = (cumulative / total_supp) * 100,
+         dataset = "Metastasis suppressors")
 
-hipergeometric_OGs_df <- do.call(rbind, result) %>%
-  as.data.frame() %>%
-  setNames(c("Process", "clade_name", "k", "M", "N", "n", "p.val")) %>%
-  arrange(p.val)
+# Combine datasets
+cumulative_comparison <- bind_rows(calc_cumulative_all, calc_cumulative_supp)
 
-rownames(hipergeometric_OGs_df) <- NULL
-
-hipergeometric_OGs_df <- hipergeometric_OGs_df %>%
-  mutate(across(c("k", "M", "N", "n", "p.val"), as.numeric))
-
-hipergeometric_OGs_df <- hipergeometric_OGs_df %>%
-  mutate(p.adj = p.adjust(p.val, method = "fdr"))
-
-head(hipergeometric_OGs_df)
-```
-
-```{r}
-hipergeometric_OGs_df$p.adj <- as.numeric(hipergeometric_OGs_df$p.adj)
-hipergeometric_OGs_df$p.val_color <- ifelse(hipergeometric_OGs_df$p.adj > 0.05, "gray", "red")
-
-i <- nodelist %>% 
-  dplyr::select(clade_name, root) %>% 
+# Order clade_name by root
+clade_order <- cumulative_comparison %>%
+  arrange(desc(root)) %>%
+  pull(clade_name) %>%
   unique()
 
-hipergeometric_OGs_df <- hipergeometric_OGs_df %>%
-  inner_join(i, by = "clade_name")
+cumulative_comparison$clade_name <- factor(cumulative_comparison$clade_name, levels = clade_order)
 
-hipergeometric_OGs_df$clade_name <- factor(hipergeometric_OGs_df$clade_name, 
-    levels = unique(hipergeometric_OGs_df$clade_name[order(hipergeometric_OGs_df$root)]))
-
-
-hipergeometric_OGs_df$Process <- factor(hipergeometric_OGs_df$Process, 
-                                    levels = c("extracellular matrix organization", 
-                                               "epithelial to mesenchymal transition", 
-                                               "cell junction organization",
-                                               "regulation of metallopeptidase activity",
-                                               "cell adhesion", 
-                                               "cellular extravasation"))
-
-ggplot(hipergeometric_OGs_df, aes(x = Process, 
-                              y = clade_name, 
-                              size = as.numeric(n), 
-                              color = p.val_color)) +
-  geom_point() +
-  scale_color_manual(values = c("gray" = "gray", "red" = "red"), 
-                     labels = c("Not Significant", "Significant")) +  
-  labs(x = "Biological Process", y = "Clade", size = "Number of Genes", color = "Significance") +
-  scale_size_continuous(breaks = c(10, 50, 98), labels = c("10 genes", "50 genes", "100 genes")) + 
+# Plot cumulative comparison in percentage with clade names on x-axis
+ggplot(cumulative_comparison, aes(x = clade_name, y = percentage, 
+                                   color = dataset, group = dataset)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2) +
+  scale_color_manual(values = c("Metastasis genes" = "#2E86AB", 
+                                 "Metastasis suppressors" = "#9B2335")) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  labs(x = "Evolutionary Root (Clade)", 
+       y = "Cumulative Percentage of Genes",
+       title = "Cumulative Rooting: Metastasis Genes vs Metastasis Suppressors",
+       subtitle = paste0("Metastasis genes: n=", total_all, " | Metastasis suppressors: n=", total_supp),
+       color = "Gene Set") +
   theme_minimal() +
-  ggtitle("Hipergeometric Test") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        panel.grid.major.x = element_blank(),
-        panel.grid.major.y = element_blank()) +
-  scale_y_discrete(labels = function(x) {
-    x <- gsub("Metamonada", "<b>Metamonada</b>", x)
-    x <- gsub("Choanoflagellata", "<b>Choanoflagellata</b>", x)
-    x <- gsub("Ctenophora", "<b>Ctenophora</b>", x)
-    x <- gsub("Actinopterygii", "<b>Actinopterygii</b>", x)
-    return(x)
-  }) +
-  theme(axis.text.y = ggtext::element_markdown())
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+    axis.title = element_text(size = 12),
+    legend.position = "bottom",
+    panel.grid.major.y = element_line(linewidth = 0.25, linetype = "dotted", color = "#E0E0E0"),
+    panel.grid.major.x = element_blank()
+  )
+
+ggsave(file = here("results/plots/cumulative_comparison_percentage.svg"), width = 12, height = 6)
 ```
 
+```{r}
+# Cumulative bar graph for metastasis suppressors only
+calc_cumulative_supp$clade_name <- factor(calc_cumulative_supp$clade_name, levels = clade_order)
 
+ggplot(calc_cumulative_supp, aes(x = clade_name, y = cumulative)) +
+  geom_bar(stat = "identity", fill = "#9B2335", alpha = 0.8) +
+  geom_text(aes(label = cumulative), vjust = -0.3, size = 3) +
+  labs(x = "Evolutionary Root (Clade)", 
+       y = "Cumulative Gene Count",
+       title = "Cumulative Rooting: Metastasis Suppressors",
+       subtitle = paste0("Total genes: n=", total_supp)) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    axis.title = element_text(size = 12),
+    panel.grid.major.y = element_line(linewidth = 0.25, linetype = "dotted", color = "#E0E0E0"),
+    panel.grid.major.x = element_blank()
+  )
 
+ggsave(file = here("results/plots/cumulative_suppressors_bar.svg"), width = 12, height = 6)
+```
+
+## Comparative Analysis: Metastasis Genes vs Suppressors vs KEGG Pathways in Cancer
+
+### Query KEGG Pathway hsa05200
+
+```{r}
+# Query KEGG pathway hsa05200 (Pathways in cancer)
+kegg_url <- "https://rest.kegg.jp/link/hsa/hsa05200"
+kegg_genes_raw <- tryCatch({
+  read.table(url(kegg_url), sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+}, error = function(e) {
+  message("Error fetching KEGG data: ", e$message)
+  return(NULL)
+})
+
+if (!is.null(kegg_genes_raw)) {
+  # Extract gene IDs (format: hsa:XXXX -> XXXX)
+  kegg_gene_ids <- gsub("hsa:", "", kegg_genes_raw$V2)
+  
+  # Get gene symbols directly from pathway
+  kegg_names_url <- "https://rest.kegg.jp/get/hsa05200"
+  pathway_info <- tryCatch({
+    readLines(url(kegg_names_url))
+  }, error = function(e) {
+    message("Error fetching pathway info: ", e$message)
+    return(NULL)
+  })
+  
+  # Parse gene symbols from the pathway entry
+  kegg_symbols <- c()
+  in_gene_section <- FALSE
+  for (line in pathway_info) {
+    if (grepl("^GENE", line)) {
+      in_gene_section <- TRUE
+      match <- regmatches(line, regexpr("[0-9]+\\s+([A-Za-z0-9-]+)", line))
+      if (length(match) > 0) {
+        symbol <- gsub("^[0-9]+\\s+", "", match)
+        kegg_symbols <- c(kegg_symbols, symbol)
+      }
+    } else if (in_gene_section && grepl("^\\s+[0-9]+", line)) {
+      match <- regmatches(line, regexpr("[0-9]+\\s+([A-Za-z0-9-]+)", line))
+      if (length(match) > 0) {
+        symbol <- gsub("^[0-9]+\\s+", "", match)
+        kegg_symbols <- c(kegg_symbols, symbol)
+      }
+    } else if (in_gene_section && !grepl("^\\s", line)) {
+      break
+    }
+  }
+  
+  kegg_symbols <- unique(kegg_symbols)
+  cat("KEGG hsa05200 genes found:", length(kegg_symbols), "\n")
+}
+```
+
+### Define Gene Sets for Comparison
+
+```{r}
+# Define the 6 biological processes
+biological_processes <- c("cell adhesion", 
+                          "extracellular matrix organization", 
+                          "epithelial to mesenchymal transition", 
+                          "regulation of metallopeptidase activity", 
+                          "cell junction organization", 
+                          "cellular extravasation")
+
+# Metastasis genes: genes that have at least ONE of the 6 biological processes
+# (some of these may ALSO be suppressors - that's the overlap we want to capture)
+nodelist_bp <- nodelist %>%
+  mutate(has_bp = rowSums(dplyr::select(., all_of(biological_processes)), na.rm = TRUE) > 0) %>%
+  filter(has_bp)
+metastasis_genes <- unique(nodelist_bp$queryItem)
+
+# Metastasis suppressors: genes flagged as suppressors
+suppressor_genes <- unique(nodelist_suppressors$queryItem)
+
+# KEGG genes that are in our analysis
+kegg_in_analysis <- intersect(kegg_symbols, unique(nodelist$queryItem))
+
+# Print set sizes
+cat("Metastasis genes (with at least 1 BP):", length(metastasis_genes), "\n")
+cat("Metastasis suppressors:", length(suppressor_genes), "\n")
+cat("KEGG hsa05200 genes in analysis:", length(kegg_in_analysis), "\n")
+
+# Check overlaps
+overlap_meta_supp_check <- intersect(metastasis_genes, suppressor_genes)
+cat("Overlap (Metastasis genes ∩ Suppressors):", length(overlap_meta_supp_check), "\n")
+cat("Genes appearing in both:", paste(overlap_meta_supp_check, collapse = ", "), "\n")
+```
+
+### UpSet Plot: Gene Set Overlaps
+
+```{r}
+# Create binary matrix for UpSet plot
+all_genes <- unique(c(metastasis_genes, suppressor_genes, kegg_in_analysis))
+
+upset_df <- data.frame(
+  gene = all_genes,
+  `Metastasis genes` = as.integer(all_genes %in% metastasis_genes),
+  `Metastasis suppressors` = as.integer(all_genes %in% suppressor_genes),
+  `KEGG Pathways in cancer` = as.integer(all_genes %in% kegg_in_analysis),
+  check.names = FALSE
+)
+
+# Create UpSet plot
+upset(upset_df, 
+      sets = c("Metastasis genes", "Metastasis suppressors", "KEGG Pathways in cancer"),
+      order.by = "freq",
+      sets.bar.color = c("#2E86AB", "#9B2335", "#4CAF50"),
+      main.bar.color = "#333333",
+      matrix.color = "#333333",
+      point.size = 3.5,
+      line.size = 1.5,
+      text.scale = 1.2,
+      mb.ratio = c(0.6, 0.4))
+
+# Save as SVG
+svg(here("results/plots/upset_gene_sets_comparison.svg"), width = 12, height = 8)
+upset(upset_df, 
+      sets = c("Metastasis genes", "Metastasis suppressors", "KEGG Pathways in cancer"),
+      order.by = "freq",
+      sets.bar.color = c("#2E86AB", "#9B2335", "#4CAF50"),
+      main.bar.color = "#333333",
+      matrix.color = "#333333",
+      point.size = 3.5,
+      line.size = 1.5,
+      text.scale = 1.2,
+      mb.ratio = c(0.6, 0.4))
+dev.off()
+```
+
+### Overlap Statistics
+
+```{r}
+# Calculate overlaps
+overlap_meta_supp <- length(intersect(metastasis_genes, suppressor_genes))
+overlap_meta_kegg <- length(intersect(metastasis_genes, kegg_in_analysis))
+overlap_supp_kegg <- length(intersect(suppressor_genes, kegg_in_analysis))
+overlap_all_three <- length(Reduce(intersect, list(metastasis_genes, suppressor_genes, kegg_in_analysis)))
+
+# Print overlap summary
+cat("Overlap Summary:\n")
+cat("Metastasis genes ∩ Suppressors:", overlap_meta_supp, "\n")
+cat("Metastasis genes ∩ KEGG:", overlap_meta_kegg, "\n")
+cat("Suppressors ∩ KEGG:", overlap_supp_kegg, "\n")
+cat("All three sets:", overlap_all_three, "\n")
+
+# Create overlap summary table
+overlap_summary <- data.frame(
+  Comparison = c("Metastasis genes ∩ Suppressors",
+                 "Metastasis genes ∩ KEGG hsa05200",
+                 "Suppressors ∩ KEGG hsa05200",
+                 "All three sets"),
+  Overlap = c(overlap_meta_supp, overlap_meta_kegg, overlap_supp_kegg, overlap_all_three)
+)
+
+overlap_summary
+```
+
+### Hypergeometric Enrichment Tests
+
+```{r}
+# Universe: all human protein-coding genes (approximate)
+universe_size <- 19954
+
+# Function to perform hypergeometric test
+hypergeom_test <- function(overlap, set1_size, set2_size, universe) {
+  p_val <- phyper(overlap - 1, set2_size, universe - set2_size, set1_size, lower.tail = FALSE)
+  fold_enrichment <- (overlap / set1_size) / (set2_size / universe)
+  return(list(p_value = p_val, fold_enrichment = fold_enrichment))
+}
+
+# Test 1: Metastasis genes vs Suppressors
+test1 <- hypergeom_test(overlap_meta_supp, length(metastasis_genes), length(suppressor_genes), universe_size)
+
+# Test 2: Metastasis genes vs KEGG
+test2 <- hypergeom_test(overlap_meta_kegg, length(metastasis_genes), length(kegg_in_analysis), universe_size)
+
+# Test 3: Suppressors vs KEGG
+test3 <- hypergeom_test(overlap_supp_kegg, length(suppressor_genes), length(kegg_in_analysis), universe_size)
+
+# Create results table
+hypergeom_results <- data.frame(
+  Comparison = c("Metastasis genes vs Suppressors",
+                 "Metastasis genes vs KEGG hsa05200",
+                 "Suppressors vs KEGG hsa05200"),
+  Set1_Size = c(length(metastasis_genes), length(metastasis_genes), length(suppressor_genes)),
+  Set2_Size = c(length(suppressor_genes), length(kegg_in_analysis), length(kegg_in_analysis)),
+  Overlap = c(overlap_meta_supp, overlap_meta_kegg, overlap_supp_kegg),
+  P_Value = c(test1$p_value, test2$p_value, test3$p_value),
+  Fold_Enrichment = c(test1$fold_enrichment, test2$fold_enrichment, test3$fold_enrichment)
+)
+
+hypergeom_results$P_Adjusted <- p.adjust(hypergeom_results$P_Value, method = "BH")
+hypergeom_results$Significant <- ifelse(hypergeom_results$P_Adjusted < 0.05, "Yes", "No")
+
+hypergeom_results
+```
+
+### Fisher's Exact Test
+
+```{r}
+# Fisher's exact test for each pairwise comparison
+fisher_results <- list()
+
+# Metastasis genes vs Suppressors
+contingency_1 <- matrix(c(
+  overlap_meta_supp,
+  length(metastasis_genes) - overlap_meta_supp,
+  length(suppressor_genes) - overlap_meta_supp,
+  universe_size - length(metastasis_genes) - length(suppressor_genes) + overlap_meta_supp
+), nrow = 2)
+fisher_1 <- fisher.test(contingency_1)
+fisher_results$meta_vs_supp <- list(odds_ratio = fisher_1$estimate, p_value = fisher_1$p.value)
+
+# Metastasis genes vs KEGG
+contingency_2 <- matrix(c(
+  overlap_meta_kegg,
+  length(metastasis_genes) - overlap_meta_kegg,
+  length(kegg_in_analysis) - overlap_meta_kegg,
+  universe_size - length(metastasis_genes) - length(kegg_in_analysis) + overlap_meta_kegg
+), nrow = 2)
+fisher_2 <- fisher.test(contingency_2)
+fisher_results$meta_vs_kegg <- list(odds_ratio = fisher_2$estimate, p_value = fisher_2$p.value)
+
+# Suppressors vs KEGG
+contingency_3 <- matrix(c(
+  overlap_supp_kegg,
+  length(suppressor_genes) - overlap_supp_kegg,
+  length(kegg_in_analysis) - overlap_supp_kegg,
+  universe_size - length(suppressor_genes) - length(kegg_in_analysis) + overlap_supp_kegg
+), nrow = 2)
+fisher_3 <- fisher.test(contingency_3)
+fisher_results$supp_vs_kegg <- list(odds_ratio = fisher_3$estimate, p_value = fisher_3$p.value)
+
+# Create Fisher results table
+fisher_df <- data.frame(
+  Comparison = c("Metastasis genes vs Suppressors",
+                 "Metastasis genes vs KEGG hsa05200",
+                 "Suppressors vs KEGG hsa05200"),
+  Odds_Ratio = c(fisher_results$meta_vs_supp$odds_ratio,
+                 fisher_results$meta_vs_kegg$odds_ratio,
+                 fisher_results$supp_vs_kegg$odds_ratio),
+  P_Value = c(fisher_results$meta_vs_supp$p_value,
+              fisher_results$meta_vs_kegg$p_value,
+              fisher_results$supp_vs_kegg$p_value)
+)
+fisher_df$P_Adjusted <- p.adjust(fisher_df$P_Value, method = "BH")
+fisher_df$Significant <- ifelse(fisher_df$P_Adjusted < 0.05, "Yes", "No")
+
+fisher_df
+```
+
+### Enrichment Visualization
+
+```{r}
+# Bubble plot for enrichment results
+enrichment_plot_data <- hypergeom_results %>%
+  mutate(
+    neg_log_p = -log10(P_Adjusted + 1e-300),
+    Comparison = factor(Comparison, levels = rev(Comparison))
+  )
+
+ggplot(enrichment_plot_data, aes(x = Fold_Enrichment, y = Comparison)) +
+  geom_point(aes(size = Overlap, color = neg_log_p)) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "gray50") +
+  scale_color_gradient(low = "gray70", high = "#9B2335", name = "-log10(p.adj)") +
+  scale_size_continuous(range = c(3, 12), name = "Overlap Size") +
+  labs(x = "Fold Enrichment",
+       y = "",
+       title = "Hypergeometric Enrichment Analysis",
+       subtitle = "Gene set overlaps with expected enrichment") +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 10),
+    panel.grid.major.y = element_blank()
+  )
+
+ggsave(file = here("results/plots/enrichment_bubble_plot.svg"), width = 10, height = 5)
+```
+
+### Gene Set Size Comparison Bar Chart
+
+```{r}
+# Create bar chart comparing set sizes
+set_sizes <- data.frame(
+  Gene_Set = c("Metastasis genes", "Metastasis suppressors", "KEGG Pathways in cancer"),
+  Count = c(length(metastasis_genes), length(suppressor_genes), length(kegg_in_analysis))
+)
+
+set_sizes$Gene_Set <- factor(set_sizes$Gene_Set, levels = set_sizes$Gene_Set)
+
+ggplot(set_sizes, aes(x = Gene_Set, y = Count, fill = Gene_Set)) +
+  geom_bar(stat = "identity", alpha = 0.8) +
+  geom_text(aes(label = Count), vjust = -0.3, size = 4) +
+  scale_fill_manual(values = c("Metastasis genes" = "#2E86AB", 
+                                "Metastasis suppressors" = "#9B2335",
+                                "KEGG Pathways in cancer" = "#4CAF50")) +
+  labs(x = "", y = "Number of Genes",
+       title = "Gene Set Sizes Comparison") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 20, hjust = 1, size = 10))
+
+ggsave(file = here("results/plots/gene_set_sizes.svg"), width = 8, height = 6)
+```
+
+### Export Comparison Results
+
+```{r}
+# Export all comparison results
+comparison_results <- list(
+  overlap_summary = overlap_summary,
+  hypergeometric = hypergeom_results,
+  fisher_exact = fisher_df
+)
+
+# Save hypergeometric results
+hypergeom_results %>%
+  vroom::vroom_write(file = here("results/paper_data/hypergeometric_comparison.csv"), delim = ",")
+
+# Save Fisher results
+fisher_df %>%
+  vroom::vroom_write(file = here("results/paper_data/fisher_comparison.csv"), delim = ",")
+
+# Save overlap summary
+overlap_summary %>%
+  vroom::vroom_write(file = here("results/paper_data/overlap_summary.csv"), delim = ",")
+```

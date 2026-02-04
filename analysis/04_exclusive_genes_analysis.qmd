@@ -1,0 +1,373 @@
+---
+title: "Exclusive Genes Analysis"
+author: "BioME"
+format: html
+editor: source
+---
+
+# Analysis of Exclusive Genes by Biological Process
+
+This script analyzes genes that belong exclusively to one biological process (not shared across multiple processes).
+
+## Loading Libraries
+
+```{r}
+#| warning: false
+library(tidyverse)
+library(vroom)
+library(ggplot2)
+library(here)
+library(ggtext)
+library(UpSetR)
+library(scales)
+```
+
+## Loading Data
+
+```{r}
+nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
+
+# Get clade order from nodelist (ordered by root descending - oldest first)
+clade_order <- nodelist %>%
+  dplyr::select(clade_name, root) %>%
+  unique() %>%
+  arrange(desc(root)) %>%
+  pull(clade_name)
+```
+
+## Defining Colors and Labels
+
+```{r themes}
+# Plotting colors and labels
+annotation_colors <- c(
+  "cell adhesion"                               = "#06141FFF"
+  ,"extracellular matrix organization"          = "#742C14FF"
+  ,"epithelial to mesenchymal transition"       = "#3D4F7DFF"
+  ,"regulation of metallopeptidase activity"    = "#E48C2AFF"
+  ,"cell junction organization"                 = "#72874EFF"
+  ,"cellular extravasation"                     = "#046E8FFF"
+  ,"metastasis suppressor"                      = "#9B2335FF"
+)
+
+# First metazoan reference line
+first_metazoan <- 29
+```
+
+## Identifying Exclusive Genes
+
+Exclusive genes are those that belong to only ONE biological process (excluding metastasis suppressor for this categorization).
+
+```{r}
+# Define the 6 biological processes
+biological_processes <- c("cell adhesion", 
+                          "extracellular matrix organization", 
+                          "epithelial to mesenchymal transition", 
+                          "regulation of metallopeptidase activity", 
+                          "cell junction organization", 
+                          "cellular extravasation")
+
+# Calculate the number of biological processes each gene belongs to
+nodelist_bp_count <- nodelist %>%
+  mutate(bp_count = rowSums(dplyr::select(., all_of(biological_processes)), na.rm = TRUE))
+
+# Filter for exclusive genes (belong to exactly 1 biological process)
+nodelist_exclusive <- nodelist_bp_count %>%
+  filter(bp_count == 1)
+
+# Summary of exclusive genes
+cat("Total genes:", nrow(nodelist), "\n")
+cat("Exclusive genes (belong to 1 BP only):", nrow(nodelist_exclusive), "\n")
+cat("Shared genes (belong to 2+ BPs):", nrow(nodelist) - nrow(nodelist_exclusive), "\n")
+```
+
+## Distribution of Exclusive Genes by Biological Process
+
+```{r}
+# Count exclusive genes per process
+exclusive_summary <- nodelist_exclusive %>%
+  pivot_longer(
+    cols = all_of(biological_processes),
+    names_to = "process",
+    values_to = "presence"
+  ) %>%
+  filter(presence == 1) %>%
+  group_by(process) %>%
+  summarise(n_exclusive = n_distinct(queryItem), .groups = "drop") %>%
+  arrange(desc(n_exclusive))
+
+exclusive_summary
+
+# Bar plot of exclusive genes per process
+ggplot(exclusive_summary, aes(x = reorder(process, n_exclusive), y = n_exclusive, fill = process)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = n_exclusive), hjust = -0.1, size = 3.5) +
+  coord_flip() +
+  scale_fill_manual(values = annotation_colors) +
+  labs(x = "Biological Process",
+       y = "Number of Exclusive Genes",
+       title = "Exclusive Genes per Biological Process") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        axis.text = element_text(size = 10))
+
+ggsave(file = here("results/plots/exclusive_genes_per_process.svg"), width = 10, height = 6)
+```
+
+## Modified Z-Score Analysis for Exclusive Genes
+
+```{r}
+# Calculate modified Z-score for exclusive genes
+calc_modified_zscore_exclusive <- function(nodelist_excl) {
+  
+  # Get clade order (use the one defined at top level)
+  clade_order_df <- nodelist_excl %>%
+    dplyr::select(clade_name, root) %>%
+    unique() %>%
+    arrange(desc(root))
+  
+  # Count genes per clade for exclusive genes
+  genes_per_clade <- nodelist_excl %>%
+    dplyr::select(root, clade_name, queryItem) %>%
+    unique() %>%
+    group_by(root, clade_name) %>%
+    summarise(n = n(), .groups = "drop") %>%
+    right_join(clade_order_df %>% dplyr::select(clade_name), by = "clade_name") %>%
+    replace_na(list(n = 0))
+  
+  # Calculate modified Z-score
+  median_val <- median(genes_per_clade$n, na.rm = TRUE)
+  mad_val <- mad(genes_per_clade$n, constant = 1, na.rm = TRUE)
+  
+  genes_per_clade <- genes_per_clade %>%
+    mutate(
+      modified_zscore = (n - median_val) / (1.4826 * mad_val),
+      significant = abs(modified_zscore) > 3.5
+    )
+  
+  return(genes_per_clade)
+}
+
+zscore_exclusive <- calc_modified_zscore_exclusive(nodelist_exclusive)
+
+# Display significant clades
+zscore_exclusive %>%
+  filter(significant) %>%
+  arrange(desc(abs(modified_zscore)))
+```
+
+## Modified Z-Score Plot for Exclusive Genes
+
+```{r}
+# Order clades by root (use nodelist for root info since we already have it from the z-score calc)
+zscore_exclusive$clade_name <- factor(zscore_exclusive$clade_name, levels = clade_order)
+
+
+
+ggplot(zscore_exclusive, aes(x = clade_name, y = modified_zscore)) +
+  geom_bar(stat = "identity", aes(fill = significant)) +
+  geom_hline(yintercept = c(-3.5, 3.5), linetype = "dashed", color = "red") +
+  scale_fill_manual(values = c("FALSE" = "gray60", "TRUE" = "#9B2335")) +
+  labs(x = "Clade",
+       y = "Modified Z-Score",
+       title = "Modified Z-Score Analysis: Exclusive Genes",
+       fill = "Significant") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+    legend.position = "bottom"
+  )
+
+ggsave(file = here("results/plots/zscore_exclusive_genes.svg"), width = 14, height = 6)
+```
+
+## Cumulative Rooting Count for Exclusive Genes
+
+```{r}
+# clade_order is already defined at file load
+
+# Calculate cumulative for all exclusive genes
+cumulative_exclusive <- nodelist_exclusive %>%
+  dplyr::select(root, clade_name, queryItem) %>%
+  unique() %>%
+  arrange(desc(root)) %>%
+  group_by(root, clade_name) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  arrange(desc(root)) %>%
+  mutate(cumulative = cumsum(n))
+
+cumulative_exclusive$clade_name <- factor(cumulative_exclusive$clade_name, levels = clade_order)
+
+# Plot cumulative rooting
+ggplot(cumulative_exclusive, aes(x = clade_name, y = cumulative)) +
+  geom_line(group = 1, color = "#2E86AB", linewidth = 1.2) +
+  geom_point(color = "#2E86AB", size = 2) +
+  geom_vline(xintercept = which(clade_order == "Ctenophora"), 
+             linetype = "dashed", color = "red", alpha = 0.5) +
+  labs(x = "Evolutionary Root (Clade)",
+       y = "Cumulative Gene Count",
+       title = "Cumulative Rooting: Exclusive Genes",
+       subtitle = paste0("Total exclusive genes: n=", nrow(nodelist_exclusive %>% dplyr::select(queryItem) %>% unique()))) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+    panel.grid.major.y = element_line(linewidth = 0.25, linetype = "dotted", color = "#E0E0E0"),
+    panel.grid.major.x = element_blank()
+  )
+
+ggsave(file = here("results/plots/cumulative_exclusive_genes.svg"), width = 12, height = 6)
+```
+
+## Cumulative Rooting by Biological Process (Exclusive Genes Only)
+
+```{r}
+# Calculate cumulative per biological process for exclusive genes
+cumulative_bp_exclusive <- nodelist_exclusive %>%
+  pivot_longer(
+    cols = all_of(biological_processes),
+    names_to = "process",
+    values_to = "presence"
+  ) %>%
+  filter(presence == 1) %>%
+  dplyr::select(root, clade_name, queryItem, process) %>%
+  unique() %>%
+  arrange(desc(root)) %>%
+  group_by(root, clade_name, process) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  arrange(desc(root)) %>%
+  group_by(process) %>%
+  mutate(cumulative = cumsum(n))
+
+cumulative_bp_exclusive$clade_name <- factor(cumulative_bp_exclusive$clade_name, levels = clade_order)
+
+# Plot cumulative by BP
+ggplot(cumulative_bp_exclusive, aes(x = clade_name, y = cumulative, 
+                                     color = process, group = process)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 1.5) +
+  geom_vline(xintercept = which(clade_order == "Ctenophora"), 
+             linetype = "dashed", color = "gray50", alpha = 0.5) +
+  scale_color_manual(values = annotation_colors) +
+  labs(x = "Evolutionary Root (Clade)",
+       y = "Cumulative Gene Count",
+       title = "Cumulative Rooting by Biological Process: Exclusive Genes Only",
+       color = "Biological Process") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+    legend.position = "bottom",
+    legend.text = element_text(size = 8),
+    panel.grid.major.y = element_line(linewidth = 0.25, linetype = "dotted", color = "#E0E0E0"),
+    panel.grid.major.x = element_blank()
+  ) +
+  guides(color = guide_legend(nrow = 2))
+
+ggsave(file = here("results/plots/cumulative_bp_exclusive.svg"), width = 14, height = 8)
+```
+
+## Hypergeometric Test for Exclusive Genes
+
+```{r}
+clades <- unique(nodelist_exclusive$clade_name)
+processes <- biological_processes
+
+result <- list()
+
+for (process in processes) {
+  for (clade in clades) {
+    
+    N <- length(unique(nodelist_exclusive$string_id))                     # total de genes únicos
+    M <- sum(nodelist_exclusive[ ,process])                               # número de genes que participam do processo
+    n <- length(which(nodelist_exclusive$clade_name == clade))            # número de genes no clado
+    k <- sum(filter(nodelist_exclusive, clade_name == clade)[[process]])  # número de genes do clado que participam do processo
+    
+    p_valor <- 1 - phyper(k - 1, M, N - M, n)
+    
+    result[[paste(process, clade, sep = "_")]] <- c(process, clade, k, M, N, n, p_valor)
+  }
+}
+
+hipergeometric_exclusive_df <- do.call(rbind, result) %>%
+  as.data.frame() %>%
+  setNames(c("Process", "clade_name", "k", "M", "N", "n", "p.val")) %>% 
+  arrange(p.val)
+
+rownames(hipergeometric_exclusive_df) <- NULL
+
+hipergeometric_exclusive_df <- hipergeometric_exclusive_df %>%
+  mutate(across(all_of(c("k", "M", "N", "n", "p.val")), as.numeric))   
+
+hipergeometric_exclusive_df <- hipergeometric_exclusive_df %>%
+  mutate(p.adj = p.adjust(p.val, method = "BH"))
+
+head(hipergeometric_exclusive_df)
+```
+
+## Hypergeometric Test Visualization
+
+```{r}
+hipergeometric_exclusive_df$p.adj <- as.numeric(hipergeometric_exclusive_df$p.adj)
+hipergeometric_exclusive_df$p.val_color <- ifelse(hipergeometric_exclusive_df$p.adj > 0.05, "gray", "red")
+
+i <- nodelist_exclusive %>% 
+  dplyr::select(clade_name, root) %>% 
+  unique()
+
+hipergeometric_exclusive_df <- hipergeometric_exclusive_df %>%
+  inner_join(i, by = "clade_name")
+
+hipergeometric_exclusive_df$clade_name <- factor(hipergeometric_exclusive_df$clade_name, 
+    levels = unique(hipergeometric_exclusive_df$clade_name[order(hipergeometric_exclusive_df$root)]))
+
+hipergeometric_exclusive_df$Process <- factor(hipergeometric_exclusive_df$Process, 
+                                    levels = c("extracellular matrix organization", 
+                                               "epithelial to mesenchymal transition", 
+                                               "cell junction organization",
+                                               "regulation of metallopeptidase activity",
+                                               "cell adhesion", 
+                                               "cellular extravasation"))
+
+ggplot(hipergeometric_exclusive_df, aes(x = Process, 
+                              y = clade_name, 
+                              size = as.numeric(n), 
+                              color = p.val_color)) +
+  geom_point() +
+  scale_color_manual(values = c("gray" = "gray", "red" = "red"), 
+                     labels = c("Not Significant", "Significant")) +  
+  labs(x = "Biological Process", 
+       y = "Clade", 
+       size = "Number of Genes", 
+       color = "Significance",
+       title = "Hypergeometric Test: Exclusive Genes") +
+  scale_size_continuous(breaks = c(5, 20, 50), labels = c("5 genes", "20 genes", "50 genes")) + 
+  theme_minimal() +
+  ggtitle("Hypergeometric Test: Exclusive Genes") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major.x = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  scale_y_discrete(labels = function(x) {
+    x <- gsub("Choanoflagellata", "<b>Choanoflagellata</b>", x)
+    x <- gsub("Ctenophora", "<b>Ctenophora</b>", x)
+    x <- gsub("Actinopterygii", "<b>Actinopterygii</b>", x)
+    return(x)
+  }) +
+  theme(axis.text.y = ggtext::element_markdown())
+
+ggsave(file = here("results/plots/hipergeometric_exclusive.svg"), width = 12, height = 10)
+```
+
+
+## Export Exclusive Genes Data
+
+```{r}
+# Export exclusive genes list
+nodelist_exclusive %>%
+  vroom::vroom_write(file = here("results/orthology_data/nodelist_exclusive.csv"), delim = ",")
+
+# Export hypergeometric results
+hipergeometric_exclusive_df %>%
+  vroom::vroom_write(file = here("results/paper_data/hipergeometric_exclusive.csv"), delim = ",")
+
+# Export z-score results
+zscore_exclusive %>%
+  vroom::vroom_write(file = here("results/paper_data/zscore_exclusive.csv"), delim = ",")
+```

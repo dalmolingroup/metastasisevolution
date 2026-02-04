@@ -1,0 +1,5 @@
+Comparison,Overlap
+Metastasis genes ∩ Suppressors,8
+Metastasis genes ∩ KEGG hsa05200,90
+Suppressors ∩ KEGG hsa05200,3
+All three sets,1
