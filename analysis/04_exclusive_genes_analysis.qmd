@@ -201,8 +201,6 @@ cumulative_exclusive$clade_name <- factor(cumulative_exclusive$clade_name, level
 ggplot(cumulative_exclusive, aes(x = clade_name, y = cumulative)) +
   geom_line(group = 1, color = "#2E86AB", linewidth = 1.2) +
   geom_point(color = "#2E86AB", size = 2) +
-  geom_vline(xintercept = which(clade_order == "Ctenophora"), 
-             linetype = "dashed", color = "red", alpha = 0.5) +
   labs(x = "Evolutionary Root (Clade)",
        y = "Cumulative Gene Count",
        title = "Cumulative Rooting: Exclusive Genes",
@@ -244,8 +242,6 @@ ggplot(cumulative_bp_exclusive, aes(x = clade_name, y = cumulative,
                                      color = process, group = process)) +
   geom_line(linewidth = 1) +
   geom_point(size = 1.5) +
-  geom_vline(xintercept = which(clade_order == "Ctenophora"), 
-             linetype = "dashed", color = "gray50", alpha = 0.5) +
   scale_color_manual(values = annotation_colors) +
   labs(x = "Evolutionary Root (Clade)",
        y = "Cumulative Gene Count",

@@ -67,7 +67,7 @@ annotation_labels <- c(
    "cell adhesion"                              = "Adesão celular"
   ,"extracellular matrix organization"          = "Organização da matriz \nextracelular" 
   ,"epithelial to mesenchymal transition"       = "Transição \nepitélio-mesênquimal"
-  ,"regulation of metallopeptidase activity"    = "Regulação da atividade \nda metalopeptidase"
+  ,"regulation of metallopeptidase activity"    = "Regulacao da atividade \nde metalopeptidase"
   ,"cell junction organization"                 = "Organização da \njunção celular"
   ,"cellular extravasation"                     = "Extravasão celular"
   ,"metastasis suppressor"                      = "Supressor de metástase"
@@ -909,7 +909,7 @@ suppressor_genes <- unique(nodelist_suppressors$queryItem)
 kegg_in_analysis <- intersect(kegg_symbols, unique(nodelist$queryItem))
 
 # Print set sizes
-cat("Metastasis genes (with at least 1 BP):", length(metastasis_genes), "\n")
+cat("Metastasis genes:", length(metastasis_genes), "\n")
 cat("Metastasis suppressors:", length(suppressor_genes), "\n")
 cat("KEGG hsa05200 genes in analysis:", length(kegg_in_analysis), "\n")
 
