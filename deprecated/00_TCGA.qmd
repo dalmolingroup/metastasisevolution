@@ -1,0 +1,118 @@
+---
+title: "00_TCGA_data"
+format: html
+---
+```{r}
+library('recount')
+
+url <- download_study(project = "TCGA")
+load(file.path('TCGA', 'rse_gene.Rdata'))
+
+
+rse <- scale_counts(rse_gene)
+
+metadata <- as.data.frame(colData(rse))
+```
+
+```{r}
+# Selecionando as amostras
+idx_metastase <- which(colData(rse)$gdc_cases.samples.sample_type %in% c("Metastatic", "Additional Metastatic"))
+idx_primario <- which(colData(rse)$gdc_cases.samples.sample_type == "Primary Tumor")
+
+# Criando o subconjunto
+rse_sub <- rse[, c(idx_primario, idx_metastase)]
+
+# Criando a variável de grupo no colData
+colData(rse_sub)$group <- ifelse(
+    colData(rse_sub)$gdc_cases.samples.sample_type == "Primary Tumor", 
+    "Primary", 
+    "Metastasis"
+)
+
+# Transformando em fator (importante para o DESeq2/Limma)
+colData(rse_sub)$group <- factor(colData(rse_sub)$group, levels = c("Primary", "Metastasis"))
+```
+
+
+
+
+
+
+
+
+```{r}
+# Bibliotecas necessárias
+library(TCGAbiolinks)
+library(dplyr)
+library(SummarizedExperiment)
+library(edgeR)
+
+# 1. Obter lista de todos os projetos TCGA ativos
+projects <- TCGAbiolinks:::getGDCprojects()$project_id
+projects <- projects[grep("TCGA", projects)]
+
+# Dataframe para armazenar onde a análise foi possível
+summary_results <- data.frame(Project = character(), 
+                              Primary_N = numeric(), 
+                              Metastatic_N = numeric(),
+                              Status = character())
+
+# Loop por todos os projetos
+for (proj in projects) {
+  message("Verificando projeto: ", proj)
+  
+  # Consulta para verificar disponibilidade de tipos de amostra
+  query <- GDCquery(project = proj, 
+                    data.category = "Transcriptome Profiling",
+                    data.type = "Gene Expression Quantification",
+                    workflow.type = "STAR - Counts")
+  
+  samples <- getResults(query)
+  
+  # Contagem de tipos de amostra (TP = 01, TM = 06)
+  n_primary <- sum(samples$sample_type == "Primary Solid Tumor")
+  n_metastatic <- sum(samples$sample_type == "Metastatic")
+  
+  # Critério de corte: pelo menos 5 amostras em cada grupo para ter poder estatístico
+  if (n_primary >= 5 & n_metastatic >= 5) {
+    message("--- Processando ", proj, ": ", n_primary, " Primários e ", n_metastatic, " Metástases")
+    
+    try({
+      # Baixar dados apenas desses dois tipos de amostra
+      query_filtered <- GDCquery(project = proj,
+                                 data.category = "Transcriptome Profiling",
+                                 data.type = "Gene Expression Quantification",
+                                 workflow.type = "STAR - Counts",
+                                 sample.type = c("Primary Solid Tumor", "Metastatic"))
+      
+      GDCdownload(query_filtered, method = "api", files.per.chunk = 10)
+      data <- GDCprepare(query_filtered)
+      
+      # Análise de Expressão Diferencial Simplificada (usando TCGAbiolinks/edgeR)
+      data_prep <- TCGAanalyze_Preprocessing(object = data)
+      data_norm <- TCGAanalyze_Normalization(tabDF = data_prep, geneInfo = geneInfoHT)
+      data_filt <- TCGAanalyze_Filtering(tabDF = data_norm, method = "quantile", qnt.cut = 0.25)
+      
+      # DEA: Metastatic vs Primary
+      results_dea <- TCGAanalyze_DEA(mat1 = data_filt[,colData(data)$sample_type == "Primary Solid Tumor"],
+                                     mat2 = data_filt[,colData(data)$sample_type == "Metastatic"],
+                                     Cond1type = "Primary",
+                                     Cond2type = "Metastatic",
+                                     method = "glmLRT")
+      
+      # Salvar resultado individual do projeto
+      write.csv(results_dea, paste0("DEA_Metastasis_", proj, ".csv"))
+      
+      summary_results <- rbind(summary_results, 
+                               data.frame(Project = proj, Primary_N = n_primary, 
+                                          Metastatic_N = n_metastatic, Status = "Sucesso"))
+    })
+  } else {
+    summary_results <- rbind(summary_results, 
+                             data.frame(Project = proj, Primary_N = n_primary, 
+                                        Metastatic_N = n_metastatic, Status = "Amostras Insuficientes"))
+  }
+}
+
+write.csv(summary_results, "Resumo_Disponibilidade_Metastase.csv")
+```
