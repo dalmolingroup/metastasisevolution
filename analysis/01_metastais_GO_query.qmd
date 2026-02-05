@@ -84,9 +84,14 @@ metastasis_ids$Signature <- substr(metastasis_ids$Signature, 12, nchar(metastasi
 metastasis_ids <- separate(metastasis_ids, GO_id, into = c("GO_id", "Description"), sep = 10, extra = "merge")
 
 # Metastasis suppressor genes from https://www.sciencedirect.com/science/article/pii/S0023683722011102
-metastasis_suppressors <- vroom::vroom("../assets/metastasis_supressors.tsv", delim = "\t")
+# metastasis_suppressors <- vroom::vroom("../assets/metastasis_supressors.tsv", delim = "\t")
+# metastasis_suppressors <- metastasis_suppressors %>%
+#   dplyr::select(external_gene_name = `Gene Symbol`) %>%
+#   dplyr::mutate(Signature = "metastasis suppressor")
+
+metastasis_suppressors <- vroom::vroom("../assets/metastasis_supressors_nature.csv", delim = "\t")
 metastasis_suppressors <- metastasis_suppressors %>%
-  dplyr::select(external_gene_name = `Gene Symbol`) %>%
+  dplyr::select(external_gene_name = `GeneSymb`) %>%
   dplyr::mutate(Signature = "metastasis suppressor")
 
 head(metastasis_ids)

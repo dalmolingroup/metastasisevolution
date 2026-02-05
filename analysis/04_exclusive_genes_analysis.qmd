@@ -26,9 +26,12 @@ library(scales)
 
 ```{r}
 nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
+metastasis_genes <- vroom(here("results/metastasis_genes/metastasis_genes.csv")) %>%
+  subset(Signature != "metastasis suppressor")
 
 # Get clade order from nodelist (ordered by root descending - oldest first)
 clade_order <- nodelist %>%
+  subset(queryItem %in% unique(metastasis_genes$external_gene_name)) %>%
   dplyr::select(clade_name, root) %>%
   unique() %>%
   arrange(desc(root)) %>%

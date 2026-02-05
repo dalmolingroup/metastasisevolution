@@ -39,11 +39,11 @@
 <polyline points='304.38,359.05 304.38,23.45 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
 <polyline points='470.72,359.05 470.72,23.45 ' style='stroke-width: 1.07; stroke: #EBEBEB; stroke-linecap: butt;' />
 <rect x='63.19' y='38.71' width='149.71' height='305.09' style='stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #2E86AB; fill-opacity: 0.80;' />
-<rect x='229.53' y='327.60' width='149.71' height='16.20' style='stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #9B2335; fill-opacity: 0.80;' />
-<rect x='395.86' y='301.21' width='149.71' height='42.59' style='stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #4CAF50; fill-opacity: 0.80;' />
+<rect x='229.53' y='269.26' width='149.71' height='74.54' style='stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #9B2335; fill-opacity: 0.80;' />
+<rect x='395.86' y='297.50' width='149.71' height='46.30' style='stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #4CAF50; fill-opacity: 0.80;' />
 <text x='138.04' y='36.22' text-anchor='middle' style='font-size: 11.38px; font-weight: 0; font-family: "Nimbus Sans";' textLength='18.96px' lengthAdjust='spacingAndGlyphs'>659</text>
-<text x='304.38' y='325.11' text-anchor='middle' style='font-size: 11.38px; font-weight: 0; font-family: "Nimbus Sans";' textLength='12.64px' lengthAdjust='spacingAndGlyphs'>35</text>
-<text x='470.72' y='298.72' text-anchor='middle' style='font-size: 11.38px; font-weight: 0; font-family: "Nimbus Sans";' textLength='12.64px' lengthAdjust='spacingAndGlyphs'>92</text>
+<text x='304.38' y='266.77' text-anchor='middle' style='font-size: 11.38px; font-weight: 0; font-family: "Nimbus Sans";' textLength='18.96px' lengthAdjust='spacingAndGlyphs'>161</text>
+<text x='470.72' y='295.02' text-anchor='middle' style='font-size: 11.38px; font-weight: 0; font-family: "Nimbus Sans";' textLength='18.96px' lengthAdjust='spacingAndGlyphs'>100</text>
 </g>
 <g clip-path='url(#cpMC4wMHw1NzYuMDB8MC4wMHw0MzIuMDA=)'>
 <text x='33.30' y='347.01' text-anchor='end' style='font-size: 8.80px; font-weight: 0;fill: #4D4D4D; font-family: "Nimbus Sans";' textLength='4.89px' lengthAdjust='spacingAndGlyphs'>0</text>

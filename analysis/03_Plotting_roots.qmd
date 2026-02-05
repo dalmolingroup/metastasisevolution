@@ -440,8 +440,8 @@ plot_stacked_bar_chart <- function(data) {
                     "cellular extravasation",
                     "metastasis suppressor"),
                     nsets = 50, nintersects = NA,
-      sets.bar.color = c("#06141FFF", "#72874EFF", "#3D4F7DFF",
-                         "#742C14FF","#046E8FFF", "#E48C2AFF", "#9B2335FF"), 
+      sets.bar.color = c("#06141FFF", "#72874EFF", "#9B2335FF", "#3D4F7DFF",
+                         "#742C14FF","#046E8FFF", "#E48C2AFF"), 
       mainbar.y.label = "Biological Process \nIntersections",
       sets.x.label = "Set Size")
 ```
@@ -807,6 +807,90 @@ ggplot(cumulative_comparison, aes(x = clade_name, y = percentage,
 
 ggsave(file = here("results/plots/cumulative_comparison_percentage.svg"), width = 12, height = 6)
 ```
+
+```{r}
+```{r}
+# ==============================================================================
+# 3. IMPLEMENTAÇÃO ESTATÍSTICA (NOVA PARTE)
+# ==============================================================================
+
+# A. Preparar dados para estatística
+# Precisamos converter os clados em "Ranks Numéricos" que respeitem a ordem do gráfico
+nodelist_stats <- nodelist %>%
+  mutate(
+    group_label = case_when(
+      `metastasis suppressor` == 1 ~ "Metastasis suppressors",
+      TRUE ~ "Metastasis genes"
+    ),
+    # Transforma clado em Fator Ordenado usando a mesma ordem do gráfico
+    clade_factor = factor(clade_name, levels = clade_order, ordered = TRUE),
+    # Converte para número (1 = Mais antigo/Esquerda, N = Mais novo/Direita)
+    clade_rank = as.numeric(clade_factor)
+  )
+
+# B. Separar vetores
+ranks_genes <- nodelist_stats %>% 
+  filter(group_label == "Metastasis genes") %>% 
+  pull(clade_rank)
+
+ranks_suppressors <- nodelist_stats %>% 
+  filter(group_label == "Metastasis suppressors") %>% 
+  pull(clade_rank)
+
+# C. Executar Testes
+# Teste Kolmogorov-Smirnov (Compara a forma das distribuições)
+ks_res <- ks.test(ranks_genes, ranks_suppressors)
+
+# Teste Mann-Whitney U (Compara se um grupo é "mais velho" ou "mais novo" que o outro)
+wilcox_res <- wilcox.test(ranks_genes, ranks_suppressors, alternative = "two.sided")
+
+# D. Printar resultados no console para conferência
+cat("\n--- RESULTADOS ESTATÍSTICOS ---\n")
+cat("KS Test p-value:", ks_res$p.value, "\n")
+cat("Mann-Whitney p-value:", wilcox_res$p.value, "\n")
+cat("-------------------------------\n")
+```
+
+
+```{r}
+# ==============================================================================
+# 4. PLOTAGEM COM OS RESULTADOS ESTATÍSTICOS
+# ==============================================================================
+
+# Criar legenda dinâmica com os p-valores
+stats_label <- paste0(
+  "KS Test p-value: ", format.pval(ks_res$p.value, digits = 2, eps = 0.001), 
+  " | Mann-Whitney p-value: ", format.pval(wilcox_res$p.value, digits = 2, eps = 0.001)
+)
+
+plot_final <- ggplot(cumulative_comparison, aes(x = clade_name, y = percentage, 
+                                  color = dataset, group = dataset)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2) +
+  scale_color_manual(values = c("Metastasis genes" = "#2E86AB", 
+                                "Metastasis suppressors" = "#9B2335")) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  labs(x = "Evolutionary Root (Clade)", 
+       y = "Cumulative Percentage of Genes",
+       title = "Cumulative Rooting: Metastasis Genes vs Metastasis Suppressors",
+       # Inclui estatísticas e tamanhos amostrais no subtítulo
+       subtitle = paste0("Metastasis genes: n=", total_all, " | Metastasis suppressors: n=", total_supp, "\n", stats_label),
+       color = "Gene Set") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 10), # Aumentei um pouco para leitura
+    axis.title = element_text(size = 12),
+    legend.position = "bottom",
+    panel.grid.major.y = element_line(linewidth = 0.25, linetype = "dotted", color = "#E0E0E0"),
+    panel.grid.major.x = element_blank(),
+    plot.subtitle = element_text(size = 10, face = "italic", color = "#333333", margin = margin(b = 10))
+  )
+
+# Exibir o plot
+print(plot_final)
+```
+```
+
 
 ```{r}
 # Cumulative bar graph for metastasis suppressors only
