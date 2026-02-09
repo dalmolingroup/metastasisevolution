@@ -1,0 +1,39 @@
+ID,Description,groups,n_groups
+GO:0050673,epithelial cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0001953,negative regulation of cell-matrix adhesion,Unicellular & Multicellular non-vertebrate,2
+GO:0006801,superoxide metabolic process,Unicellular & Multicellular non-vertebrate,2
+GO:0007009,plasma membrane organization,Unicellular & Multicellular non-vertebrate,2
+GO:0007159,leukocyte cell-cell adhesion,Unicellular & Multicellular non-vertebrate,2
+GO:0007411,axon guidance,Unicellular & Multicellular non-vertebrate,2
+GO:0009612,response to mechanical stimulus,Unicellular & Multicellular non-vertebrate,2
+GO:0010720,positive regulation of cell development,Unicellular & Multicellular non-vertebrate,2
+GO:0010721,negative regulation of cell development,Unicellular & Multicellular non-vertebrate,2
+GO:0010812,negative regulation of cell-substrate adhesion,Unicellular & Multicellular non-vertebrate,2
+GO:0010975,regulation of neuron projection development,Unicellular & Multicellular non-vertebrate,2
+GO:0030336,negative regulation of cell migration,Unicellular & Multicellular non-vertebrate,2
+GO:0030879,mammary gland development,Unicellular & Multicellular non-vertebrate,2
+GO:0030900,forebrain development,Unicellular & Multicellular non-vertebrate,2
+GO:0032928,regulation of superoxide anion generation,Unicellular & Multicellular non-vertebrate,2
+GO:0032930,positive regulation of superoxide anion generation,Unicellular & Multicellular non-vertebrate,2
+GO:0035019,somatic stem cell population maintenance,Unicellular & Multicellular non-vertebrate,2
+GO:0036462,TRAIL-activated apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0040013,negative regulation of locomotion,Unicellular & Multicellular non-vertebrate,2
+GO:0045786,negative regulation of cell cycle,Unicellular & Multicellular non-vertebrate,2
+GO:0048485,sympathetic nervous system development,Unicellular & Multicellular non-vertebrate,2
+GO:0048511,rhythmic process,Unicellular & Multicellular non-vertebrate,2
+GO:0050678,regulation of epithelial cell proliferation,Unicellular & Multicellular non-vertebrate,2
+GO:0050767,regulation of neurogenesis,Unicellular & Multicellular non-vertebrate,2
+GO:0050768,negative regulation of neurogenesis,Unicellular & Multicellular non-vertebrate,2
+GO:0051960,regulation of nervous system development,Unicellular & Multicellular non-vertebrate,2
+GO:0051961,negative regulation of nervous system development,Unicellular & Multicellular non-vertebrate,2
+GO:0071214,cellular response to abiotic stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071356,cellular response to tumor necrosis factor,Multicellular non-vertebrate & Vertebrates,2
+GO:0090287,regulation of cellular response to growth factor stimulus,Unicellular & Multicellular non-vertebrate,2
+GO:0097191,extrinsic apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0097485,neuron projection guidance,Unicellular & Multicellular non-vertebrate,2
+GO:0104004,cellular response to environmental stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:1900180,regulation of protein localization to nucleus,Unicellular & Multicellular non-vertebrate,2
+GO:1900182,positive regulation of protein localization to nucleus,Unicellular & Multicellular non-vertebrate,2
+GO:1902903,regulation of supramolecular fiber organization,Unicellular & Multicellular non-vertebrate,2
+GO:1903037,regulation of leukocyte cell-cell adhesion,Unicellular & Multicellular non-vertebrate,2
+GO:2000146,negative regulation of cell motility,Unicellular & Multicellular non-vertebrate,2

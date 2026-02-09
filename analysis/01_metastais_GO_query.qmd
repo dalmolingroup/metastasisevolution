@@ -79,7 +79,7 @@ First, we need to load the metastasis GO biological process table
 
 ```{r data}
 # Data frame with GOids and annotation
-metastasis_ids <- vroom::vroom("../assets/Detatch_and_Dissemination.csv")
+metastasis_ids <- vroom::vroom(here("assets/Detatch_and_Dissemination.csv"))
 metastasis_ids$Signature <- substr(metastasis_ids$Signature, 12, nchar(metastasis_ids$Signature))
 metastasis_ids <- separate(metastasis_ids, GO_id, into = c("GO_id", "Description"), sep = 10, extra = "merge")
 
@@ -89,7 +89,7 @@ metastasis_ids <- separate(metastasis_ids, GO_id, into = c("GO_id", "Description
 #   dplyr::select(external_gene_name = `Gene Symbol`) %>%
 #   dplyr::mutate(Signature = "metastasis suppressor")
 
-metastasis_suppressors <- vroom::vroom("../assets/metastasis_supressors_nature.csv", delim = "\t")
+metastasis_suppressors <- vroom::vroom(here("assets/metastasis_supressors_nature.csv"), delim = "\t")
 metastasis_suppressors <- metastasis_suppressors %>%
   dplyr::select(external_gene_name = `GeneSymb`) %>%
   dplyr::mutate(Signature = "metastasis suppressor")

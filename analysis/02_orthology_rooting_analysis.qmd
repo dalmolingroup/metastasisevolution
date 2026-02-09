@@ -152,16 +152,16 @@ combine_scores <- function(dat, evidences = "all", confLevel = 0.4) {
 
 ```{r data}
 # Metastasis Genes data frame
-df <- vroom::vroom("../results/metastasis_genes/metastasis_genes.csv")
+df <- vroom::vroom(here("results/metastasis_genes/metastasis_genes.csv"))
 
 # NCBI Eukaryotes 
-load('../assets/string_eukaryotes.rda')
+load(here('assets/string_eukaryotes.rda'))
 
 ## Table with Orthologous Groups and their proteins
 #download_if_missing("https://stringdb-static.org/download/COG.mappings.v11.0.txt.gz")
 
 cogs <- fread(
-  "../assets/COG.mappings.v11.0.txt.gz",
+  here("assets/COG.mappings.v11.0.txt.gz"),
   header           = F,
   stringsAsFactors = F,
   skip             = 1,
@@ -288,7 +288,7 @@ res <- getBridge(ogr, what="results")
 res |> 
   vroom::vroom_write(file = here("results/orthology_data/genebridge_result.csv"), delim = ",")
 
-save(ogr, file = "../results/orthology_data/genebridge_ogr.RData")
+save(ogr, file = here("results/orthology_data/genebridge_ogr.RData"))
 ```
 ## GeneBridge results processing
 

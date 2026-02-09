@@ -37,8 +37,9 @@ library(here)
 
 ```{r}
 #load("../results/plots/graph")
-metastasis_genes <- vroom::vroom("../results/metastasis_genes/metastasis_genes.csv", delim = ",")
-nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
+metastasis_genes <- vroom::vroom(here("results/metastasis_genes/metastasis_genes.csv"), delim = ",")
+nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
+
 
 #CLADE_NAMES <- "https://raw.githubusercontent.com/dalmolingroup/neurotransmissionevolution/ctenophora_before_porifera/analysis/geneplast_clade_names.tsv"
 #lca_names <- read_table(CLADE_NAMES)
@@ -639,7 +640,7 @@ plot_stacked_bar_chart(df_proportion)
 ## Hipergeometric Test
 
 ```{r}
-nodelist <- vroom::vroom("../results/orthology_data/nodelist.csv")
+nodelist <- vroom::vroom(head("results/orthology_data/nodelist.csv"))
 
 # Filter out genes that are ONLY metastasis suppressors (exclude from statistical test)
 # Keep genes that have at least one of the 6 original biological processes
@@ -808,7 +809,7 @@ ggplot(cumulative_comparison, aes(x = clade_name, y = percentage,
 ggsave(file = here("results/plots/cumulative_comparison_percentage.svg"), width = 12, height = 6)
 ```
 
-```{r}
+
 ```{r}
 # ==============================================================================
 # 3. IMPLEMENTAÇÃO ESTATÍSTICA (NOVA PARTE)
@@ -889,7 +890,7 @@ plot_final <- ggplot(cumulative_comparison, aes(x = clade_name, y = percentage,
 # Exibir o plot
 print(plot_final)
 ```
-```
+
 
 
 ```{r}

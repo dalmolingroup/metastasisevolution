@@ -8,7 +8,7 @@ cell adhesion,Sauropsida,14,356,515,14,0.00524775688383072,0.13644167897959872,g
 cell junction organization,Tunicata,6,80,515,15,0.0181813910954214,0.3190843818368336,gray,21
 cell junction organization,Amoebozoa,6,80,515,15,0.0181813910954214,0.3190843818368336,gray,32
 extracellular matrix organization,Ecdysozoa,4,33,515,17,0.0184087143367404,0.3190843818368336,gray,24
-cellular extravasation,Actinopterygii,3,5,515,75,0.0238915602956302,0.3727083406118311,gray,20
+cellular extravasation,Actinopterygii,3,5,515,75,0.0238915602956303,0.37270834061183267,gray,20
 regulation of metallopeptidase activity,Metatheria,1,3,515,6,0.0346123452764484,0.4539248530346972,gray,15
 cell adhesion,Afrotheria,9,356,515,9,0.0349172963872844,0.4539248530346972,gray,14
 cell adhesion,Choanoflagellata,68,356,515,88,0.0432851106667882,0.5194213280014585,gray,30
@@ -21,7 +21,7 @@ epithelial to mesenchymal transition,Rhodophyta,1,38,515,2,0.142261342601337,1,g
 cell adhesion,Coelacanthimorpha,5,356,515,5,0.15646615403468,1,gray,19
 extracellular matrix organization,Ctenophora,4,33,515,35,0.177921606306881,1,gray,29
 cell junction organization,Metamonada,19,80,515,101,0.193005892115994,1,gray,37
-cellular extravasation,Choanoflagellata,2,5,515,88,0.203795766895238,1,gray,30
+cellular extravasation,Choanoflagellata,2,5,515,88,0.203795766895239,1,gray,30
 cell adhesion,Spiralia,4,356,515,4,0.227142627021936,1,gray,25
 cell adhesion,Placozoa,4,356,515,4,0.227142627021936,1,gray,27
 cell junction organization,Metatheria,2,80,515,6,0.235600240468662,1,gray,15
