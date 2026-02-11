@@ -222,8 +222,8 @@ dir.create(file.path(output_base, "plots"), recursive = TRUE, showWarnings = FAL
 ## Filter and Classify Metastasis Suppressor Genes
 
 Define evolutionary groups based on root values:
-- **Unicellular**: Root > 30 (before Choanoflagellata)
-- **Multicellular non-vertebrate**: 21 <= Root <= 30 (Choanoflagellata to Tunicata)
+- **Unicellular**: Root >= 30 (before Choanoflagellata)
+- **Multicellular non-vertebrate**: 21 <= Root < 30 (Choanoflagellata to Tunicata)
 - **Vertebrates**: Root <= 20 (Actinopterygii and newer)
 
 ```{r filter-msg}
@@ -238,8 +238,8 @@ cat("Total metastasis suppressor genes in nodelist:", nrow(msg_nodelist), "\n")
 msg_nodelist <- msg_nodelist %>%
   mutate(
     evolutionary_group = case_when(
-      root > 30 ~ "Unicellular",
-      root >= 21 & root <= 30 ~ "Multicellular non-vertebrate",
+      root => 30 ~ "Unicellular",
+      root >= 21 & root < 30 ~ "Multicellular non-vertebrate",
       root <= 20 ~ "Vertebrates"
     )
   ) %>%

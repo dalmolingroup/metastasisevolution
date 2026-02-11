@@ -216,8 +216,8 @@ cat("Total metastasis suppressor genes in nodelist:", nrow(msg_nodelist), "\n")
 msg_nodelist <- msg_nodelist %>%
   mutate(
     rooted_group = case_when(
-      root > 30 ~ "Unicellular",
-      root >= 21 & root <= 30 ~ "Multicellular non-vertebrate",
+      root >= 30 ~ "Unicellular",
+      root >= 21 & root < 30 ~ "Multicellular non-vertebrate",
       root <= 20 ~ "Vertebrates"
     )
   )
@@ -528,7 +528,7 @@ if (nrow(kegg_all_clades) > 0) {
   
   heatmap_data <- heatmap_data %>% left_join(enriched_pairs, by = c("Description", "Clade")) %>% mutate(enriched = ifelse(is.na(enriched), FALSE, enriched))
   
-  clade_group <- clade_info %>% mutate(group = case_when(root > 30 ~ "Unicellular", root >= 21 & root <= 30 ~ "Multicellular non-vertebrate", root <= 20 ~ "Vertebrates"))
+  clade_group <- clade_info %>% mutate(group = case_when(root >= 30 ~ "Unicellular", root >= 21 & root < 30 ~ "Multicellular non-vertebrate", root <= 20 ~ "Vertebrates"))
   heatmap_data <- heatmap_data %>% left_join(clade_group %>% dplyr::select("clade_name", "group"), by = c("Clade" = "clade_name"))
   
   heatmap_data <- heatmap_data %>% mutate(fill_color = case_when(!enriched ~ "Not enriched", group == "Unicellular" ~ "Unicellular", group == "Multicellular non-vertebrate" ~ "Multicellular non-vertebrate", group == "Vertebrates" ~ "Vertebrates"))
