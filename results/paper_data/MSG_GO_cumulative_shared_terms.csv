@@ -1,0 +1,913 @@
+ID,Description,groups,n_groups
+GO:0000082,G1/S transition of mitotic cell cycle,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0001952,regulation of cell-matrix adhesion,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0001953,negative regulation of cell-matrix adhesion,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0002347,response to tumor cell,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0002357,defense response to tumor cell,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0003281,ventricular septum development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006183,GTP biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006220,pyrimidine nucleotide metabolic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006221,pyrimidine nucleotide biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006228,UTP biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006241,CTP biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006309,apoptotic DNA fragmentation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006474,N-terminal protein amino acid acetylation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006475,internal protein amino acid acetylation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006606,protein import into nucleus,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006801,superoxide metabolic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0006979,response to oxidative stress,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0007009,plasma membrane organization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0007015,actin filament organization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0007159,leukocyte cell-cell adhesion,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0007411,axon guidance,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0007519,skeletal muscle tissue development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0007623,circadian rhythm,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0008064,regulation of actin polymerization or depolymerization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0009147,pyrimidine nucleoside triphosphate metabolic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0009148,pyrimidine nucleoside triphosphate biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0009208,pyrimidine ribonucleoside triphosphate metabolic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0009209,pyrimidine ribonucleoside triphosphate biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0009218,pyrimidine ribonucleotide metabolic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0009220,pyrimidine ribonucleotide biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0009263,deoxyribonucleotide biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0009265,2'-deoxyribonucleotide biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0009612,response to mechanical stimulus,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0010624,regulation of Schwann cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0010720,positive regulation of cell development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0010721,negative regulation of cell development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0010812,negative regulation of cell-substrate adhesion,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0010975,regulation of neuron projection development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0010977,negative regulation of neuron projection development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0014009,glial cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0014010,Schwann cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0014013,regulation of gliogenesis,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0014014,negative regulation of gliogenesis,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0014910,regulation of smooth muscle cell migration,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0016078,tRNA decay,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0018198,peptidyl-cysteine modification,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0021537,telencephalon development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0021955,central nervous system neuron axonogenesis,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0030336,negative regulation of cell migration,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0030832,regulation of actin filament length,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0030879,mammary gland development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0030900,forebrain development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0031345,negative regulation of cell projection organization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0031365,N-terminal protein amino acid modification,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0031400,negative regulation of protein modification process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0031647,regulation of protein stability,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0031648,protein destabilization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0032535,regulation of cellular component size,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0032928,regulation of superoxide anion generation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0032930,positive regulation of superoxide anion generation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0032956,regulation of actin cytoskeleton organization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0032970,regulation of actin filament-based process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0033157,regulation of intracellular protein transport,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0033598,mammary gland epithelial cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0033599,regulation of mammary gland epithelial cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0034214,protein hexamerization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0034341,response to type II interferon,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0034504,protein localization to nucleus,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0034599,cellular response to oxidative stress,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0035019,somatic stem cell population maintenance,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0035902,response to immobilization stress,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0040013,negative regulation of locomotion,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0043254,regulation of protein-containing complex assembly,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0043923,host-mediated activation of viral transcription,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0044843,cell cycle G1/S phase transition,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0045786,negative regulation of cell cycle,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0046036,CTP metabolic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0046039,GTP metabolic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0046051,UTP metabolic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0046385,deoxyribose phosphate biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0046634,regulation of alpha-beta T cell activation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0046635,positive regulation of alpha-beta T cell activation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0046637,regulation of alpha-beta T cell differentiation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0046641,positive regulation of alpha-beta T cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0048485,sympathetic nervous system development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0048511,rhythmic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0050673,epithelial cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0050678,regulation of epithelial cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0050767,regulation of neurogenesis,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0050768,negative regulation of neurogenesis,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0051170,import into nucleus,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0051494,negative regulation of cytoskeleton organization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0051495,positive regulation of cytoskeleton organization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0051960,regulation of nervous system development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0051961,negative regulation of nervous system development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0051962,positive regulation of nervous system development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0060251,regulation of glial cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0060253,negative regulation of glial cell proliferation,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0061180,mammary gland epithelium development,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0071346,cellular response to type II interferon,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0072350,tricarboxylic acid metabolic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0072527,pyrimidine-containing compound metabolic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0072528,pyrimidine-containing compound biosynthetic process,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0072567,chemokine (C-X-C motif) ligand 2 production,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0086001,cardiac muscle cell action potential,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0090287,regulation of cellular response to growth factor stimulus,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0097485,neuron projection guidance,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0098911,regulation of ventricular cardiac muscle cell action potential,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0110053,regulation of actin filament organization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:1900180,regulation of protein localization to nucleus,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:1900182,positive regulation of protein localization to nucleus,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:1901990,regulation of mitotic cell cycle phase transition,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:1902806,regulation of cell cycle G1/S phase transition,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:1902903,regulation of supramolecular fiber organization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:1902904,negative regulation of supramolecular fiber organization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:1902905,positive regulation of supramolecular fiber organization,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:1903037,regulation of leukocyte cell-cell adhesion,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:1903909,regulation of receptor clustering,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:2000045,regulation of G1/S transition of mitotic cell cycle,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:2000146,negative regulation of cell motility,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:2000318,positive regulation of T-helper 17 type immune response,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:2000341,regulation of chemokine (C-X-C motif) ligand 2 production,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:2000677,regulation of transcription regulatory region DNA binding,Unicellular & Multicellular non-vertebrate & Vertebrates,3
+GO:0000302,response to reactive oxygen species,Multicellular non-vertebrate & Vertebrates,2
+GO:0001503,ossification,Multicellular non-vertebrate & Vertebrates,2
+GO:0001558,regulation of cell growth,Multicellular non-vertebrate & Vertebrates,2
+GO:0001649,osteoblast differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0001654,eye development,Multicellular non-vertebrate & Vertebrates,2
+GO:0001655,urogenital system development,Multicellular non-vertebrate & Vertebrates,2
+GO:0001656,metanephros development,Multicellular non-vertebrate & Vertebrates,2
+GO:0001657,ureteric bud development,Multicellular non-vertebrate & Vertebrates,2
+GO:0001658,branching involved in ureteric bud morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0001666,response to hypoxia,Multicellular non-vertebrate & Vertebrates,2
+GO:0001667,ameboidal-type cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0001701,in utero embryonic development,Multicellular non-vertebrate & Vertebrates,2
+GO:0001704,formation of primary germ layer,Multicellular non-vertebrate & Vertebrates,2
+GO:0001707,mesoderm formation,Multicellular non-vertebrate & Vertebrates,2
+GO:0001709,cell fate determination,Multicellular non-vertebrate & Vertebrates,2
+GO:0001710,mesodermal cell fate commitment,Multicellular non-vertebrate & Vertebrates,2
+GO:0001755,neural crest cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0001763,morphogenesis of a branching structure,Multicellular non-vertebrate & Vertebrates,2
+GO:0001818,negative regulation of cytokine production,Multicellular non-vertebrate & Vertebrates,2
+GO:0001822,kidney development,Multicellular non-vertebrate & Vertebrates,2
+GO:0001823,mesonephros development,Multicellular non-vertebrate & Vertebrates,2
+GO:0001837,epithelial to mesenchymal transition,Multicellular non-vertebrate & Vertebrates,2
+GO:0001838,embryonic epithelial tube formation,Multicellular non-vertebrate & Vertebrates,2
+GO:0001841,neural tube formation,Multicellular non-vertebrate & Vertebrates,2
+GO:0001843,neural tube closure,Multicellular non-vertebrate & Vertebrates,2
+GO:0001890,placenta development,Multicellular non-vertebrate & Vertebrates,2
+GO:0001892,embryonic placenta development,Multicellular non-vertebrate & Vertebrates,2
+GO:0001933,negative regulation of protein phosphorylation,Multicellular non-vertebrate & Vertebrates,2
+GO:0002011,morphogenesis of an epithelial sheet,Multicellular non-vertebrate & Vertebrates,2
+GO:0002040,sprouting angiogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0002042,cell migration involved in sprouting angiogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0002065,columnar/cuboidal epithelial cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0002088,lens development in camera-type eye,Multicellular non-vertebrate & Vertebrates,2
+GO:0002089,lens morphogenesis in camera-type eye,Multicellular non-vertebrate & Vertebrates,2
+GO:0002092,positive regulation of receptor internalization,Multicellular non-vertebrate & Vertebrates,2
+GO:0002223,stimulatory C-type lectin receptor signaling pathway,Unicellular & Multicellular non-vertebrate,2
+GO:0002237,response to molecule of bacterial origin,Multicellular non-vertebrate & Vertebrates,2
+GO:0002246,wound healing involved in inflammatory response,Multicellular non-vertebrate & Vertebrates,2
+GO:0002274,myeloid leukocyte activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0002573,myeloid leukocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0002685,regulation of leukocyte migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0002687,positive regulation of leukocyte migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0002695,negative regulation of leukocyte activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0002696,positive regulation of leukocyte activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0002697,regulation of immune effector process,Multicellular non-vertebrate & Vertebrates,2
+GO:0002703,regulation of leukocyte mediated immunity,Multicellular non-vertebrate & Vertebrates,2
+GO:0002763,positive regulation of myeloid leukocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0002819,regulation of adaptive immune response,Multicellular non-vertebrate & Vertebrates,2
+GO:0002822,regulation of adaptive immune response based on somatic recombination of immune receptors built from immunoglobulin superfamily domains,Multicellular non-vertebrate & Vertebrates,2
+GO:0002834,regulation of response to tumor cell,Multicellular non-vertebrate & Vertebrates,2
+GO:0002835,negative regulation of response to tumor cell,Multicellular non-vertebrate & Vertebrates,2
+GO:0002838,negative regulation of immune response to tumor cell,Multicellular non-vertebrate & Vertebrates,2
+GO:0002934,desmosome organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0003002,regionalization,Multicellular non-vertebrate & Vertebrates,2
+GO:0003007,heart morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0003151,outflow tract morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0003170,heart valve development,Multicellular non-vertebrate & Vertebrates,2
+GO:0003176,aortic valve development,Multicellular non-vertebrate & Vertebrates,2
+GO:0003179,heart valve morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0003180,aortic valve morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0003184,pulmonary valve morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0003188,heart valve formation,Multicellular non-vertebrate & Vertebrates,2
+GO:0003197,endocardial cushion development,Multicellular non-vertebrate & Vertebrates,2
+GO:0003205,cardiac chamber development,Multicellular non-vertebrate & Vertebrates,2
+GO:0003206,cardiac chamber morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0003231,cardiac ventricle development,Multicellular non-vertebrate & Vertebrates,2
+GO:0003253,cardiac neural crest cell migration involved in outflow tract morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0003279,cardiac septum development,Multicellular non-vertebrate & Vertebrates,2
+GO:0003401,axis elongation,Multicellular non-vertebrate & Vertebrates,2
+GO:0006109,regulation of carbohydrate metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0006509,membrane protein ectodomain proteolysis,Multicellular non-vertebrate & Vertebrates,2
+GO:0006809,nitric oxide biosynthetic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0006909,phagocytosis,Multicellular non-vertebrate & Vertebrates,2
+GO:0006911,"phagocytosis, engulfment",Multicellular non-vertebrate & Vertebrates,2
+GO:0006913,nucleocytoplasmic transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0006935,chemotaxis,Multicellular non-vertebrate & Vertebrates,2
+GO:0007044,cell-substrate junction assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0007160,cell-matrix adhesion,Multicellular non-vertebrate & Vertebrates,2
+GO:0007162,negative regulation of cell adhesion,Multicellular non-vertebrate & Vertebrates,2
+GO:0007178,cell surface receptor protein serine/threonine kinase signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0007179,transforming growth factor beta receptor signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0007216,G protein-coupled glutamate receptor signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0007229,integrin-mediated signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0007249,canonical NF-kappaB signal transduction,Multicellular non-vertebrate & Vertebrates,2
+GO:0007272,ensheathment of neurons,Multicellular non-vertebrate & Vertebrates,2
+GO:0007369,gastrulation,Multicellular non-vertebrate & Vertebrates,2
+GO:0007389,pattern specification process,Multicellular non-vertebrate & Vertebrates,2
+GO:0007409,axonogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0007413,axonal fasciculation,Multicellular non-vertebrate & Vertebrates,2
+GO:0007416,synapse assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0007422,peripheral nervous system development,Multicellular non-vertebrate & Vertebrates,2
+GO:0007492,endoderm development,Multicellular non-vertebrate & Vertebrates,2
+GO:0007498,mesoderm development,Multicellular non-vertebrate & Vertebrates,2
+GO:0007517,muscle organ development,Multicellular non-vertebrate & Vertebrates,2
+GO:0007548,sex differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0007565,female pregnancy,Multicellular non-vertebrate & Vertebrates,2
+GO:0007566,embryo implantation,Multicellular non-vertebrate & Vertebrates,2
+GO:0007584,response to nutrient,Multicellular non-vertebrate & Vertebrates,2
+GO:0007611,learning or memory,Multicellular non-vertebrate & Vertebrates,2
+GO:0008038,neuron recognition,Multicellular non-vertebrate & Vertebrates,2
+GO:0008154,actin polymerization or depolymerization,Unicellular & Multicellular non-vertebrate,2
+GO:0008366,axon ensheathment,Multicellular non-vertebrate & Vertebrates,2
+GO:0008406,gonad development,Multicellular non-vertebrate & Vertebrates,2
+GO:0008543,fibroblast growth factor receptor signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0008544,epidermis development,Multicellular non-vertebrate & Vertebrates,2
+GO:0008584,male gonad development,Multicellular non-vertebrate & Vertebrates,2
+GO:0008585,female gonad development,Multicellular non-vertebrate & Vertebrates,2
+GO:0008625,extrinsic apoptotic signaling pathway via death domain receptors,Multicellular non-vertebrate & Vertebrates,2
+GO:0009152,purine ribonucleotide biosynthetic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0009165,nucleotide biosynthetic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0009314,response to radiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0009410,response to xenobiotic stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0009743,response to carbohydrate,Multicellular non-vertebrate & Vertebrates,2
+GO:0009746,response to hexose,Multicellular non-vertebrate & Vertebrates,2
+GO:0009749,response to glucose,Multicellular non-vertebrate & Vertebrates,2
+GO:0009791,post-embryonic development,Multicellular non-vertebrate & Vertebrates,2
+GO:0009798,axis specification,Multicellular non-vertebrate & Vertebrates,2
+GO:0009895,negative regulation of catabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0009913,epidermal cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0009948,anterior/posterior axis specification,Multicellular non-vertebrate & Vertebrates,2
+GO:0009952,anterior/posterior pattern specification,Multicellular non-vertebrate & Vertebrates,2
+GO:0010001,glial cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0010038,response to metal ion,Multicellular non-vertebrate & Vertebrates,2
+GO:0010165,response to X-ray,Multicellular non-vertebrate & Vertebrates,2
+GO:0010171,body morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0010212,response to ionizing radiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0010421,hydrogen peroxide-mediated programmed cell death,Multicellular non-vertebrate & Vertebrates,2
+GO:0010453,regulation of cell fate commitment,Multicellular non-vertebrate & Vertebrates,2
+GO:0010455,positive regulation of cell fate commitment,Multicellular non-vertebrate & Vertebrates,2
+GO:0010466,negative regulation of peptidase activity,Multicellular non-vertebrate & Vertebrates,2
+GO:0010507,negative regulation of autophagy,Multicellular non-vertebrate & Vertebrates,2
+GO:0010563,negative regulation of phosphorus metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0010586,miRNA metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0010594,regulation of endothelial cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0010596,negative regulation of endothelial cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0010631,epithelial cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0010632,regulation of epithelial cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0010633,negative regulation of epithelial cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0010639,negative regulation of organelle organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0010657,muscle cell apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0010660,regulation of muscle cell apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0010661,positive regulation of muscle cell apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0010712,regulation of collagen metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0010714,positive regulation of collagen metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0010715,regulation of extracellular matrix disassembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0010716,negative regulation of extracellular matrix disassembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0010717,regulation of epithelial to mesenchymal transition,Multicellular non-vertebrate & Vertebrates,2
+GO:0010718,positive regulation of epithelial to mesenchymal transition,Multicellular non-vertebrate & Vertebrates,2
+GO:0010719,negative regulation of epithelial to mesenchymal transition,Multicellular non-vertebrate & Vertebrates,2
+GO:0010761,fibroblast migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0010762,regulation of fibroblast migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0010763,positive regulation of fibroblast migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0010803,regulation of tumor necrosis factor-mediated signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0010810,regulation of cell-substrate adhesion,Multicellular non-vertebrate & Vertebrates,2
+GO:0010927,cellular component assembly involved in morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0010936,negative regulation of macrophage cytokine production,Multicellular non-vertebrate & Vertebrates,2
+GO:0014003,oligodendrocyte development,Multicellular non-vertebrate & Vertebrates,2
+GO:0014004,microglia differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0014020,primary neural tube formation,Multicellular non-vertebrate & Vertebrates,2
+GO:0014033,neural crest cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0014037,Schwann cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0014044,Schwann cell development,Multicellular non-vertebrate & Vertebrates,2
+GO:0014706,striated muscle tissue development,Multicellular non-vertebrate & Vertebrates,2
+GO:0014812,muscle cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0014850,response to muscle activity,Multicellular non-vertebrate & Vertebrates,2
+GO:0014909,smooth muscle cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0014911,positive regulation of smooth muscle cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0015908,fatty acid transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0015909,long-chain fatty acid transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0016049,cell growth,Multicellular non-vertebrate & Vertebrates,2
+GO:0016055,Wnt signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0016202,regulation of striated muscle tissue development,Multicellular non-vertebrate & Vertebrates,2
+GO:0016331,morphogenesis of embryonic epithelium,Multicellular non-vertebrate & Vertebrates,2
+GO:0016525,negative regulation of angiogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0017015,regulation of transforming growth factor beta receptor signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0018193,peptidyl-amino acid modification,Unicellular & Multicellular non-vertebrate,2
+GO:0019098,reproductive behavior,Multicellular non-vertebrate & Vertebrates,2
+GO:0019827,stem cell population maintenance,Multicellular non-vertebrate & Vertebrates,2
+GO:0021543,pallium development,Multicellular non-vertebrate & Vertebrates,2
+GO:0021700,developmental maturation,Multicellular non-vertebrate & Vertebrates,2
+GO:0021766,hippocampus development,Multicellular non-vertebrate & Vertebrates,2
+GO:0021782,glial cell development,Multicellular non-vertebrate & Vertebrates,2
+GO:0021915,neural tube development,Multicellular non-vertebrate & Vertebrates,2
+GO:0021952,central nervous system projection neuron axonogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0021953,central nervous system neuron differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0021954,central nervous system neuron development,Multicellular non-vertebrate & Vertebrates,2
+GO:0021983,pituitary gland development,Multicellular non-vertebrate & Vertebrates,2
+GO:0022011,myelination in peripheral nervous system,Multicellular non-vertebrate & Vertebrates,2
+GO:0022408,negative regulation of cell-cell adhesion,Multicellular non-vertebrate & Vertebrates,2
+GO:0022409,positive regulation of cell-cell adhesion,Multicellular non-vertebrate & Vertebrates,2
+GO:0022411,cellular component disassembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0022602,ovulation cycle process,Multicellular non-vertebrate & Vertebrates,2
+GO:0022612,gland morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0022617,extracellular matrix disassembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0030098,lymphocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0030099,myeloid cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0030100,regulation of endocytosis,Multicellular non-vertebrate & Vertebrates,2
+GO:0030111,regulation of Wnt signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0030162,regulation of proteolysis,Multicellular non-vertebrate & Vertebrates,2
+GO:0030177,positive regulation of Wnt signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0030183,B cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0030195,negative regulation of blood coagulation,Multicellular non-vertebrate & Vertebrates,2
+GO:0030198,extracellular matrix organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0030217,T cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0030225,macrophage differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0030278,regulation of ossification,Multicellular non-vertebrate & Vertebrates,2
+GO:0030308,negative regulation of cell growth,Multicellular non-vertebrate & Vertebrates,2
+GO:0030316,osteoclast differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0030323,respiratory tube development,Multicellular non-vertebrate & Vertebrates,2
+GO:0030324,lung development,Multicellular non-vertebrate & Vertebrates,2
+GO:0030326,embryonic limb morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0030509,BMP signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0030510,regulation of BMP signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0030511,positive regulation of transforming growth factor beta receptor signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0030513,positive regulation of BMP signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0030514,negative regulation of BMP signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0030540,female genitalia development,Multicellular non-vertebrate & Vertebrates,2
+GO:0030595,leukocyte chemotaxis,Multicellular non-vertebrate & Vertebrates,2
+GO:0030850,prostate gland development,Multicellular non-vertebrate & Vertebrates,2
+GO:0030889,negative regulation of B cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0030901,midbrain development,Multicellular non-vertebrate & Vertebrates,2
+GO:0031032,actomyosin structure organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0031053,primary miRNA processing,Multicellular non-vertebrate & Vertebrates,2
+GO:0031099,regeneration,Multicellular non-vertebrate & Vertebrates,2
+GO:0031290,retinal ganglion cell axon guidance,Unicellular & Multicellular non-vertebrate,2
+GO:0031589,cell-substrate adhesion,Multicellular non-vertebrate & Vertebrates,2
+GO:0031623,receptor internalization,Multicellular non-vertebrate & Vertebrates,2
+GO:0031644,regulation of nervous system process,Multicellular non-vertebrate & Vertebrates,2
+GO:0031646,positive regulation of nervous system process,Multicellular non-vertebrate & Vertebrates,2
+GO:0031998,regulation of fatty acid beta-oxidation,Multicellular non-vertebrate & Vertebrates,2
+GO:0032000,positive regulation of fatty acid beta-oxidation,Multicellular non-vertebrate & Vertebrates,2
+GO:0032025,response to cobalt ion,Multicellular non-vertebrate & Vertebrates,2
+GO:0032102,negative regulation of response to external stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0032231,regulation of actin filament bundle assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0032233,positive regulation of actin filament bundle assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0032288,myelin assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0032292,peripheral nervous system axon ensheathment,Multicellular non-vertebrate & Vertebrates,2
+GO:0032303,regulation of icosanoid secretion,Multicellular non-vertebrate & Vertebrates,2
+GO:0032309,icosanoid secretion,Multicellular non-vertebrate & Vertebrates,2
+GO:0032355,response to estradiol,Multicellular non-vertebrate & Vertebrates,2
+GO:0032386,regulation of intracellular transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0032388,positive regulation of intracellular transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0032496,response to lipopolysaccharide,Multicellular non-vertebrate & Vertebrates,2
+GO:0032570,response to progesterone,Multicellular non-vertebrate & Vertebrates,2
+GO:0032602,chemokine production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032609,type II interferon production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032613,interleukin-10 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032615,interleukin-12 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032616,interleukin-13 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032633,interleukin-4 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032635,interleukin-6 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032637,interleukin-8 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032640,tumor necrosis factor production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032642,regulation of chemokine production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032649,regulation of type II interferon production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032653,regulation of interleukin-10 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032655,regulation of interleukin-12 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032656,regulation of interleukin-13 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032673,regulation of interleukin-4 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032675,regulation of interleukin-6 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032677,regulation of interleukin-8 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032680,regulation of tumor necrosis factor production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032720,negative regulation of tumor necrosis factor production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032722,positive regulation of chemokine production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032729,positive regulation of type II interferon production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032733,positive regulation of interleukin-10 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032735,positive regulation of interleukin-12 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032736,positive regulation of interleukin-13 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032753,positive regulation of interleukin-4 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032755,positive regulation of interleukin-6 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032760,positive regulation of tumor necrosis factor production,Multicellular non-vertebrate & Vertebrates,2
+GO:0032890,regulation of organic acid transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0032922,circadian regulation of gene expression,Multicellular non-vertebrate & Vertebrates,2
+GO:0032943,mononuclear cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0032944,regulation of mononuclear cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0032945,negative regulation of mononuclear cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0032963,collagen metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0032964,collagen biosynthetic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0032965,regulation of collagen biosynthetic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0032967,positive regulation of collagen biosynthetic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0032989,cellular anatomical entity morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0033002,muscle cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0033079,immature T cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0033080,immature T cell proliferation in thymus,Multicellular non-vertebrate & Vertebrates,2
+GO:0033083,regulation of immature T cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0033084,regulation of immature T cell proliferation in thymus,Multicellular non-vertebrate & Vertebrates,2
+GO:0033085,negative regulation of T cell differentiation in thymus,Multicellular non-vertebrate & Vertebrates,2
+GO:0033273,response to vitamin,Multicellular non-vertebrate & Vertebrates,2
+GO:0033619,membrane protein proteolysis,Multicellular non-vertebrate & Vertebrates,2
+GO:0034109,homotypic cell-cell adhesion,Multicellular non-vertebrate & Vertebrates,2
+GO:0034113,heterotypic cell-cell adhesion,Multicellular non-vertebrate & Vertebrates,2
+GO:0034284,response to monosaccharide,Multicellular non-vertebrate & Vertebrates,2
+GO:0034390,smooth muscle cell apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0034391,regulation of smooth muscle cell apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0034393,positive regulation of smooth muscle cell apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0034405,response to fluid shear stress,Multicellular non-vertebrate & Vertebrates,2
+GO:0034612,response to tumor necrosis factor,Multicellular non-vertebrate & Vertebrates,2
+GO:0034616,response to laminar fluid shear stress,Multicellular non-vertebrate & Vertebrates,2
+GO:0034762,regulation of transmembrane transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0034764,positive regulation of transmembrane transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0034765,regulation of monoatomic ion transmembrane transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0035023,regulation of Rho protein signal transduction,Multicellular non-vertebrate & Vertebrates,2
+GO:0035051,cardiocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0035107,appendage morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0035108,limb morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0035113,embryonic appendage morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0035115,embryonic forelimb morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0035116,embryonic hindlimb morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0035136,forelimb morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0035137,hindlimb morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0035148,tube formation,Multicellular non-vertebrate & Vertebrates,2
+GO:0035196,miRNA processing,Multicellular non-vertebrate & Vertebrates,2
+GO:0035270,endocrine system development,Multicellular non-vertebrate & Vertebrates,2
+GO:0035282,segmentation,Multicellular non-vertebrate & Vertebrates,2
+GO:0035655,interleukin-18-mediated signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0036293,response to decreased oxygen levels,Multicellular non-vertebrate & Vertebrates,2
+GO:0036446,myofibroblast differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0036462,TRAIL-activated apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0038065,collagen-activated signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0038093,Fc receptor signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0040036,regulation of fibroblast growth factor receptor signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0040037,negative regulation of fibroblast growth factor receptor signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0042060,wound healing,Multicellular non-vertebrate & Vertebrates,2
+GO:0042063,gliogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0042098,T cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0042113,B cell activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0042116,macrophage activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0042129,regulation of T cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0042130,negative regulation of T cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0042176,regulation of protein catabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0042177,negative regulation of protein catabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0042306,regulation of protein import into nucleus,Multicellular non-vertebrate & Vertebrates,2
+GO:0042307,positive regulation of protein import into nucleus,Multicellular non-vertebrate & Vertebrates,2
+GO:0042326,negative regulation of phosphorylation,Multicellular non-vertebrate & Vertebrates,2
+GO:0042330,taxis,Multicellular non-vertebrate & Vertebrates,2
+GO:0042481,regulation of odontogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0042542,response to hydrogen peroxide,Multicellular non-vertebrate & Vertebrates,2
+GO:0042552,myelination,Multicellular non-vertebrate & Vertebrates,2
+GO:0042554,superoxide anion generation,Multicellular non-vertebrate & Vertebrates,2
+GO:0042692,muscle cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0042698,ovulation cycle,Multicellular non-vertebrate & Vertebrates,2
+GO:0042733,embryonic digit morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0043010,camera-type eye development,Multicellular non-vertebrate & Vertebrates,2
+GO:0043029,T cell homeostasis,Multicellular non-vertebrate & Vertebrates,2
+GO:0043062,extracellular structure organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0043086,negative regulation of catalytic activity,Multicellular non-vertebrate & Vertebrates,2
+GO:0043122,regulation of canonical NF-kappaB signal transduction,Multicellular non-vertebrate & Vertebrates,2
+GO:0043124,negative regulation of canonical NF-kappaB signal transduction,Multicellular non-vertebrate & Vertebrates,2
+GO:0043217,myelin maintenance,Multicellular non-vertebrate & Vertebrates,2
+GO:0043255,regulation of carbohydrate biosynthetic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0043367,"CD4-positive, alpha-beta T cell differentiation",Multicellular non-vertebrate & Vertebrates,2
+GO:0043370,"regulation of CD4-positive, alpha-beta T cell differentiation",Multicellular non-vertebrate & Vertebrates,2
+GO:0043410,positive regulation of MAPK cascade,Multicellular non-vertebrate & Vertebrates,2
+GO:0043491,phosphatidylinositol 3-kinase/protein kinase B signal transduction,Multicellular non-vertebrate & Vertebrates,2
+GO:0043523,regulation of neuron apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0043525,positive regulation of neuron apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0043534,blood vessel endothelial cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0043535,regulation of blood vessel endothelial cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0043537,negative regulation of blood vessel endothelial cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0043542,endothelial cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0043588,skin development,Multicellular non-vertebrate & Vertebrates,2
+GO:0043589,skin morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0043627,response to estrogen,Multicellular non-vertebrate & Vertebrates,2
+GO:0044092,negative regulation of molecular function,Multicellular non-vertebrate & Vertebrates,2
+GO:0044344,cellular response to fibroblast growth factor stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0044346,fibroblast apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0044703,multi-organism reproductive process,Multicellular non-vertebrate & Vertebrates,2
+GO:0044706,multi-multicellular organism process,Multicellular non-vertebrate & Vertebrates,2
+GO:0044772,mitotic cell cycle phase transition,Multicellular non-vertebrate & Vertebrates,2
+GO:0045058,T cell selection,Unicellular & Multicellular non-vertebrate,2
+GO:0045137,development of primary sexual characteristics,Multicellular non-vertebrate & Vertebrates,2
+GO:0045165,cell fate commitment,Multicellular non-vertebrate & Vertebrates,2
+GO:0045216,cell-cell junction organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0045229,external encapsulating structure organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0045428,regulation of nitric oxide biosynthetic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0045429,positive regulation of nitric oxide biosynthetic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0045445,myoblast differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045580,regulation of T cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045581,negative regulation of T cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045582,positive regulation of T cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045619,regulation of lymphocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045620,negative regulation of lymphocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045621,positive regulation of lymphocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045651,positive regulation of macrophage differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045664,regulation of neuron differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045666,positive regulation of neuron differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045667,regulation of osteoblast differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045668,negative regulation of osteoblast differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045669,positive regulation of osteoblast differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045687,positive regulation of glial cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0045765,regulation of angiogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0045766,positive regulation of angiogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0045807,positive regulation of endocytosis,Multicellular non-vertebrate & Vertebrates,2
+GO:0045843,negative regulation of striated muscle tissue development,Multicellular non-vertebrate & Vertebrates,2
+GO:0045861,negative regulation of proteolysis,Multicellular non-vertebrate & Vertebrates,2
+GO:0045926,negative regulation of growth,Multicellular non-vertebrate & Vertebrates,2
+GO:0045936,negative regulation of phosphate metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0046007,negative regulation of activated T cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0046209,nitric oxide metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0046321,positive regulation of fatty acid oxidation,Multicellular non-vertebrate & Vertebrates,2
+GO:0046545,development of primary female sexual characteristics,Multicellular non-vertebrate & Vertebrates,2
+GO:0046546,development of primary male sexual characteristics,Multicellular non-vertebrate & Vertebrates,2
+GO:0046631,alpha-beta T cell activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0046632,alpha-beta T cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0046633,alpha-beta T cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0046638,positive regulation of alpha-beta T cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0046640,regulation of alpha-beta T cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0046651,lymphocyte proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0046660,female sex differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0046661,male sex differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0046716,muscle cell cellular homeostasis,Multicellular non-vertebrate & Vertebrates,2
+GO:0046822,regulation of nucleocytoplasmic transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0046824,positive regulation of nucleocytoplasmic transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0048041,focal adhesion assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0048144,fibroblast proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0048145,regulation of fibroblast proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0048260,positive regulation of receptor-mediated endocytosis,Multicellular non-vertebrate & Vertebrates,2
+GO:0048286,lung alveolus development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048332,mesoderm morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0048333,mesodermal cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0048483,autonomic nervous system development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048545,response to steroid hormone,Multicellular non-vertebrate & Vertebrates,2
+GO:0048546,digestive tract morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0048565,digestive tract development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048568,embryonic organ development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048588,developmental cell growth,Multicellular non-vertebrate & Vertebrates,2
+GO:0048592,eye morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0048593,camera-type eye morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0048608,reproductive structure development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048634,regulation of muscle organ development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048635,negative regulation of muscle organ development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048640,negative regulation of developmental growth,Multicellular non-vertebrate & Vertebrates,2
+GO:0048659,smooth muscle cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0048660,regulation of smooth muscle cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0048661,positive regulation of smooth muscle cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0048662,negative regulation of smooth muscle cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0048675,axon extension,Multicellular non-vertebrate & Vertebrates,2
+GO:0048701,embryonic cranial skeleton morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0048704,embryonic skeletal system morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0048705,skeletal system morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0048709,oligodendrocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0048732,gland development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048736,appendage development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048738,cardiac muscle tissue development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048754,branching morphogenesis of an epithelial tube,Multicellular non-vertebrate & Vertebrates,2
+GO:0048762,mesenchymal cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0048771,tissue remodeling,Multicellular non-vertebrate & Vertebrates,2
+GO:0048806,genitalia development,Multicellular non-vertebrate & Vertebrates,2
+GO:0048846,axon extension involved in axon guidance,Multicellular non-vertebrate & Vertebrates,2
+GO:0048863,stem cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0048880,sensory system development,Multicellular non-vertebrate & Vertebrates,2
+GO:0050482,arachidonate secretion,Multicellular non-vertebrate & Vertebrates,2
+GO:0050670,regulation of lymphocyte proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050672,negative regulation of lymphocyte proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050679,positive regulation of epithelial cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050680,negative regulation of epithelial cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050727,regulation of inflammatory response,Multicellular non-vertebrate & Vertebrates,2
+GO:0050729,positive regulation of inflammatory response,Multicellular non-vertebrate & Vertebrates,2
+GO:0050769,positive regulation of neurogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0050770,regulation of axonogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0050771,negative regulation of axonogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0050819,negative regulation of coagulation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050863,regulation of T cell activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050864,regulation of B cell activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050866,negative regulation of cell activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050867,positive regulation of cell activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050868,negative regulation of T cell activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050869,negative regulation of B cell activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050870,positive regulation of T cell activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0050890,cognition,Multicellular non-vertebrate & Vertebrates,2
+GO:0050900,leukocyte migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0050918,positive chemotaxis,Multicellular non-vertebrate & Vertebrates,2
+GO:0050920,regulation of chemotaxis,Multicellular non-vertebrate & Vertebrates,2
+GO:0050921,positive regulation of chemotaxis,Multicellular non-vertebrate & Vertebrates,2
+GO:0050922,negative regulation of chemotaxis,Multicellular non-vertebrate & Vertebrates,2
+GO:0050982,detection of mechanical stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0051017,actin filament bundle assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0051043,regulation of membrane protein ectodomain proteolysis,Multicellular non-vertebrate & Vertebrates,2
+GO:0051051,negative regulation of transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0051090,regulation of DNA-binding transcription factor activity,Multicellular non-vertebrate & Vertebrates,2
+GO:0051098,regulation of binding,Multicellular non-vertebrate & Vertebrates,2
+GO:0051099,positive regulation of binding,Multicellular non-vertebrate & Vertebrates,2
+GO:0051101,regulation of DNA binding,Multicellular non-vertebrate & Vertebrates,2
+GO:0051145,smooth muscle cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0051146,striated muscle cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0051147,regulation of muscle cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0051148,negative regulation of muscle cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0051150,regulation of smooth muscle cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0051153,regulation of striated muscle cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0051169,nuclear transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0051216,cartilage development,Multicellular non-vertebrate & Vertebrates,2
+GO:0051222,positive regulation of protein transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0051223,regulation of protein transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0051250,negative regulation of lymphocyte activation,Multicellular non-vertebrate & Vertebrates,2
+GO:0051259,protein complex oligomerization,Multicellular non-vertebrate & Vertebrates,2
+GO:0051262,protein tetramerization,Multicellular non-vertebrate & Vertebrates,2
+GO:0051290,protein heterotetramerization,Multicellular non-vertebrate & Vertebrates,2
+GO:0051346,negative regulation of hydrolase activity,Multicellular non-vertebrate & Vertebrates,2
+GO:0051402,neuron apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0051580,regulation of neurotransmitter uptake,Multicellular non-vertebrate & Vertebrates,2
+GO:0051893,regulation of focal adhesion assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0051895,negative regulation of focal adhesion assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0051896,regulation of phosphatidylinositol 3-kinase/protein kinase B signal transduction,Multicellular non-vertebrate & Vertebrates,2
+GO:0051897,positive regulation of phosphatidylinositol 3-kinase/protein kinase B signal transduction,Multicellular non-vertebrate & Vertebrates,2
+GO:0051917,regulation of fibrinolysis,Multicellular non-vertebrate & Vertebrates,2
+GO:0051918,negative regulation of fibrinolysis,Multicellular non-vertebrate & Vertebrates,2
+GO:0051926,negative regulation of calcium ion transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0051957,positive regulation of amino acid transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0055001,muscle cell development,Multicellular non-vertebrate & Vertebrates,2
+GO:0055002,striated muscle cell development,Multicellular non-vertebrate & Vertebrates,2
+GO:0055006,cardiac cell development,Multicellular non-vertebrate & Vertebrates,2
+GO:0055007,cardiac muscle cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0055013,cardiac muscle cell development,Multicellular non-vertebrate & Vertebrates,2
+GO:0055094,response to lipoprotein particle,Multicellular non-vertebrate & Vertebrates,2
+GO:0055123,digestive system development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060021,roof of mouth development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060065,uterus development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060070,canonical Wnt signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0060148,positive regulation of post-transcriptional gene silencing,Multicellular non-vertebrate & Vertebrates,2
+GO:0060173,limb development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060317,cardiac epithelial to mesenchymal transition,Multicellular non-vertebrate & Vertebrates,2
+GO:0060323,head morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060324,face development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060325,face morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060326,cell chemotaxis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060349,bone morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060390,regulation of SMAD protein signal transduction,Multicellular non-vertebrate & Vertebrates,2
+GO:0060391,positive regulation of SMAD protein signal transduction,Multicellular non-vertebrate & Vertebrates,2
+GO:0060395,SMAD protein signal transduction,Multicellular non-vertebrate & Vertebrates,2
+GO:0060411,cardiac septum morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060412,ventricular septum morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060425,lung morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060428,lung epithelium development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060433,bronchus development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060442,branching involved in prostate gland morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060443,mammary gland morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060444,branching involved in mammary gland duct morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060479,lung cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0060485,mesenchyme development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060487,lung epithelial cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0060512,prostate gland morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060525,prostate glandular acinus development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060537,muscle tissue development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060538,skeletal muscle organ development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060541,respiratory system development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060560,developmental growth involved in morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060562,epithelial tube morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060563,neuroepithelial cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0060572,morphogenesis of an epithelial bud,Multicellular non-vertebrate & Vertebrates,2
+GO:0060601,lateral sprouting from an epithelium,Multicellular non-vertebrate & Vertebrates,2
+GO:0060602,branch elongation of an epithelium,Multicellular non-vertebrate & Vertebrates,2
+GO:0060603,mammary gland duct morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060606,tube closure,Multicellular non-vertebrate & Vertebrates,2
+GO:0060675,ureteric bud morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060688,regulation of morphogenesis of a branching structure,Multicellular non-vertebrate & Vertebrates,2
+GO:0060706,cell differentiation involved in embryonic placenta development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060707,trophoblast giant cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0060711,labyrinthine layer development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060740,prostate gland epithelium morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0060759,regulation of response to cytokine stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0060828,regulation of canonical Wnt signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0060900,embryonic camera-type eye formation,Multicellular non-vertebrate & Vertebrates,2
+GO:0060973,cell migration involved in heart development,Multicellular non-vertebrate & Vertebrates,2
+GO:0060986,endocrine hormone secretion,Multicellular non-vertebrate & Vertebrates,2
+GO:0060993,kidney morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0061029,eyelid development in camera-type eye,Multicellular non-vertebrate & Vertebrates,2
+GO:0061041,regulation of wound healing,Multicellular non-vertebrate & Vertebrates,2
+GO:0061045,negative regulation of wound healing,Multicellular non-vertebrate & Vertebrates,2
+GO:0061082,myeloid leukocyte cytokine production,Multicellular non-vertebrate & Vertebrates,2
+GO:0061138,morphogenesis of a branching epithelium,Multicellular non-vertebrate & Vertebrates,2
+GO:0061140,lung secretory cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0061307,cardiac neural crest cell differentiation involved in heart development,Multicellular non-vertebrate & Vertebrates,2
+GO:0061308,cardiac neural crest cell development involved in heart development,Multicellular non-vertebrate & Vertebrates,2
+GO:0061309,cardiac neural crest cell development involved in outflow tract morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0061326,renal tubule development,Multicellular non-vertebrate & Vertebrates,2
+GO:0061333,renal tubule morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0061448,connective tissue development,Multicellular non-vertebrate & Vertebrates,2
+GO:0061458,reproductive system development,Multicellular non-vertebrate & Vertebrates,2
+GO:0061572,actin filament bundle organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0061614,miRNA transcription,Multicellular non-vertebrate & Vertebrates,2
+GO:0062197,cellular response to chemical stress,Multicellular non-vertebrate & Vertebrates,2
+GO:0062237,protein localization to postsynapse,Multicellular non-vertebrate & Vertebrates,2
+GO:0070371,ERK1 and ERK2 cascade,Multicellular non-vertebrate & Vertebrates,2
+GO:0070372,regulation of ERK1 and ERK2 cascade,Multicellular non-vertebrate & Vertebrates,2
+GO:0070374,positive regulation of ERK1 and ERK2 cascade,Multicellular non-vertebrate & Vertebrates,2
+GO:0070482,response to oxygen levels,Multicellular non-vertebrate & Vertebrates,2
+GO:0070661,leukocyte proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0070663,regulation of leukocyte proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0070664,negative regulation of leukocyte proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:0070673,response to interleukin-18,Multicellular non-vertebrate & Vertebrates,2
+GO:0070920,regulation of regulatory ncRNA processing,Multicellular non-vertebrate & Vertebrates,2
+GO:0071214,cellular response to abiotic stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071216,cellular response to biotic stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071260,cellular response to mechanical stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071351,cellular response to interleukin-18,Multicellular non-vertebrate & Vertebrates,2
+GO:0071356,cellular response to tumor necrosis factor,Multicellular non-vertebrate & Vertebrates,2
+GO:0071383,cellular response to steroid hormone stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071391,cellular response to estrogen stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071392,cellular response to estradiol stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071402,cellular response to lipoprotein particle stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071404,cellular response to low-density lipoprotein particle stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071478,cellular response to radiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0071479,cellular response to ionizing radiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0071481,cellular response to X-ray,Multicellular non-vertebrate & Vertebrates,2
+GO:0071496,cellular response to external stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071526,semaphorin-plexin signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0071559,response to transforming growth factor beta,Multicellular non-vertebrate & Vertebrates,2
+GO:0071560,cellular response to transforming growth factor beta stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071604,transforming growth factor beta production,Multicellular non-vertebrate & Vertebrates,2
+GO:0071605,monocyte chemotactic protein-1 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0071634,regulation of transforming growth factor beta production,Multicellular non-vertebrate & Vertebrates,2
+GO:0071636,positive regulation of transforming growth factor beta production,Multicellular non-vertebrate & Vertebrates,2
+GO:0071637,regulation of monocyte chemotactic protein-1 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0071639,positive regulation of monocyte chemotactic protein-1 production,Multicellular non-vertebrate & Vertebrates,2
+GO:0071674,mononuclear cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0071675,regulation of mononuclear cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0071677,positive regulation of mononuclear cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0071706,tumor necrosis factor superfamily cytokine production,Multicellular non-vertebrate & Vertebrates,2
+GO:0071715,icosanoid transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0071772,response to BMP,Multicellular non-vertebrate & Vertebrates,2
+GO:0071773,cellular response to BMP stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0071774,response to fibroblast growth factor,Multicellular non-vertebrate & Vertebrates,2
+GO:0071895,odontoblast differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0072001,renal system development,Multicellular non-vertebrate & Vertebrates,2
+GO:0072006,nephron development,Multicellular non-vertebrate & Vertebrates,2
+GO:0072009,nephron epithelium development,Multicellular non-vertebrate & Vertebrates,2
+GO:0072028,nephron morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0072073,kidney epithelium development,Multicellular non-vertebrate & Vertebrates,2
+GO:0072078,nephron tubule morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0072080,nephron tubule development,Multicellular non-vertebrate & Vertebrates,2
+GO:0072088,nephron epithelium morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0072111,cell proliferation involved in kidney development,Multicellular non-vertebrate & Vertebrates,2
+GO:0072160,nephron tubule epithelial cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0072163,mesonephric epithelium development,Multicellular non-vertebrate & Vertebrates,2
+GO:0072164,mesonephric tubule development,Multicellular non-vertebrate & Vertebrates,2
+GO:0072171,mesonephric tubule morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0072175,epithelial tube formation,Multicellular non-vertebrate & Vertebrates,2
+GO:0072176,nephric duct development,Multicellular non-vertebrate & Vertebrates,2
+GO:0072178,nephric duct morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0072189,ureter development,Multicellular non-vertebrate & Vertebrates,2
+GO:0072376,protein activation cascade,Multicellular non-vertebrate & Vertebrates,2
+GO:0072577,endothelial cell apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0072593,reactive oxygen species metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0072594,establishment of protein localization to organelle,Multicellular non-vertebrate & Vertebrates,2
+GO:0072657,protein localization to membrane,Multicellular non-vertebrate & Vertebrates,2
+GO:0090092,regulation of transmembrane receptor protein serine/threonine kinase signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0090100,positive regulation of transmembrane receptor protein serine/threonine kinase signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0090101,negative regulation of transmembrane receptor protein serine/threonine kinase signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0090109,regulation of cell-substrate junction assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:0090130,tissue migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0090132,epithelium migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0090183,regulation of kidney development,Multicellular non-vertebrate & Vertebrates,2
+GO:0090189,regulation of branching involved in ureteric bud morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0090190,positive regulation of branching involved in ureteric bud morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0090263,positive regulation of canonical Wnt signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0090288,negative regulation of cellular response to growth factor stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0090303,positive regulation of wound healing,Multicellular non-vertebrate & Vertebrates,2
+GO:0090311,regulation of protein deacetylation,Multicellular non-vertebrate & Vertebrates,2
+GO:0090316,positive regulation of intracellular protein transport,Multicellular non-vertebrate & Vertebrates,2
+GO:0090322,regulation of superoxide metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:0090398,cellular senescence,Multicellular non-vertebrate & Vertebrates,2
+GO:0090497,mesenchymal cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0090596,sensory organ morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0097028,dendritic cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:0097094,craniofacial suture morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0097191,extrinsic apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0097193,intrinsic apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0097194,execution phase of apoptosis,Multicellular non-vertebrate & Vertebrates,2
+GO:0097305,response to alcohol,Multicellular non-vertebrate & Vertebrates,2
+GO:0097529,myeloid leukocyte migration,Multicellular non-vertebrate & Vertebrates,2
+GO:0098586,cellular response to virus,Multicellular non-vertebrate & Vertebrates,2
+GO:0098693,regulation of synaptic vesicle cycle,Multicellular non-vertebrate & Vertebrates,2
+GO:0098712,L-glutamate import across plasma membrane,Multicellular non-vertebrate & Vertebrates,2
+GO:0098727,maintenance of cell number,Multicellular non-vertebrate & Vertebrates,2
+GO:0098732,macromolecule deacylation,Multicellular non-vertebrate & Vertebrates,2
+GO:0098814,spontaneous synaptic transmission,Multicellular non-vertebrate & Vertebrates,2
+GO:0098901,regulation of cardiac muscle cell action potential,Multicellular non-vertebrate & Vertebrates,2
+GO:0099024,plasma membrane invagination,Multicellular non-vertebrate & Vertebrates,2
+GO:0099173,postsynapse organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0099612,protein localization to axon,Multicellular non-vertebrate & Vertebrates,2
+GO:0104004,cellular response to environmental stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:0106030,neuron projection fasciculation,Multicellular non-vertebrate & Vertebrates,2
+GO:0110020,regulation of actomyosin structure organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0110110,positive regulation of animal organ morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:0141091,transforming growth factor beta receptor superfamily signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0141193,nuclear receptor-mediated signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:0150063,visual system development,Multicellular non-vertebrate & Vertebrates,2
+GO:0150115,cell-substrate junction organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0150116,regulation of cell-substrate junction organization,Multicellular non-vertebrate & Vertebrates,2
+GO:0150118,negative regulation of cell-substrate junction organization,Multicellular non-vertebrate & Vertebrates,2
+GO:1900047,negative regulation of hemostasis,Multicellular non-vertebrate & Vertebrates,2
+GO:1900119,positive regulation of execution phase of apoptosis,Multicellular non-vertebrate & Vertebrates,2
+GO:1900370,positive regulation of post-transcriptional gene silencing by RNA,Multicellular non-vertebrate & Vertebrates,2
+GO:1901163,regulation of trophoblast cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:1901203,positive regulation of extracellular matrix assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:1901342,regulation of vasculature development,Multicellular non-vertebrate & Vertebrates,2
+GO:1901343,negative regulation of vasculature development,Multicellular non-vertebrate & Vertebrates,2
+GO:1901654,response to ketone,Multicellular non-vertebrate & Vertebrates,2
+GO:1901655,cellular response to ketone,Multicellular non-vertebrate & Vertebrates,2
+GO:1901722,regulation of cell proliferation involved in kidney development,Multicellular non-vertebrate & Vertebrates,2
+GO:1901861,regulation of muscle tissue development,Multicellular non-vertebrate & Vertebrates,2
+GO:1901862,negative regulation of muscle tissue development,Multicellular non-vertebrate & Vertebrates,2
+GO:1901888,regulation of cell junction assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:1901889,negative regulation of cell junction assembly,Multicellular non-vertebrate & Vertebrates,2
+GO:1901987,regulation of cell cycle phase transition,Multicellular non-vertebrate & Vertebrates,2
+GO:1902041,regulation of extrinsic apoptotic signaling pathway via death domain receptors,Multicellular non-vertebrate & Vertebrates,2
+GO:1902043,positive regulation of extrinsic apoptotic signaling pathway via death domain receptors,Multicellular non-vertebrate & Vertebrates,2
+GO:1902105,regulation of leukocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:1902106,negative regulation of leukocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:1902107,positive regulation of leukocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:1902284,neuron projection extension involved in neuron projection guidance,Multicellular non-vertebrate & Vertebrates,2
+GO:1902742,apoptotic process involved in development,Multicellular non-vertebrate & Vertebrates,2
+GO:1902893,regulation of miRNA transcription,Multicellular non-vertebrate & Vertebrates,2
+GO:1902894,negative regulation of miRNA transcription,Multicellular non-vertebrate & Vertebrates,2
+GO:1902895,positive regulation of miRNA transcription,Multicellular non-vertebrate & Vertebrates,2
+GO:1902991,regulation of amyloid precursor protein catabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:1903034,regulation of response to wounding,Multicellular non-vertebrate & Vertebrates,2
+GO:1903035,negative regulation of response to wounding,Multicellular non-vertebrate & Vertebrates,2
+GO:1903038,negative regulation of leukocyte cell-cell adhesion,Multicellular non-vertebrate & Vertebrates,2
+GO:1903039,positive regulation of leukocyte cell-cell adhesion,Multicellular non-vertebrate & Vertebrates,2
+GO:1903053,regulation of extracellular matrix organization,Multicellular non-vertebrate & Vertebrates,2
+GO:1903054,negative regulation of extracellular matrix organization,Multicellular non-vertebrate & Vertebrates,2
+GO:1903170,negative regulation of calcium ion transmembrane transport,Multicellular non-vertebrate & Vertebrates,2
+GO:1903317,regulation of protein maturation,Multicellular non-vertebrate & Vertebrates,2
+GO:1903522,regulation of blood circulation,Multicellular non-vertebrate & Vertebrates,2
+GO:1903539,protein localization to postsynaptic membrane,Multicellular non-vertebrate & Vertebrates,2
+GO:1903555,regulation of tumor necrosis factor superfamily cytokine production,Multicellular non-vertebrate & Vertebrates,2
+GO:1903556,negative regulation of tumor necrosis factor superfamily cytokine production,Multicellular non-vertebrate & Vertebrates,2
+GO:1903557,positive regulation of tumor necrosis factor superfamily cytokine production,Multicellular non-vertebrate & Vertebrates,2
+GO:1903706,regulation of hemopoiesis,Multicellular non-vertebrate & Vertebrates,2
+GO:1903708,positive regulation of hemopoiesis,Multicellular non-vertebrate & Vertebrates,2
+GO:1903798,regulation of miRNA processing,Multicellular non-vertebrate & Vertebrates,2
+GO:1903829,positive regulation of protein localization,Multicellular non-vertebrate & Vertebrates,2
+GO:1903844,regulation of cellular response to transforming growth factor beta stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:1903846,positive regulation of cellular response to transforming growth factor beta stimulus,Multicellular non-vertebrate & Vertebrates,2
+GO:1903963,arachidonate transport,Multicellular non-vertebrate & Vertebrates,2
+GO:1904018,positive regulation of vasculature development,Multicellular non-vertebrate & Vertebrates,2
+GO:1904407,positive regulation of nitric oxide metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:1904705,regulation of vascular associated smooth muscle cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:1904706,negative regulation of vascular associated smooth muscle cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:1904888,cranial skeletal system development,Multicellular non-vertebrate & Vertebrates,2
+GO:1904894,positive regulation of receptor signaling pathway via STAT,Multicellular non-vertebrate & Vertebrates,2
+GO:1904948,midbrain dopaminergic neuron differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:1905207,regulation of cardiocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:1905209,positive regulation of cardiocyte differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:1905314,semi-lunar valve development,Multicellular non-vertebrate & Vertebrates,2
+GO:1905330,regulation of morphogenesis of an epithelium,Multicellular non-vertebrate & Vertebrates,2
+GO:1905332,positive regulation of morphogenesis of an epithelium,Multicellular non-vertebrate & Vertebrates,2
+GO:1905475,regulation of protein localization to membrane,Multicellular non-vertebrate & Vertebrates,2
+GO:1905906,regulation of amyloid fibril formation,Multicellular non-vertebrate & Vertebrates,2
+GO:1990000,amyloid fibril formation,Multicellular non-vertebrate & Vertebrates,2
+GO:1990840,response to lectin,Unicellular & Multicellular non-vertebrate,2
+GO:1990858,cellular response to lectin,Unicellular & Multicellular non-vertebrate,2
+GO:1990874,vascular associated smooth muscle cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:2000027,regulation of animal organ morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:2000048,negative regulation of cell-cell adhesion mediated by cadherin,Multicellular non-vertebrate & Vertebrates,2
+GO:2000052,positive regulation of non-canonical Wnt signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:2000114,regulation of establishment of cell polarity,Unicellular & Multicellular non-vertebrate,2
+GO:2000181,negative regulation of blood vessel morphogenesis,Multicellular non-vertebrate & Vertebrates,2
+GO:2000191,regulation of fatty acid transport,Multicellular non-vertebrate & Vertebrates,2
+GO:2000241,regulation of reproductive process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000242,negative regulation of reproductive process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000269,regulation of fibroblast apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000271,positive regulation of fibroblast apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000343,positive regulation of chemokine (C-X-C motif) ligand 2 production,Multicellular non-vertebrate & Vertebrates,2
+GO:2000351,regulation of endothelial cell apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000353,positive regulation of endothelial cell apoptotic process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000377,regulation of reactive oxygen species metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000379,positive regulation of reactive oxygen species metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000403,positive regulation of lymphocyte migration,Multicellular non-vertebrate & Vertebrates,2
+GO:2000404,regulation of T cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:2000406,positive regulation of T cell migration,Multicellular non-vertebrate & Vertebrates,2
+GO:2000514,"regulation of CD4-positive, alpha-beta T cell activation",Multicellular non-vertebrate & Vertebrates,2
+GO:2000628,regulation of miRNA metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000629,negative regulation of miRNA metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000630,positive regulation of miRNA metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:2000637,positive regulation of miRNA-mediated gene silencing,Multicellular non-vertebrate & Vertebrates,2
+GO:2000648,positive regulation of stem cell proliferation,Multicellular non-vertebrate & Vertebrates,2
+GO:2000725,regulation of cardiac muscle cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:2000727,positive regulation of cardiac muscle cell differentiation,Multicellular non-vertebrate & Vertebrates,2
+GO:2000772,regulation of cellular senescence,Multicellular non-vertebrate & Vertebrates,2
+GO:2000773,negative regulation of cellular senescence,Multicellular non-vertebrate & Vertebrates,2
+GO:2001057,reactive nitrogen species metabolic process,Multicellular non-vertebrate & Vertebrates,2
+GO:2001233,regulation of apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:2001234,negative regulation of apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:2001235,positive regulation of apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:2001236,regulation of extrinsic apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:2001237,negative regulation of extrinsic apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2
+GO:2001238,positive regulation of extrinsic apoptotic signaling pathway,Multicellular non-vertebrate & Vertebrates,2

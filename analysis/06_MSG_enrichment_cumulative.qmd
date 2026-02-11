@@ -1,0 +1,1179 @@
+---
+title: "MSG Cumulative Enrichment Analysis"
+author: "BioME"
+format: html
+editor: source
+---
+
+# Cumulative Enrichment of Metastasis Suppressor Genes (MSG)
+
+Unlike the exclusive rooting analysis (QMD 05), this notebook enriches **all
+orthologs present up to each evolutionary point**. That is:
+
+- **Unicellular**: genes rooted at root > 30 (the oldest genes)
+- **Multicellular non-vertebrate**: all genes with root ≥ 21 (unicellular + multicellular)
+- **Vertebrates**: all MSG genes (everything present by the vertebrate era)
+
+This cumulative approach reveals which biological functions become available at
+each evolutionary transition.
+
+## Loading Libraries
+
+```{r}
+#| warning: false
+#| message: false
+library(TreeAndLeaf)
+library(RedeR)
+library(igraph)
+library(tidyverse)
+library(here)
+library(vroom)
+library(RColorBrewer)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+library(GOSemSim)
+library(classInt)
+library(UpSetR)
+```
+
+## Configuration
+
+```{r}
+# Define Evolutionary Group Colors
+group_colors <- c(
+  "Unicellular" = "#E69F00",                # Orange
+  "Multicellular non-vertebrate" = "#0072B2", # Blue
+  "Vertebrates" = "#009E73"                  # Green
+)
+
+# Visualization sizing parameters
+sizeMultiplier <- 15
+sizeBase <- 50
+```
+
+## Read Data
+
+```{r}
+#| message: false
+# Nodelist with rooting information and biological process annotations
+nodelist <- vroom::vroom(here("results/orthology_data/nodelist.csv"))
+
+# Metastasis suppressor genes reference list
+msg_reference <- vroom::vroom(
+  here("assets/metastasis_supressors_nature.csv"),
+  delim = "\t"
+)
+```
+
+## Filter and Classify Metastasis Suppressor Genes (Cumulative)
+
+In the cumulative approach, each evolutionary group includes **all genes that
+existed up to that point**, not only those that first appeared (rooted) there.
+
+```{r}
+# Filter nodelist to keep only metastasis suppressor genes
+msg_nodelist <- nodelist %>%
+  filter(`metastasis suppressor` == 1) %>%
+  dplyr::select(cog_id, root, clade_name, string_id, queryItem)
+
+cat("Total metastasis suppressor genes in nodelist:", nrow(msg_nodelist), "\n")
+
+# Assign root-based group for reference (exclusive, same as QMD 05)
+msg_nodelist <- msg_nodelist %>%
+  mutate(
+    rooted_group = case_when(
+      root > 30 ~ "Unicellular",
+      root >= 21 & root <= 30 ~ "Multicellular non-vertebrate",
+      root <= 20 ~ "Vertebrates"
+    )
+  )
+
+# Summary of genes per exclusive root group
+cat("\n--- Gene Distribution by Root Group (exclusive) ---\n")
+print(table(msg_nodelist$rooted_group))
+
+# Build CUMULATIVE gene lists:
+# Unicellular: only genes rooted in unicellular era (root > 30)
+genes_unicellular <- msg_nodelist %>%
+  filter(root > 30) %>%
+  pull(queryItem) %>%
+  unique()
+
+# Multicellular: all genes present by the multicellular era (root >= 21)
+genes_multicellular <- msg_nodelist %>%
+  filter(root >= 21) %>%
+  pull(queryItem) %>%
+  unique()
+
+# Vertebrates: ALL genes (present by the vertebrate era)
+genes_vertebrates <- msg_nodelist %>%
+  pull(queryItem) %>%
+  unique()
+
+cat("\n--- Cumulative Gene Counts ---\n")
+cat(sprintf("  Unicellular (root > 30):  %d genes\n", length(genes_unicellular)))
+cat(sprintf("  Multicellular (root >= 21): %d genes\n", length(genes_multicellular)))
+cat(sprintf("  Vertebrates (all):          %d genes\n", length(genes_vertebrates)))
+```
+
+# GO Enrichment Analysis
+
+## GO Enrichment per Evolutionary Group (Cumulative)
+
+```{r}
+#| warning: false
+#| message: false
+
+# Function to perform GO enrichment for a group
+perform_go_enrichment <- function(genes, group_name) {
+  cat(sprintf("  Processing %s (%d genes)...\n", group_name, length(genes)))
+
+  # Convert gene symbols to Entrez IDs
+  gene_ids <- bitr(
+    genes,
+    fromType = "SYMBOL",
+    toType = "ENTREZID",
+    OrgDb = org.Hs.eg.db
+  )
+
+  if (nrow(gene_ids) == 0) {
+    cat(sprintf("    No genes mapped for %s\n", group_name))
+    return(NULL)
+  }
+
+  # Perform GO enrichment
+  ego <- enrichGO(
+    gene = gene_ids$ENTREZID,
+    OrgDb = org.Hs.eg.db,
+    ont = "BP",
+    pAdjustMethod = "BH",
+    pvalueCutoff = 0.05,
+    qvalueCutoff = 0.05,
+    readable = TRUE
+  )
+
+  if (is.null(ego) || nrow(as.data.frame(ego)) == 0) {
+    cat(sprintf("    No enriched terms for %s\n", group_name))
+    return(NULL)
+  }
+
+  result <- as.data.frame(ego) %>%
+    mutate(evolutionary_group = group_name)
+
+  cat(sprintf("    Found %d enriched GO terms\n", nrow(result)))
+  return(result)
+}
+
+# Perform enrichment for each cumulative group
+go_unicellular <- perform_go_enrichment(genes_unicellular, "Unicellular")
+go_multicellular <- perform_go_enrichment(
+  genes_multicellular,
+  "Multicellular non-vertebrate"
+)
+go_vertebrates <- perform_go_enrichment(genes_vertebrates, "Vertebrates")
+
+# Combine all results
+go_combined <- bind_rows(
+  go_unicellular,
+  go_multicellular,
+  go_vertebrates
+) %>%
+  filter(!is.na(ID))
+
+if (nrow(go_combined) == 0) {
+  stop("No enriched GO terms found in any group.")
+}
+
+cat(sprintf(
+  "\nTotal enriched GO terms across all groups: %d\n",
+  nrow(go_combined)
+))
+```
+
+## Save GO Enrichment Results
+
+```{r}
+#| message: false
+if (!is.null(go_unicellular) && nrow(go_unicellular) > 0) {
+  vroom::vroom_write(
+    go_unicellular,
+    here("results/paper_data/MSG_GO_cumulative_unicellular.csv"),
+    delim = ","
+  )
+}
+
+if (!is.null(go_multicellular) && nrow(go_multicellular) > 0) {
+  vroom::vroom_write(
+    go_multicellular,
+    here("results/paper_data/MSG_GO_cumulative_multicellular.csv"),
+    delim = ","
+  )
+}
+
+if (!is.null(go_vertebrates) && nrow(go_vertebrates) > 0) {
+  vroom::vroom_write(
+    go_vertebrates,
+    here("results/paper_data/MSG_GO_cumulative_vertebrates.csv"),
+    delim = ","
+  )
+}
+
+vroom::vroom_write(
+  go_combined,
+  here("results/paper_data/MSG_GO_cumulative_combined.csv"),
+  delim = ","
+)
+
+cat("Cumulative GO enrichment results saved to results/paper_data/\n")
+```
+
+## GO Enrichment Bar Plot — All Groups (Cumulative)
+
+```{r}
+#| fig-width: 12
+#| fig-height: 14
+#| warning: false
+
+# Select top 15 GO terms per group by p.adjust
+go_top <- go_combined %>%
+  group_by(evolutionary_group) %>%
+  slice_min(p.adjust, n = 15, with_ties = FALSE) %>%
+  ungroup() %>%
+  mutate(
+    neg_log10_padj = -log10(p.adjust),
+    # Set factor order: Unicellular on top, Multicellular middle, Vertebrates bottom
+    evolutionary_group = factor(
+      evolutionary_group,
+      levels = c("Vertebrates", "Multicellular non-vertebrate", "Unicellular")
+    )
+  )
+
+# Order descriptions within each group
+go_top <- go_top %>%
+  arrange(evolutionary_group, neg_log10_padj) %>%
+  mutate(Description = factor(Description, levels = unique(Description)))
+
+p_go_all <- ggplot(go_top, aes(x = neg_log10_padj, y = Description, fill = evolutionary_group)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  facet_grid(evolutionary_group ~ ., scales = "free_y", space = "free_y") +
+  scale_fill_manual(values = group_colors, name = "Evolutionary Group") +
+  labs(
+    title = "GO Biological Process Enrichment — Cumulative Gene Sets",
+    subtitle = "Top 15 terms per evolutionary group (all orthologs present up to each point)",
+    x = expression(-log[10](p.adjust)),
+    y = NULL
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    strip.text.y = element_text(angle = 0, face = "bold", size = 11),
+    legend.position = "none",
+    panel.grid.major.y = element_blank(),
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(color = "gray40")
+  )
+
+print(p_go_all)
+
+# Save
+ggsave(
+  here("results/plots/MSG_GO_cumulative_barplot_all_groups.pdf"),
+  p_go_all, width = 12, height = 14
+)
+ggsave(
+  here("results/plots/MSG_GO_cumulative_barplot_all_groups.png"),
+  p_go_all, width = 12, height = 14, dpi = 300
+)
+```
+
+## GO Enrichment Bar Plot — Vertebrates Only (Cumulative)
+
+```{r}
+#| fig-width: 10
+#| fig-height: 8
+#| warning: false
+
+go_vert <- go_combined %>%
+  filter(evolutionary_group == "Vertebrates") %>%
+  slice_min(p.adjust, n = 20, with_ties = FALSE) %>%
+  mutate(
+    neg_log10_padj = -log10(p.adjust)
+  ) %>%
+  arrange(neg_log10_padj) %>%
+  mutate(Description = factor(Description, levels = unique(Description)))
+
+p_go_vert <- ggplot(go_vert, aes(x = neg_log10_padj, y = Description)) +
+  geom_bar(stat = "identity", fill = group_colors["Vertebrates"], width = 0.7) +
+  labs(
+    title = "GO Biological Process Enrichment — Vertebrates (Cumulative)",
+    subtitle = "Top 20 enriched terms (all MSG orthologs)",
+    x = expression(-log[10](p.adjust)),
+    y = NULL
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(color = "gray40")
+  )
+
+print(p_go_vert)
+
+ggsave(
+  here("results/plots/MSG_GO_cumulative_barplot_vertebrates.pdf"),
+  p_go_vert, width = 10, height = 8
+)
+ggsave(
+  here("results/plots/MSG_GO_cumulative_barplot_vertebrates.png"),
+  p_go_vert, width = 10, height = 8, dpi = 300
+)
+```
+
+## UpSet Plot — GO Term Overlap Between Groups (Cumulative)
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+#| warning: false
+
+# Create list of GO terms per group
+go_terms_list <- list(
+  "Unicellular" = if (!is.null(go_unicellular) && nrow(go_unicellular) > 0) {
+    go_unicellular$ID
+  } else {
+    character(0)
+  },
+  "Multicellular" = if (
+    !is.null(go_multicellular) && nrow(go_multicellular) > 0
+  ) {
+    go_multicellular$ID
+  } else {
+    character(0)
+  },
+  "Vertebrates" = if (!is.null(go_vertebrates) && nrow(go_vertebrates) > 0) {
+    go_vertebrates$ID
+  } else {
+    character(0)
+  }
+)
+
+# Remove empty groups
+go_terms_list <- go_terms_list[sapply(go_terms_list, length) > 0]
+
+if (length(go_terms_list) >= 2) {
+  upset_plot <- upset(
+    fromList(go_terms_list),
+    order.by = "freq",
+    decreasing = TRUE,
+    mb.ratio = c(0.6, 0.4),
+    number.angles = 0,
+    text.scale = 1.5,
+    point.size = 3.5,
+    line.size = 1.5,
+    mainbar.y.label = "GO Terms Intersection",
+    sets.x.label = "GO Terms per Group",
+    sets.bar.color = c(
+      group_colors["Unicellular"],
+      group_colors["Multicellular non-vertebrate"],
+      group_colors["Vertebrates"]
+    )[names(go_terms_list)]
+  )
+
+  print(upset_plot)
+
+  # Save UpSet plot
+  pdf(here("results/plots/MSG_GO_cumulative_upset_plot.pdf"), width = 10, height = 7)
+  print(upset_plot)
+  dev.off()
+
+  png(
+    here("results/plots/MSG_GO_cumulative_upset_plot.png"),
+    width = 1000, height = 700, res = 100
+  )
+  print(upset_plot)
+  dev.off()
+
+  cat("UpSet plot saved to results/plots/\n")
+}
+```
+
+## GO Term Overlap Statistics
+
+```{r}
+if (length(go_terms_list) >= 2) {
+  # Find terms in multiple groups
+  all_terms <- unique(go_combined$ID)
+  terms_in_groups <- sapply(all_terms, function(term) {
+    groups <- go_combined %>%
+      filter(ID == term) %>%
+      pull(evolutionary_group) %>%
+      unique()
+    paste(groups, collapse = " & ")
+  })
+
+  overlap_summary <- table(terms_in_groups)
+  cat("Distribution of GO terms across groups:\n")
+  print(overlap_summary)
+
+  # List terms that appear in multiple groups
+  shared_terms <- go_combined %>%
+    group_by(ID, Description) %>%
+    summarise(
+      groups = paste(unique(evolutionary_group), collapse = " & "),
+      n_groups = n_distinct(evolutionary_group),
+      .groups = "drop"
+    ) %>%
+    filter(n_groups > 1) %>%
+    arrange(desc(n_groups))
+
+  if (nrow(shared_terms) > 0) {
+    cat(sprintf(
+      "\nGO terms appearing in multiple groups: %d\n",
+      nrow(shared_terms)
+    ))
+    print(as.data.frame(shared_terms), row.names = FALSE)
+
+    vroom::vroom_write(
+      shared_terms,
+      here("results/paper_data/MSG_GO_cumulative_shared_terms.csv"),
+      delim = ","
+    )
+  } else {
+    cat("\nNo GO terms appear in multiple groups.\n")
+  }
+}
+```
+
+## GO Semantic Similarity Clustering
+
+```{r}
+#| message: false
+cat("--- Calculating GO Semantic Similarity ---\n")
+
+# Get unique GO term IDs
+go_terms <- unique(go_combined$ID)
+cat(sprintf(
+  "Calculating similarity for %d unique GO terms...\n",
+  length(go_terms)
+))
+
+# Create semantic data object
+semData <- godata(OrgDb = org.Hs.eg.db, ont = "BP")
+
+# Calculate pairwise semantic similarity
+mSim <- mgoSim(
+  go_terms,
+  go_terms,
+  semData = semData,
+  measure = "Wang",
+  combine = NULL
+)
+
+# Handle NA values by replacing with 0
+mSim[is.na(mSim)] <- 0
+
+# Create distance matrix (convert similarity to distance)
+dist_matrix <- as.dist(1 - mSim)
+
+# Hierarchical clustering
+hc <- hclust(dist_matrix, method = "average")
+
+cat("Semantic similarity clustering complete.\n")
+```
+
+## GO TreeAndLeaf Visualization
+
+```{r}
+#| message: false
+# Prepare Data for Visualization
+go_combined <- go_combined %>%
+  mutate(
+    path_length = as.integer(sapply(strsplit(GeneRatio, "/"), "[", 2)),
+    ratio = Count / path_length
+  )
+
+# For each GO term, determine the primary group
+go_term_info <- go_combined %>%
+  group_by(ID) %>%
+  slice_min(pvalue, n = 1, with_ties = FALSE) %>%
+  ungroup() %>%
+  dplyr::select(
+    ID, Description, Count, ratio, pvalue, p.adjust, evolutionary_group
+  )
+
+# Organize node sizes
+size <- go_term_info$Count
+aux <- sort(unique(size))
+names(aux) <- as.character(1:length(aux))
+sizeRanks <- as.factor(names(aux[match(size, aux)]))
+sizeIntervals <- min(7, length(unique(size)))
+go_term_info$size <- (sizeBase + (as.numeric(sizeRanks) * sizeMultiplier))
+
+# Add group color
+go_term_info$group_color <- group_colors[go_term_info$evolutionary_group]
+
+# Create TreeAndLeaf Object
+cat("--- Creating TreeAndLeaf Visualization ---\n")
+
+tal <- treeAndLeaf(hc)
+
+# Map attributes to the graph
+tal <- att.mapv(g = tal, dat = as.data.frame(go_term_info), refcol = 1)
+
+# Color palette for ratio
+pal <- brewer.pal(9, "OrRd")
+
+# Set node labels (GO term descriptions)
+tal <- att.setv(g = tal, from = "Description", to = "nodeAlias")
+
+# Set node colors based on ratio
+tal <- att.setv(
+  g = tal,
+  from = "ratio",
+  to = "nodeColor",
+  cols = pal,
+  nquant = 5
+)
+
+# Set node sizes based on gene count
+tal <- att.setv(
+  g = tal,
+  from = "size",
+  to = "nodeSize",
+  xlim = c(
+    (sizeBase + sizeMultiplier),
+    (sizeBase + (sizeMultiplier * sizeIntervals)),
+    sizeMultiplier
+  ),
+  nquant = sizeIntervals
+)
+
+# Set font size for labels
+tal <- att.addv(tal, "nodeFontSize", value = 15, index = V(tal)$isLeaf)
+
+# Set edge attributes
+tal <- att.adde(tal, "edgeWidth", value = 3)
+tal <- att.adde(tal, "edgeColor", value = "gray80")
+
+# Set nodeLineColor Based on Evolutionary Group
+leaf_indices <- which(V(tal)$isLeaf)
+
+for (i in leaf_indices) {
+  node_name <- V(tal)$name[i]
+  node_group <- go_term_info %>%
+    filter(ID == node_name) %>%
+    pull(evolutionary_group)
+
+  if (length(node_group) > 0 && !is.na(node_group)) {
+    V(tal)$nodeLineColor[i] <- group_colors[node_group]
+  } else {
+    V(tal)$nodeLineColor[i] <- "gray50"
+  }
+}
+
+# Set line width for the border
+tal <- att.addv(tal, "nodeLineWidth", value = 4, index = V(tal)$isLeaf)
+
+# For non-leaf nodes, set gray color
+non_leaf_indices <- which(!V(tal)$isLeaf)
+V(tal)$nodeLineColor[non_leaf_indices] <- "gray80"
+V(tal)$nodeLineWidth[non_leaf_indices] <- 1
+```
+
+## Display GO TreeAndLeaf in RedeR
+
+```{r}
+#| eval: false
+cat("--- Starting RedeR Visualization ---\n")
+cat("Group Colors (nodeLineColor):\n")
+for (group in names(group_colors)) {
+  cat(sprintf("  %s: %s\n", group, group_colors[group]))
+}
+
+# Start RedeR
+rdp <- RedPort()
+calld(rdp)
+
+# Reset and add graph
+resetd(rdp)
+addGraph(rdp, tal, layout = NULL)
+
+# Add legends
+addLegend.color(
+  obj = rdp,
+  tal,
+  title = "Gene Ratio",
+  position = "topright"
+)
+
+addLegend.size(
+  obj = rdp,
+  tal,
+  title = "Gene Count",
+  position = "bottomright"
+)
+
+# Relax the network layout
+relax(rdp, p1 = 21, p2 = 70, p3 = 255, p4 = 100, p5 = 50)
+
+cat("GO TreeAndLeaf visualization displayed in RedeR.\n")
+```
+
+## GO Summary Statistics
+
+```{r}
+cat("--- GO Cumulative Analysis Summary ---\n")
+cat(sprintf("Total MSG genes analyzed: %d\n", length(genes_vertebrates)))
+cat(sprintf("  Unicellular (root > 30):    %d genes\n", length(genes_unicellular)))
+cat(sprintf("  Multicellular (root >= 21): %d genes\n", length(genes_multicellular)))
+cat(sprintf("  Vertebrates (all):          %d genes\n", length(genes_vertebrates)))
+
+cat(sprintf("\nTotal enriched GO terms: %d\n", nrow(go_combined)))
+cat("GO terms per group:\n")
+print(table(go_term_info$evolutionary_group))
+
+# Export MSG nodelist with group assignment
+msg_nodelist %>%
+  vroom::vroom_write(
+    file = here("results/orthology_data/MSG_nodelist_grouped.csv"),
+    delim = ","
+  )
+```
+
+# KEGG Pathway Enrichment Analysis
+
+## KEGG Enrichment per Evolutionary Group (Cumulative)
+
+```{r}
+#| warning: false
+#| message: false
+
+cat("--- Performing KEGG Enrichment Analysis (Cumulative) ---\n")
+
+# Function to perform KEGG enrichment for a group
+perform_kegg_enrichment <- function(genes, group_name) {
+  cat(sprintf("  Processing %s (%d genes)...\n", group_name, length(genes)))
+
+  # Convert gene symbols to Entrez IDs
+  gene_ids <- bitr(
+    genes,
+    fromType = "SYMBOL",
+    toType = "ENTREZID",
+    OrgDb = org.Hs.eg.db
+  )
+
+  if (nrow(gene_ids) == 0) {
+    cat(sprintf("    No genes mapped for %s\n", group_name))
+    return(NULL)
+  }
+
+  # Perform KEGG enrichment
+  ekegg <- enrichKEGG(
+    gene = gene_ids$ENTREZID,
+    organism = "hsa",
+    pAdjustMethod = "BH",
+    pvalueCutoff = 0.05,
+    qvalueCutoff = 0.05
+  )
+
+  if (is.null(ekegg) || nrow(as.data.frame(ekegg)) == 0) {
+    cat(sprintf("    No enriched KEGG pathways for %s\n", group_name))
+    return(NULL)
+  }
+
+  # Convert to readable gene symbols
+  ekegg <- setReadable(ekegg, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
+
+  result <- as.data.frame(ekegg) %>%
+    mutate(evolutionary_group = group_name)
+
+  cat(sprintf("    Found %d enriched KEGG pathways\n", nrow(result)))
+  return(result)
+}
+
+# Perform KEGG enrichment for each cumulative group
+kegg_unicellular <- perform_kegg_enrichment(genes_unicellular, "Unicellular")
+kegg_multicellular <- perform_kegg_enrichment(
+  genes_multicellular,
+  "Multicellular non-vertebrate"
+)
+kegg_vertebrates <- perform_kegg_enrichment(genes_vertebrates, "Vertebrates")
+```
+
+## Filter KEGG Human Disease Pathways
+
+KEGG pathways in the "Human Diseases" category have IDs starting with `hsa05`.
+These are removed to focus on biological and signaling pathways.
+
+```{r}
+# Filter out Human Diseases (hsa05*) from each group
+filter_human_diseases <- function(df) {
+  if (is.null(df) || nrow(df) == 0) return(df)
+  df_filtered <- df %>%
+    filter(!str_detect(ID, "^hsa05"))
+  cat(sprintf(
+    "  Removed %d Human Disease pathways, %d remaining\n",
+    nrow(df) - nrow(df_filtered), nrow(df_filtered)
+  ))
+  if (nrow(df_filtered) == 0) return(NULL)
+  return(df_filtered)
+}
+
+cat("--- Filtering Human Disease Pathways ---\n")
+kegg_unicellular <- filter_human_diseases(kegg_unicellular)
+kegg_multicellular <- filter_human_diseases(kegg_multicellular)
+kegg_vertebrates <- filter_human_diseases(kegg_vertebrates)
+
+# Combine all KEGG results (filtered)
+kegg_combined <- bind_rows(
+  kegg_unicellular,
+  kegg_multicellular,
+  kegg_vertebrates
+) %>%
+  filter(!is.na(ID))
+
+cat(sprintf(
+  "\nTotal enriched KEGG pathways after filtering: %d\n",
+  nrow(kegg_combined)
+))
+```
+
+## Save KEGG Enrichment Results
+
+```{r}
+#| message: false
+if (nrow(kegg_combined) > 0) {
+  if (!is.null(kegg_unicellular) && nrow(kegg_unicellular) > 0) {
+    vroom::vroom_write(
+      kegg_unicellular,
+      here("results/paper_data/MSG_KEGG_cumulative_unicellular.csv"),
+      delim = ","
+    )
+  }
+
+  if (!is.null(kegg_multicellular) && nrow(kegg_multicellular) > 0) {
+    vroom::vroom_write(
+      kegg_multicellular,
+      here("results/paper_data/MSG_KEGG_cumulative_multicellular.csv"),
+      delim = ","
+    )
+  }
+
+  if (!is.null(kegg_vertebrates) && nrow(kegg_vertebrates) > 0) {
+    vroom::vroom_write(
+      kegg_vertebrates,
+      here("results/paper_data/MSG_KEGG_cumulative_vertebrates.csv"),
+      delim = ","
+    )
+  }
+
+  vroom::vroom_write(
+    kegg_combined,
+    here("results/paper_data/MSG_KEGG_cumulative_combined.csv"),
+    delim = ","
+  )
+
+  cat("KEGG cumulative enrichment results saved to results/paper_data/\n")
+}
+```
+
+## KEGG Enrichment Bar Plot — All Groups (Cumulative)
+
+```{r}
+#| fig-width: 12
+#| fig-height: 10
+#| warning: false
+
+if (nrow(kegg_combined) > 0) {
+  kegg_top <- kegg_combined %>%
+    group_by(evolutionary_group) %>%
+    slice_min(p.adjust, n = 15, with_ties = FALSE) %>%
+    ungroup() %>%
+    mutate(
+      neg_log10_padj = -log10(p.adjust),
+      evolutionary_group = factor(
+        evolutionary_group,
+        levels = c("Vertebrates", "Multicellular non-vertebrate", "Unicellular")
+      )
+    )
+
+  kegg_top <- kegg_top %>%
+    arrange(evolutionary_group, neg_log10_padj) %>%
+    mutate(Description = factor(Description, levels = unique(Description)))
+
+  p_kegg_all <- ggplot(
+    kegg_top,
+    aes(x = neg_log10_padj, y = Description, fill = evolutionary_group)
+  ) +
+    geom_bar(stat = "identity", width = 0.7) +
+    facet_grid(evolutionary_group ~ ., scales = "free_y", space = "free_y") +
+    scale_fill_manual(values = group_colors, name = "Evolutionary Group") +
+    labs(
+      title = "KEGG Pathway Enrichment — Cumulative Gene Sets",
+      subtitle = "Top 15 pathways per group (Human Diseases excluded)",
+      x = expression(-log[10](p.adjust)),
+      y = NULL
+    ) +
+    theme_minimal(base_size = 12) +
+    theme(
+      strip.text.y = element_text(angle = 0, face = "bold", size = 11),
+      legend.position = "none",
+      panel.grid.major.y = element_blank(),
+      plot.title = element_text(face = "bold", size = 14),
+      plot.subtitle = element_text(color = "gray40")
+    )
+
+  print(p_kegg_all)
+
+  ggsave(
+    here("results/plots/MSG_KEGG_cumulative_barplot_all_groups.pdf"),
+    p_kegg_all, width = 12, height = 10
+  )
+  ggsave(
+    here("results/plots/MSG_KEGG_cumulative_barplot_all_groups.png"),
+    p_kegg_all, width = 12, height = 10, dpi = 300
+  )
+}
+```
+
+## KEGG Enrichment Bar Plot — Vertebrates Only (Cumulative)
+
+```{r}
+#| fig-width: 10
+#| fig-height: 8
+#| warning: false
+
+if (!is.null(kegg_vertebrates) && nrow(kegg_vertebrates) > 0) {
+  kegg_vert <- kegg_vertebrates %>%
+    slice_min(p.adjust, n = 20, with_ties = FALSE) %>%
+    mutate(
+      neg_log10_padj = -log10(p.adjust)
+    ) %>%
+    arrange(neg_log10_padj) %>%
+    mutate(Description = factor(Description, levels = unique(Description)))
+
+  p_kegg_vert <- ggplot(
+    kegg_vert,
+    aes(x = neg_log10_padj, y = Description)
+  ) +
+    geom_bar(stat = "identity", fill = group_colors["Vertebrates"], width = 0.7) +
+    labs(
+      title = "KEGG Pathway Enrichment — Vertebrates (Cumulative)",
+      subtitle = "Top 20 enriched pathways (Human Diseases excluded, all MSG orthologs)",
+      x = expression(-log[10](p.adjust)),
+      y = NULL
+    ) +
+    theme_minimal(base_size = 12) +
+    theme(
+      panel.grid.major.y = element_blank(),
+      plot.title = element_text(face = "bold", size = 14),
+      plot.subtitle = element_text(color = "gray40")
+    )
+
+  print(p_kegg_vert)
+
+  ggsave(
+    here("results/plots/MSG_KEGG_cumulative_barplot_vertebrates.pdf"),
+    p_kegg_vert, width = 10, height = 8
+  )
+  ggsave(
+    here("results/plots/MSG_KEGG_cumulative_barplot_vertebrates.png"),
+    p_kegg_vert, width = 10, height = 8, dpi = 300
+  )
+}
+```
+
+## KEGG UpSet Plot (Cumulative)
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+#| warning: false
+
+if (nrow(kegg_combined) > 0) {
+  kegg_terms_list <- list(
+    "Unicellular" = if (!is.null(kegg_unicellular) && nrow(kegg_unicellular) > 0)
+      kegg_unicellular$ID else character(0),
+    "Multicellular" = if (!is.null(kegg_multicellular) && nrow(kegg_multicellular) > 0)
+      kegg_multicellular$ID else character(0),
+    "Vertebrates" = if (!is.null(kegg_vertebrates) && nrow(kegg_vertebrates) > 0)
+      kegg_vertebrates$ID else character(0)
+  )
+
+  kegg_terms_list <- kegg_terms_list[sapply(kegg_terms_list, length) > 0]
+
+  if (length(kegg_terms_list) >= 2) {
+    kegg_upset <- upset(
+      fromList(kegg_terms_list),
+      order.by = "freq",
+      decreasing = TRUE,
+      mb.ratio = c(0.6, 0.4),
+      number.angles = 0,
+      text.scale = 1.5,
+      point.size = 3.5,
+      line.size = 1.5,
+      mainbar.y.label = "KEGG Pathways Intersection",
+      sets.x.label = "Pathways per Group"
+    )
+
+    print(kegg_upset)
+
+    pdf(here("results/plots/MSG_KEGG_cumulative_upset_plot.pdf"), width = 10, height = 7)
+    print(kegg_upset)
+    dev.off()
+
+    png(
+      here("results/plots/MSG_KEGG_cumulative_upset_plot.png"),
+      width = 1000, height = 700, res = 100
+    )
+    print(kegg_upset)
+    dev.off()
+
+    cat("KEGG UpSet plot saved to results/plots/\n")
+  }
+}
+```
+
+## KEGG Summary Statistics
+
+```{r}
+if (nrow(kegg_combined) > 0) {
+  cat("--- KEGG Cumulative Analysis Summary ---\n")
+  cat(sprintf("Total enriched KEGG pathways: %d\n", nrow(kegg_combined)))
+  cat("KEGG pathways per group:\n")
+  kegg_term_info <- kegg_combined %>%
+    group_by(ID) %>%
+    slice_min(pvalue, n = 1, with_ties = FALSE) %>%
+    ungroup()
+  print(table(kegg_term_info$evolutionary_group))
+} else {
+  cat("\nNo KEGG pathways were enriched in any group.\n")
+}
+
+cat("\n=== Cumulative Enrichment Analysis Complete ===\n")
+```
+
+## KEGG Pathway × Evolutionary Clade Heatmap
+
+This heatmap shows all enriched KEGG pathways (rows) across **every individual
+clade** (columns), ordered from oldest to most recent. For each clade, KEGG
+enrichment is performed using all genes present up to that evolutionary point
+(cumulative). A colored cell indicates that the pathway is significantly
+enriched; white indicates no enrichment.
+
+```{r}
+#| fig-width: 16
+#| fig-height: 20
+#| warning: false
+#| message: false
+
+# Get all clades ordered from oldest to most recent
+clade_info <- msg_nodelist %>%
+  dplyr::select(clade_name, root) %>%
+  distinct() %>%
+  arrange(desc(root))
+
+clade_order <- clade_info$clade_name
+
+cat(sprintf("Performing KEGG enrichment for %d individual clades (cumulative)...\n",
+            length(clade_order)))
+
+# Function to perform KEGG enrichment for cumulative gene set at a given clade
+perform_kegg_clade <- function(genes, clade_name) {
+  gene_ids <- tryCatch(
+    bitr(genes, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Hs.eg.db),
+    error = function(e) data.frame(SYMBOL = character(0), ENTREZID = character(0))
+  )
+
+  if (nrow(gene_ids) < 3) return(NULL)
+
+  ekegg <- tryCatch(
+    enrichKEGG(
+      gene = gene_ids$ENTREZID,
+      organism = "hsa",
+      pAdjustMethod = "BH",
+      pvalueCutoff = 0.05,
+      qvalueCutoff = 0.05
+    ),
+    error = function(e) NULL
+  )
+
+  if (is.null(ekegg) || nrow(as.data.frame(ekegg)) == 0) return(NULL)
+
+  ekegg <- setReadable(ekegg, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
+
+  result <- as.data.frame(ekegg) %>%
+    filter(!str_detect(ID, "^hsa05")) %>% # Remove Human Diseases
+    mutate(clade = clade_name)
+
+  if (nrow(result) == 0) return(NULL)
+  return(result)
+}
+
+# Perform cumulative enrichment per clade
+kegg_per_clade <- list()
+
+for (clade in clade_order) {
+  # Get the root value for this clade
+  clade_root <- clade_info$root[clade_info$clade_name == clade]
+
+  # Cumulative: all genes with root >= this clade's root
+  cumulative_genes <- msg_nodelist %>%
+    filter(root >= clade_root) %>%
+    pull(queryItem) %>%
+    unique()
+
+  cat(sprintf("  %s (root=%d): %d cumulative genes... ",
+              clade, clade_root, length(cumulative_genes)))
+
+  result <- perform_kegg_clade(cumulative_genes, clade)
+
+  if (!is.null(result)) {
+    kegg_per_clade[[clade]] <- result
+    cat(sprintf("%d pathways\n", nrow(result)))
+  } else {
+    cat("no enrichment\n")
+  }
+}
+
+# Combine all clade results
+kegg_all_clades <- bind_rows(kegg_per_clade)
+
+cat(sprintf("\nTotal clade-pathway combinations: %d\n", nrow(kegg_all_clades)))
+cat(sprintf("Unique pathways across all clades: %d\n",
+            n_distinct(kegg_all_clades$Description)))
+cat(sprintf("Clades with enrichment: %d / %d\n",
+            n_distinct(kegg_all_clades$clade), length(clade_order)))
+```
+
+```{r}
+#| fig-width: 16
+#| fig-height: 20
+#| warning: false
+
+if (nrow(kegg_all_clades) > 0) {
+  # Get all unique pathways
+  all_pathways <- unique(kegg_all_clades$Description)
+
+  # Get clades that have at least one enrichment
+  clades_with_data <- clade_order[clade_order %in% unique(kegg_all_clades$clade)]
+
+  # Build presence/absence matrix
+  heatmap_data <- expand.grid(
+    Description = all_pathways,
+    Clade = clades_with_data,
+    stringsAsFactors = FALSE
+  )
+
+  enriched_pairs <- kegg_all_clades %>%
+    dplyr::select("Description", "clade") %>%
+    distinct() %>%
+    mutate(enriched = TRUE) %>%
+    dplyr::rename(Clade = clade)
+
+  heatmap_data <- heatmap_data %>%
+    left_join(enriched_pairs, by = c("Description", "Clade")) %>%
+    mutate(enriched = ifelse(is.na(enriched), FALSE, enriched))
+
+  # Assign evolutionary group color for each clade
+  clade_group <- clade_info %>%
+    mutate(
+      group = case_when(
+        root > 30 ~ "Unicellular",
+        root >= 21 & root <= 30 ~ "Multicellular non-vertebrate",
+        root <= 20 ~ "Vertebrates"
+      )
+    )
+
+  heatmap_data <- heatmap_data %>%
+    left_join(clade_group %>% dplyr::select("clade_name", "group"),
+              by = c("Clade" = "clade_name"))
+
+  # Create fill variable: enriched gets group color, not enriched gets white
+  heatmap_data <- heatmap_data %>%
+    mutate(fill_color = case_when(
+      !enriched ~ "Not enriched",
+      group == "Unicellular" ~ "Unicellular",
+      group == "Multicellular non-vertebrate" ~ "Multicellular non-vertebrate",
+      group == "Vertebrates" ~ "Vertebrates"
+    ))
+
+  # Set factor order for clades (oldest on the left)
+  heatmap_data$Clade <- factor(heatmap_data$Clade, levels = clades_with_data)
+
+  # Set group as ordered factor for correct facet ordering
+  heatmap_data$group <- factor(
+    heatmap_data$group,
+    levels = c("Unicellular", "Multicellular non-vertebrate", "Vertebrates")
+  )
+
+  # Cluster pathways by enrichment pattern
+  pathway_matrix <- heatmap_data %>%
+    mutate(val = as.integer(enriched)) %>%
+    dplyr::select("Description", "Clade", "val") %>%
+    pivot_wider(names_from = Clade, values_from = val, values_fill = 0)
+
+  mat <- as.matrix(pathway_matrix[, -1])
+  rownames(mat) <- pathway_matrix$Description
+
+  if (nrow(mat) > 2) {
+    hc_paths <- hclust(dist(mat, method = "binary"), method = "complete")
+    pathway_order <- rownames(mat)[hc_paths$order]
+  } else {
+    pathway_order <- rownames(mat)
+  }
+
+  heatmap_data$Description <- factor(heatmap_data$Description, levels = pathway_order)
+
+  # Plot
+  fill_values <- c(
+    "Not enriched" = "white",
+    "Unicellular" = group_colors["Unicellular"],
+    "Multicellular non-vertebrate" = group_colors["Multicellular non-vertebrate"],
+    "Vertebrates" = group_colors["Vertebrates"]
+  )
+
+  p_heatmap <- ggplot(
+    heatmap_data,
+    aes(x = Clade, y = Description, fill = fill_color)
+  ) +
+    geom_tile(color = "gray80", linewidth = 0.3) +
+    facet_grid(. ~ group, scales = "free_x", space = "free_x") +
+    scale_fill_manual(
+      values = fill_values,
+      name = "Evolutionary Group",
+      breaks = c("Unicellular", "Multicellular non-vertebrate", "Vertebrates")
+    ) +
+    labs(
+      title = "KEGG Pathway Enrichment Across Evolutionary Clades",
+      subtitle = "Cumulative gene sets per clade | Human Diseases excluded",
+      x = NULL,
+      y = NULL
+    ) +
+    theme_minimal(base_size = 11) +
+    theme(
+      axis.text.x = element_text(angle = 60, hjust = 1, size = 9),
+      axis.text.y = element_text(size = 8),
+      panel.grid = element_blank(),
+      panel.spacing = unit(0.3, "lines"),
+      strip.text.x = element_text(face = "bold", size = 10),
+      strip.background = element_rect(fill = "gray95", color = NA),
+      plot.title = element_text(face = "bold", size = 14),
+      plot.subtitle = element_text(color = "gray40"),
+      legend.position = "none"
+    )
+
+  print(p_heatmap)
+
+  ggsave(
+    here("results/plots/MSG_KEGG_cumulative_clade_heatmap.pdf"),
+    p_heatmap, width = 16, height = 20
+  )
+  ggsave(
+    here("results/plots/MSG_KEGG_cumulative_clade_heatmap.png"),
+    p_heatmap, width = 16, height = 20, dpi = 300
+  )
+
+  cat("KEGG clade heatmap saved to results/plots/\n")
+}
+```
+
