@@ -569,13 +569,8 @@ if (nrow(kegg_all_clades) > 0) {
 ```{r save-outputs}
 #| cache: false
 
-# Final check
-if (file.exists(here("results/paper_data/MSG_GO_cumulative_combined.csv"))) {
-  old_go <- vroom::vroom(here("results/paper_data/MSG_GO_cumulative_combined.csv"), show_col_types = FALSE)
-  new_go <- vroom::vroom(file.path(output_base, "tables/MSG_GO_cumulative_combined.csv"), show_col_types = FALSE)
-  cat("MSG_GO_cumulative_combined — old rows:", nrow(old_go), ", new rows:", nrow(new_go), "\n")
-}
+vroom::vroom(file.path(output_base, "tables/MSG_GO_cumulative_combined.csv"), show_col_types = FALSE)
 
-rm(mSim, dist_matrix, hc, tal, go_combined, kegg_combined, kegg_all_clades, layout, pathway_matrix, mat)
+rm(mSim, dist_matrix, hc, go_combined, kegg_combined, kegg_all_clades, pathway_matrix, mat)
 gc()
 ```

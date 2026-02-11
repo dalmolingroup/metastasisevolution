@@ -252,65 +252,6 @@ rm(genesPerTerm)
 gc()
 ```
 
-## Equivalence Checks
-
-Temporary validation chunk to verify that the refactored script produces
-outputs identical to the original pipeline. Set `eval: true` to activate.
-
-```{r equivalence}
-#| eval: false
-#| cache: false
-
-# Helper: trim whitespace in all character columns for robust comparison
-trim_char_cols <- function(df) {
-  df[] <- lapply(df, function(col) {
-    if (is.character(col)) trimws(col) else col
-  })
-  df
-}
-
-# --- Check metastasis_genes.csv equivalence ---
-# Compare the newly written CSV against the original to confirm identical output
-new_genes <- vroom::vroom(
-  here("results/metastasis_genes/metastasis_genes.csv"),
-  show_col_types = FALSE
-)
-
-new_genes_sorted <- trim_char_cols(as.data.frame(
-  new_genes[order(new_genes$external_gene_name, new_genes$Signature), ]
-))
-orig_genes_sorted <- trim_char_cols(as.data.frame(
-  result[order(result$external_gene_name, result$Signature), ]
-))
-
-genes_match <- all.equal(orig_genes_sorted, new_genes_sorted, check.attributes = FALSE)
-message("metastasis_genes.csv equivalence: ", genes_match)
-
-# --- Check table1.csv equivalence ---
-# Compare new output against original paper_data/table1.csv
-original_table1 <- vroom::vroom(
-  here("results/paper_data/table1.csv"),
-  show_col_types = FALSE
-)
-new_table1 <- vroom::vroom(
-  here("results/metastasis_genes/table1.csv"),
-  show_col_types = FALSE
-)
-
-orig_t1_sorted <- trim_char_cols(as.data.frame(
-  original_table1[order(original_table1$GO_id), ]
-))
-new_t1_sorted <- trim_char_cols(as.data.frame(
-  new_table1[order(new_table1$GO_id), ]
-))
-
-table1_match <- all.equal(orig_t1_sorted, new_t1_sorted, check.attributes = FALSE)
-message("table1.csv equivalence: ", table1_match)
-
-# Cleanup equivalence objects
-rm(new_genes, new_genes_sorted, orig_genes_sorted,
-   original_table1, new_table1, orig_t1_sorted, new_t1_sorted)
-```
 
 ## Intersection of Gene Sets Across Biological Processes
 

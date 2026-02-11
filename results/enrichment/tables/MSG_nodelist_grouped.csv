@@ -1,162 +1,162 @@
 cog_id,root,clade_name,string_id,queryItem,evolutionary_group,group_color
 NOG83179,15,Metatheria,ENSP00000362108,LCN2,Vertebrates,#009E73
 NOG43638,18,Amphibia,ENSP00000356162,KISS1,Vertebrates,#009E73
-NOG256826,20,Actinopterygii,ENSP00000398632,CD44,Vertebrates,#009E73
-NOG00771,20,Actinopterygii,ENSP00000315130,CLU,Vertebrates,#009E73
-NOG01354,20,Actinopterygii,ENSP00000434045,GPR68,Vertebrates,#009E73
-NOG11150,20,Actinopterygii,ENSP00000295522,CLDN1,Vertebrates,#009E73
-NOG11833,20,Actinopterygii,ENSP00000384537,AKAP12,Vertebrates,#009E73
-NOG10515,20,Actinopterygii,ENSP00000329797,CADM1,Vertebrates,#009E73
 NOG11571,20,Actinopterygii,ENSP00000221132,TNFRSF10A,Vertebrates,#009E73
 NOG11571,20,Actinopterygii,ENSP00000276431,TNFRSF10B,Vertebrates,#009E73
+NOG00771,20,Actinopterygii,ENSP00000315130,CLU,Vertebrates,#009E73
 NOG01189,20,Actinopterygii,ENSP00000263409,LIFR,Vertebrates,#009E73
-NOG18285,20,Actinopterygii,ENSP00000415283,ICAM2,Vertebrates,#009E73
-NOG09326,20,Actinopterygii,ENSP00000370473,IGFBP3,Vertebrates,#009E73
 NOG09814,20,Actinopterygii,ENSP00000172229,NGFR,Vertebrates,#009E73
-NOG18232,20,Actinopterygii,ENSP00000362299,ENG,Vertebrates,#009E73
+NOG11833,20,Actinopterygii,ENSP00000384537,AKAP12,Vertebrates,#009E73
+NOG09326,20,Actinopterygii,ENSP00000370473,IGFBP3,Vertebrates,#009E73
+NOG256826,20,Actinopterygii,ENSP00000398632,CD44,Vertebrates,#009E73
+NOG11150,20,Actinopterygii,ENSP00000295522,CLDN1,Vertebrates,#009E73
+NOG01354,20,Actinopterygii,ENSP00000434045,GPR68,Vertebrates,#009E73
+NOG10515,20,Actinopterygii,ENSP00000329797,CADM1,Vertebrates,#009E73
+NOG18285,20,Actinopterygii,ENSP00000415283,ICAM2,Vertebrates,#009E73
 NOG272242,20,Actinopterygii,ENSP00000311313,CST6,Vertebrates,#009E73
+NOG18232,20,Actinopterygii,ENSP00000362299,ENG,Vertebrates,#009E73
 NOG258523,21,Tunicata,ENSP00000298743,GAS1,Multicellular non-vertebrate,#0072B2
 NOG05020,22,Cephalochordata,ENSP00000268638,IRF8,Multicellular non-vertebrate,#0072B2
-NOG13312,22,Cephalochordata,ENSP00000356791,DPT,Multicellular non-vertebrate,#0072B2
 NOG11949,22,Cephalochordata,ENSP00000360472,LGI1,Multicellular non-vertebrate,#0072B2
 NOG03235,22,Cephalochordata,ENSP00000284878,CXADR,Multicellular non-vertebrate,#0072B2
-NOG12100,23,Ambulacraria,ENSP00000303398,MTBP,Multicellular non-vertebrate,#0072B2
+NOG13312,22,Cephalochordata,ENSP00000356791,DPT,Multicellular non-vertebrate,#0072B2
 NOG255743,23,Ambulacraria,ENSP00000370981,LZTS1,Multicellular non-vertebrate,#0072B2
 NOG19818,23,Ambulacraria,ENSP00000255688,RARRES3,Multicellular non-vertebrate,#0072B2
+NOG12100,23,Ambulacraria,ENSP00000303398,MTBP,Multicellular non-vertebrate,#0072B2
 NOG00756,23,Ambulacraria,ENSP00000241261,TNFSF10,Multicellular non-vertebrate,#0072B2
 COG4409,23,Ambulacraria,ENSP00000364782,NEU1,Multicellular non-vertebrate,#0072B2
+KOG4788,24,Ecdysozoa,ENSP00000310880,MAL,Multicellular non-vertebrate,#0072B2
 KOG3545,24,Ecdysozoa,ENSP00000219022,OLFM4,Multicellular non-vertebrate,#0072B2
 KOG2692,24,Ecdysozoa,ENSP00000225276,ST6GALNAC2,Multicellular non-vertebrate,#0072B2
-KOG4788,24,Ecdysozoa,ENSP00000310880,MAL,Multicellular non-vertebrate,#0072B2
 NOG06917,24,Ecdysozoa,ENSP00000304895,IRS1,Multicellular non-vertebrate,#0072B2
-KOG0487,25,Spiralia,ENSP00000283921,HOXA10,Multicellular non-vertebrate,#0072B2
-NOG239425,25,Spiralia,ENSP00000398736,CYR61,Multicellular non-vertebrate,#0072B2
 NOG02565,25,Spiralia,ENSP00000322804,MTSS1,Multicellular non-vertebrate,#0072B2
+NOG239425,25,Spiralia,ENSP00000398736,CYR61,Multicellular non-vertebrate,#0072B2
+KOG0487,25,Spiralia,ENSP00000283921,HOXA10,Multicellular non-vertebrate,#0072B2
 NOG239366,25,Spiralia,ENSP00000367227,TMEM8B,Multicellular non-vertebrate,#0072B2
 KOG3591,26,Cnidaria,ENSP00000433560,CRYAB,Multicellular non-vertebrate,#0072B2
 KOG4004,26,Cnidaria,ENSP00000414856,SPARCL1,Multicellular non-vertebrate,#0072B2
-KOG4447,26,Cnidaria,ENSP00000242261,TWIST1,Multicellular non-vertebrate,#0072B2
 KOG3805,26,Cnidaria,ENSP00000363149,SPDEF,Multicellular non-vertebrate,#0072B2
 NOG09140,26,Cnidaria,ENSP00000340494,ZNF395,Multicellular non-vertebrate,#0072B2
+KOG4447,26,Cnidaria,ENSP00000242261,TWIST1,Multicellular non-vertebrate,#0072B2
 KOG3587,27,Placozoa,ENSP00000378856,LGALS9,Multicellular non-vertebrate,#0072B2
 NOG05235,28,Porifera,ENSP00000367797,SKI,Multicellular non-vertebrate,#0072B2
 KOG3560,28,Porifera,ENSP00000242057,AHR,Multicellular non-vertebrate,#0072B2
+NOG236267,28,Porifera,ENSP00000264731,TP63,Multicellular non-vertebrate,#0072B2
 KOG4745,28,Porifera,ENSP00000218388,TIMP1,Multicellular non-vertebrate,#0072B2
 KOG4745,28,Porifera,ENSP00000262768,TIMP2,Multicellular non-vertebrate,#0072B2
 KOG4745,28,Porifera,ENSP00000266085,TIMP3,Multicellular non-vertebrate,#0072B2
 KOG4745,28,Porifera,ENSP00000287814,TIMP4,Multicellular non-vertebrate,#0072B2
-NOG236267,28,Porifera,ENSP00000264731,TP63,Multicellular non-vertebrate,#0072B2
 COG4826,28,Porifera,ENSP00000254722,SERPINF1,Multicellular non-vertebrate,#0072B2
 COG4826,28,Porifera,ENSP00000372221,SERPINB5,Multicellular non-vertebrate,#0072B2
-KOG3821,29,Ctenophora,ENSP00000366267,GPC5,Multicellular non-vertebrate,#0072B2
-KOG3821,29,Ctenophora,ENSP00000377836,GPC3,Multicellular non-vertebrate,#0072B2
 KOG3900,29,Ctenophora,ENSP00000221930,TGFB1,Multicellular non-vertebrate,#0072B2
 KOG3900,29,Ctenophora,ENSP00000245451,BMP4,Multicellular non-vertebrate,#0072B2
-KOG3701,29,Ctenophora,ENSP00000341551,SMAD4,Multicellular non-vertebrate,#0072B2
+KOG3821,29,Ctenophora,ENSP00000366267,GPC5,Multicellular non-vertebrate,#0072B2
+KOG3821,29,Ctenophora,ENSP00000377836,GPC3,Multicellular non-vertebrate,#0072B2
 KOG0489,29,Ctenophora,ENSP00000346879,NKX2-1,Multicellular non-vertebrate,#0072B2
+KOG4304,29,Ctenophora,ENSP00000242728,BHLHE41,Multicellular non-vertebrate,#0072B2
+KOG0639,29,Ctenophora,ENSP00000221561,AES,Multicellular non-vertebrate,#0072B2
+KOG3575,29,Ctenophora,ENSP00000379904,THRB,Multicellular non-vertebrate,#0072B2
+KOG3575,29,Ctenophora,ENSP00000405330,ESR1,Multicellular non-vertebrate,#0072B2
+KOG4221,29,Ctenophora,ENSP00000389140,DCC,Multicellular non-vertebrate,#0072B2
+KOG3577,29,Ctenophora,ENSP00000220772,SFRP1,Multicellular non-vertebrate,#0072B2
+KOG3701,29,Ctenophora,ENSP00000341551,SMAD4,Multicellular non-vertebrate,#0072B2
+KOG0083,29,Ctenophora,ENSP00000376390,RAB37,Multicellular non-vertebrate,#0072B2
 KOG3573,29,Ctenophora,ENSP00000311032,CASP3,Multicellular non-vertebrate,#0072B2
 KOG3573,29,Ctenophora,ENSP00000351273,CASP8,Multicellular non-vertebrate,#0072B2
 KOG3573,29,Ctenophora,ENSP00000376849,CASP5,Multicellular non-vertebrate,#0072B2
-KOG4221,29,Ctenophora,ENSP00000389140,DCC,Multicellular non-vertebrate,#0072B2
-KOG3577,29,Ctenophora,ENSP00000220772,SFRP1,Multicellular non-vertebrate,#0072B2
-KOG4304,29,Ctenophora,ENSP00000242728,BHLHE41,Multicellular non-vertebrate,#0072B2
-KOG0083,29,Ctenophora,ENSP00000376390,RAB37,Multicellular non-vertebrate,#0072B2
-NOG258312,29,Ctenophora,ENSP00000260356,THBS1,Multicellular non-vertebrate,#0072B2
-KOG3575,29,Ctenophora,ENSP00000379904,THRB,Multicellular non-vertebrate,#0072B2
-KOG3575,29,Ctenophora,ENSP00000405330,ESR1,Multicellular non-vertebrate,#0072B2
-KOG0639,29,Ctenophora,ENSP00000221561,AES,Multicellular non-vertebrate,#0072B2
-KOG1280,29,Ctenophora,ENSP00000386738,KCMF1,Multicellular non-vertebrate,#0072B2
 KOG4466,29,Ctenophora,ENSP00000396052,BRMS1,Multicellular non-vertebrate,#0072B2
 KOG4087,29,Ctenophora,ENSP00000383364,PLA2G2A,Multicellular non-vertebrate,#0072B2
+KOG1280,29,Ctenophora,ENSP00000386738,KCMF1,Multicellular non-vertebrate,#0072B2
+NOG258312,29,Ctenophora,ENSP00000260356,THBS1,Multicellular non-vertebrate,#0072B2
+KOG3611,30,Choanoflagellata,ENSP00000002829,SEMA3F,Multicellular non-vertebrate,#0072B2
+KOG2200,30,Choanoflagellata,ENSP00000276297,DLC1,Multicellular non-vertebrate,#0072B2
+KOG3530,30,Choanoflagellata,ENSP00000343158,EPB41L3,Multicellular non-vertebrate,#0072B2
 KOG3882,30,Choanoflagellata,ENSP00000227155,CD82,Multicellular non-vertebrate,#0072B2
 KOG3882,30,Choanoflagellata,ENSP00000371958,CD9,Multicellular non-vertebrate,#0072B2
 KOG3882,30,Choanoflagellata,ENSP00000447730,CD63,Multicellular non-vertebrate,#0072B2
+KOG3697,30,Choanoflagellata,ENSP00000401303,SHC1,Multicellular non-vertebrate,#0072B2
+KOG3614,30,Choanoflagellata,ENSP00000437849,TRPM1,Multicellular non-vertebrate,#0072B2
+KOG3599,30,Choanoflagellata,ENSP00000262304,PKD1,Multicellular non-vertebrate,#0072B2
 KOG3656,30,Choanoflagellata,ENSP00000292513,PTGER1,Multicellular non-vertebrate,#0072B2
 KOG3656,30,Choanoflagellata,ENSP00000349003,PTGER3,Multicellular non-vertebrate,#0072B2
 KOG3656,30,Choanoflagellata,ENSP00000359532,NTSR1,Multicellular non-vertebrate,#0072B2
-KOG3649,30,Choanoflagellata,ENSP00000367202,RECK,Multicellular non-vertebrate,#0072B2
-KOG3637,30,Choanoflagellata,ENSP00000296585,ITGA2,Multicellular non-vertebrate,#0072B2
-KOG3530,30,Choanoflagellata,ENSP00000343158,EPB41L3,Multicellular non-vertebrate,#0072B2
-KOG1006,30,Choanoflagellata,ENSP00000410402,MAP2K4,Multicellular non-vertebrate,#0072B2
-KOG1226,30,Choanoflagellata,ENSP00000379350,ITGB1,Multicellular non-vertebrate,#0072B2
-KOG0709,30,Choanoflagellata,ENSP00000481956,CREB3L1,Multicellular non-vertebrate,#0072B2
-KOG3611,30,Choanoflagellata,ENSP00000002829,SEMA3F,Multicellular non-vertebrate,#0072B2
 KOG3982,30,Choanoflagellata,ENSP00000382800,RUNX3,Multicellular non-vertebrate,#0072B2
-KOG3614,30,Choanoflagellata,ENSP00000437849,TRPM1,Multicellular non-vertebrate,#0072B2
-KOG2200,30,Choanoflagellata,ENSP00000276297,DLC1,Multicellular non-vertebrate,#0072B2
-KOG4295,30,Choanoflagellata,ENSP00000222543,TFPI2,Multicellular non-vertebrate,#0072B2
-KOG4295,30,Choanoflagellata,ENSP00000284981,APP,Multicellular non-vertebrate,#0072B2
-KOG3599,30,Choanoflagellata,ENSP00000262304,PKD1,Multicellular non-vertebrate,#0072B2
-KOG3697,30,Choanoflagellata,ENSP00000401303,SHC1,Multicellular non-vertebrate,#0072B2
-COG5640,30,Choanoflagellata,ENSP00000222390,HGF,Multicellular non-vertebrate,#0072B2
-COG5640,30,Choanoflagellata,ENSP00000308938,PLG,Multicellular non-vertebrate,#0072B2
+KOG1006,30,Choanoflagellata,ENSP00000410402,MAP2K4,Multicellular non-vertebrate,#0072B2
+KOG1883,30,Choanoflagellata,ENSP00000357047,MED23,Multicellular non-vertebrate,#0072B2
 KOG3594,30,Choanoflagellata,ENSP00000261769,CDH1,Multicellular non-vertebrate,#0072B2
+KOG3649,30,Choanoflagellata,ENSP00000367202,RECK,Multicellular non-vertebrate,#0072B2
 KOG2931,30,Choanoflagellata,ENSP00000404854,NDRG1,Multicellular non-vertebrate,#0072B2
 KOG2931,30,Choanoflagellata,ENSP00000451712,NDRG2,Multicellular non-vertebrate,#0072B2
-KOG1883,30,Choanoflagellata,ENSP00000357047,MED23,Multicellular non-vertebrate,#0072B2
-KOG1565,30,Choanoflagellata,ENSP00000236826,MMP8,Multicellular non-vertebrate,#0072B2
+KOG3637,30,Choanoflagellata,ENSP00000296585,ITGA2,Multicellular non-vertebrate,#0072B2
+KOG1226,30,Choanoflagellata,ENSP00000379350,ITGB1,Multicellular non-vertebrate,#0072B2
+COG5640,30,Choanoflagellata,ENSP00000222390,HGF,Multicellular non-vertebrate,#0072B2
+COG5640,30,Choanoflagellata,ENSP00000308938,PLG,Multicellular non-vertebrate,#0072B2
+KOG0709,30,Choanoflagellata,ENSP00000481956,CREB3L1,Multicellular non-vertebrate,#0072B2
 KOG0403,30,Choanoflagellata,ENSP00000280154,PDCD4,Multicellular non-vertebrate,#0072B2
+KOG4295,30,Choanoflagellata,ENSP00000222543,TFPI2,Multicellular non-vertebrate,#0072B2
+KOG4295,30,Choanoflagellata,ENSP00000284981,APP,Multicellular non-vertebrate,#0072B2
+KOG1565,30,Choanoflagellata,ENSP00000236826,MMP8,Multicellular non-vertebrate,#0072B2
 KOG0849,31,Fungi,ENSP00000350844,PAX5,Unicellular,#E69F00
 KOG0527,31,Fungi,ENSP00000322568,SOX11,Unicellular,#E69F00
 COG2335,31,Fungi,ENSP00000369071,POSTN,Unicellular,#E69F00
-KOG3771,32,Amoebozoa,ENSP00000316779,BIN1,Unicellular,#E69F00
-KOG3508,32,Amoebozoa,ENSP00000356621,RASAL2,Unicellular,#E69F00
 KOG0490,32,Amoebozoa,ENSP00000340226,LMX1A,Unicellular,#E69F00
+KOG3508,32,Amoebozoa,ENSP00000356621,RASAL2,Unicellular,#E69F00
+KOG3771,32,Amoebozoa,ENSP00000316779,BIN1,Unicellular,#E69F00
 KOG3780,32,Amoebozoa,ENSP00000462521,TXNIP,Unicellular,#E69F00
 KOG1642,33,Viridiplantae,ENSP00000426455,RNASET2,Unicellular,#E69F00
 COG1881,33,Viridiplantae,ENSP00000261313,PEBP1,Unicellular,#E69F00
-KOG0443,34,Discoba,ENSP00000362924,GSN,Unicellular,#E69F00
 KOG0082,34,Discoba,ENSP00000312999,GNAI2,Unicellular,#E69F00
+KOG0443,34,Discoba,ENSP00000362924,GSN,Unicellular,#E69F00
 KOG4562,34,Discoba,ENSP00000364847,MAGED1,Unicellular,#E69F00
 KOG1755,35,Rhodophyta,ENSP00000225655,PFN1,Unicellular,#E69F00
 COG5641,35,Rhodophyta,ENSP00000368632,GATA3,Unicellular,#E69F00
 COG0044,35,Rhodophyta,ENSP00000321606,CRMP1,Unicellular,#E69F00
 COG0044,35,Rhodophyta,ENSP00000343690,DPYSL3,Unicellular,#E69F00
+COG5160,36,SAR,ENSP00000296257,SENP2,Unicellular,#E69F00
 COG0702,36,SAR,ENSP00000392985,HTATIP2,Unicellular,#E69F00
-COG0538,36,SAR,ENSP00000390265,IDH1,Unicellular,#E69F00
 COG0209,36,SAR,ENSP00000300738,RRM1,Unicellular,#E69F00
+COG5022,36,SAR,ENSP00000334563,MYO18B,Unicellular,#E69F00
+COG0055,36,SAR,ENSP00000356234,KDM5B,Unicellular,#E69F00
 COG5082,36,SAR,ENSP00000410769,CNBP,Unicellular,#E69F00
 COG5069,36,SAR,ENSP00000354923,DMD,Unicellular,#E69F00
 COG5069,36,SAR,ENSP00000378400,LIMA1,Unicellular,#E69F00
-COG0055,36,SAR,ENSP00000356234,KDM5B,Unicellular,#E69F00
 COG0671,36,SAR,ENSP00000392553,PPAPDC1B,Unicellular,#E69F00
-COG0571,36,SAR,ENSP00000437256,DICER1,Unicellular,#E69F00
-COG5160,36,SAR,ENSP00000296257,SENP2,Unicellular,#E69F00
 COG5025,36,SAR,ENSP00000363377,FOXO4,Unicellular,#E69F00
-KOG4441,36,SAR,ENSP00000356468,IVNS1ABP,Unicellular,#E69F00
-KOG1508,36,SAR,ENSP00000361777,SET,Unicellular,#E69F00
+COG0571,36,SAR,ENSP00000437256,DICER1,Unicellular,#E69F00
+COG0538,36,SAR,ENSP00000390265,IDH1,Unicellular,#E69F00
 COG0265,36,SAR,ENSP00000357980,HTRA1,Unicellular,#E69F00
-COG5022,36,SAR,ENSP00000334563,MYO18B,Unicellular,#E69F00
-COG5076,37,Metamonada,ENSP00000263253,EP300,Unicellular,#E69F00
+KOG1508,36,SAR,ENSP00000361777,SET,Unicellular,#E69F00
+KOG4441,36,SAR,ENSP00000356468,IVNS1ABP,Unicellular,#E69F00
+COG5058,37,Metamonada,ENSP00000271688,CERS2,Unicellular,#E69F00
 COG0515,37,Metamonada,ENSP00000332118,EPHB3,Unicellular,#E69F00
 COG0515,37,Metamonada,ENSP00000364907,SYK,Unicellular,#E69F00
 COG0515,37,Metamonada,ENSP00000431885,TYK2,Unicellular,#E69F00
 COG0515,37,Metamonada,ENSP00000481994,EPHB6,Unicellular,#E69F00
+COG0369,37,Metamonada,ENSP00000327251,NOS2,Unicellular,#E69F00
+COG1163,37,Metamonada,ENSP00000329715,DRG1,Unicellular,#E69F00
+COG0456,37,Metamonada,ENSP00000417763,NAA10,Unicellular,#E69F00
 COG5273,37,Metamonada,ENSP00000262096,ZDHHC2,Unicellular,#E69F00
+KOG4308,37,Metamonada,ENSP00000433999,RNH1,Unicellular,#E69F00
+COG1100,37,Metamonada,ENSP00000364886,RND3,Unicellular,#E69F00
+COG1100,37,Metamonada,ENSP00000427926,RHOBTB2,Unicellular,#E69F00
+COG4886,37,Metamonada,ENSP00000360597,LRRC26,Unicellular,#E69F00
+COG4886,37,Metamonada,ENSP00000422591,SLIT2,Unicellular,#E69F00
+COG0666,37,Metamonada,ENSP00000418915,CDKN2A,Unicellular,#E69F00
 COG0105,37,Metamonada,ENSP00000219302,NME3,Unicellular,#E69F00
 COG0105,37,Metamonada,ENSP00000337060,NME1,Unicellular,#E69F00
 COG0105,37,Metamonada,ENSP00000376889,NME2,Unicellular,#E69F00
-COG2453,37,Metamonada,ENSP00000171887,TNS1,Unicellular,#E69F00
-COG2453,37,Metamonada,ENSP00000361021,PTEN,Unicellular,#E69F00
-COG0123,37,Metamonada,ENSP00000216271,HDAC10,Unicellular,#E69F00
-COG5058,37,Metamonada,ENSP00000271688,CERS2,Unicellular,#E69F00
 KOG1721,37,Metamonada,ENSP00000285407,KLF10,Unicellular,#E69F00
 KOG1721,37,Metamonada,ENSP00000363804,KLF4,Unicellular,#E69F00
 COG5307,37,Metamonada,ENSP00000377280,FBXO8,Unicellular,#E69F00
-COG1163,37,Metamonada,ENSP00000329715,DRG1,Unicellular,#E69F00
-COG0369,37,Metamonada,ENSP00000327251,NOS2,Unicellular,#E69F00
-COG0225,37,Metamonada,ENSP00000313921,MSRA,Unicellular,#E69F00
-KOG0032,37,Metamonada,ENSP00000386135,DAPK1,Unicellular,#E69F00
+COG5076,37,Metamonada,ENSP00000263253,EP300,Unicellular,#E69F00
 COG2940,37,Metamonada,ENSP00000313983,WHSC1L1,Unicellular,#E69F00
 KOG3911,37,Metamonada,ENSP00000339145,RRP1B,Unicellular,#E69F00
-COG0666,37,Metamonada,ENSP00000418915,CDKN2A,Unicellular,#E69F00
+COG0123,37,Metamonada,ENSP00000216271,HDAC10,Unicellular,#E69F00
+COG2453,37,Metamonada,ENSP00000171887,TNS1,Unicellular,#E69F00
+COG2453,37,Metamonada,ENSP00000361021,PTEN,Unicellular,#E69F00
+KOG0032,37,Metamonada,ENSP00000386135,DAPK1,Unicellular,#E69F00
+COG0225,37,Metamonada,ENSP00000313921,MSRA,Unicellular,#E69F00
 COG0572,37,Metamonada,ENSP00000377508,JUP,Unicellular,#E69F00
-COG4886,37,Metamonada,ENSP00000360597,LRRC26,Unicellular,#E69F00
-COG4886,37,Metamonada,ENSP00000422591,SLIT2,Unicellular,#E69F00
-COG1100,37,Metamonada,ENSP00000364886,RND3,Unicellular,#E69F00
-COG1100,37,Metamonada,ENSP00000427926,RHOBTB2,Unicellular,#E69F00
-COG0456,37,Metamonada,ENSP00000417763,NAA10,Unicellular,#E69F00
-KOG4308,37,Metamonada,ENSP00000433999,RNH1,Unicellular,#E69F00
-KOG1109,37,Metamonada,ENSP00000262291,VMP1,Unicellular,#E69F00
 KOG3205,37,Metamonada,ENSP00000228945,ARHGDIB,Unicellular,#E69F00
 KOG3205,37,Metamonada,ENSP00000269321,ARHGDIA,Unicellular,#E69F00
+KOG1109,37,Metamonada,ENSP00000262291,VMP1,Unicellular,#E69F00

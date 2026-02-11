@@ -1006,45 +1006,8 @@ overlap_summary %>%
   vroom::vroom_write(file = file.path(output_dir, "overlap_summary.csv"), delim = ",")
 
 # Memory cleanup
-rm(upset_df, nodelist_filtered, nodelist_bp, nodelist_stats,
+rm(upset_df, nodelist_bp, nodelist_stats,
    long_data, cumulative_data, cumulative_genes, cumulative_bp)
 gc()
 ```
 
-## Equivalence Checks
-
-Temporary validation to confirm that key outputs match the originals.
-Set `eval: true` to activate.
-
-```{r equivalence}
-#| eval: false
-#| cache: false
-
-# Helper: trim whitespace in all character columns
-trim_char_cols <- function(df) {
-  df[] <- lapply(df, function(col) {
-    if (is.character(col)) trimws(col) else col
-  })
-  df
-}
-
-# Check suppl_table1
-if (file.exists(here("results/paper_data/suppl_table1.csv"))) {
-  old <- vroom::vroom(here("results/paper_data/suppl_table1.csv"), show_col_types = FALSE)
-  new <- vroom::vroom(here("results/rooting_analysis/suppl_table1.csv"), show_col_types = FALSE)
-  match_result <- all.equal(
-    trim_char_cols(as.data.frame(old)),
-    trim_char_cols(as.data.frame(new)),
-    check.attributes = FALSE
-  )
-  message("suppl_table1.csv equivalence: ", match_result)
-}
-
-# Check hypergeometric_all_genes
-if (file.exists(here("results/paper_data/hipergeometric_all_genes.csv"))) {
-  old <- vroom::vroom(here("results/paper_data/hipergeometric_all_genes.csv"), show_col_types = FALSE)
-  new <- vroom::vroom(here("results/rooting_analysis/hypergeometric_all_genes.csv"), show_col_types = FALSE)
-  message("hypergeometric_all_genes — old rows: ", nrow(old), ", new rows: ", nrow(new))
-  message("hypergeometric_all_genes — old cols: ", ncol(old), ", new cols: ", ncol(new))
-}
-```

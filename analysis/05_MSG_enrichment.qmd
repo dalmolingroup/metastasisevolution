@@ -642,6 +642,6 @@ if (file.exists(here("results/paper_data/MSG_GO_enrichment_combined.csv"))) {
 }
 
 # Memory cleanup
-rm(mSim, dist_matrix, hc, tal, ego, ekegg, go_combined, kegg_combined, nodelist)
+rm(mSim, dist_matrix, hc, tal, go_combined, kegg_combined, nodelist)
 gc()
 ```

@@ -330,7 +330,7 @@ gc()
 The STRING database API is queried to retrieve the interaction network for
 all mapped metastasis-associated proteins. Interaction scores are recomputed
 using only experimental (ascore), coexpression (escore), and database (dscore)
-evidence channels with a minimum confidence level of 0.4.
+evidence channels with a minimum confidence level of 0.9.
 
 ```{r network-interaction}
 #| cache: true
@@ -342,7 +342,7 @@ string_edgelist <- get_network_interaction(map_ids)
 string_edgelist <- combine_scores(
   string_edgelist,
   evidences = c("ascore", "escore", "dscore"),
-  confLevel = 0.4
+  confLevel = 0.9
 )
 
 colnames(string_edgelist) <- c("stringId_A", "stringId_B", "combined_score")
@@ -520,55 +520,3 @@ rm(net, pivotada, source_statements)
 gc()
 ```
 
-## Equivalence Checks
-
-Temporary validation chunk to verify that the refactored script produces
-outputs identical to the original pipeline. Set `eval: true` to activate.
-
-```{r equivalence}
-#| eval: false
-#| cache: false
-
-# Helper: trim whitespace in all character columns for robust comparison
-trim_char_cols <- function(df) {
-  df[] <- lapply(df, function(col) {
-    if (is.character(col)) trimws(col) else col
-  })
-  df
-}
-
-# List of output files to compare (new path = same as old since outputs
-# already went to results/orthology_data/)
-output_files <- c(
-  "gene_cogs.csv",
-  "map_ids.csv",
-  "string_edgelist.csv",
-  "genebridge_result.csv",
-  "groot_df.csv",
-  "merged_paths.csv",
-  "nodelist.csv",
-  "network_nodelist.csv",
-  "connected_nodes.csv",
-  "network_filtered.csv"
-)
-
-for (fname in output_files) {
-  new_file <- here("results/orthology_data", fname)
-
-  if (!file.exists(new_file)) {
-    message(fname, " — SKIPPED (file not found)")
-    next
-  }
-
-  new_data <- vroom::vroom(new_file, show_col_types = FALSE)
-  new_data <- trim_char_cols(as.data.frame(new_data))
-
-  # Sort by first column for deterministic comparison
-  sort_col <- colnames(new_data)[1]
-  new_data <- new_data[order(new_data[[sort_col]]), ]
-
-  message(fname, " — rows: ", nrow(new_data), ", cols: ", ncol(new_data))
-}
-
-message("Equivalence checks completed. Review row/column counts against originals.")
-```

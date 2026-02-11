@@ -461,35 +461,3 @@ trim_char_cols <- function(df) {
   })
   df
 }
-
-# Check nodelist_exclusive
-if (file.exists(here("results/orthology_data/nodelist_exclusive.csv"))) {
-  old <- vroom::vroom(here("results/orthology_data/nodelist_exclusive.csv"), show_col_types = FALSE)
-  new <- vroom::vroom(file.path(output_dir, "nodelist_exclusive.csv"), show_col_types = FALSE)
-  cat("nodelist_exclusive — old rows:", nrow(old), ", new rows:", nrow(new), "\n")
-  cat("nodelist_exclusive — old cols:", ncol(old), ", new cols:", ncol(new), "\n")
-}
-
-# Check hypergeometric_exclusive
-if (file.exists(here("results/paper_data/hipergeometric_exclusive.csv"))) {
-  old <- vroom::vroom(here("results/paper_data/hipergeometric_exclusive.csv"), show_col_types = FALSE)
-  new <- vroom::vroom(file.path(output_dir, "hypergeometric_exclusive.csv"), show_col_types = FALSE)
-  cat("hypergeometric_exclusive — old rows:", nrow(old), ", new rows:", nrow(new), "\n")
-  cat("hypergeometric_exclusive — old cols:", ncol(old), ", new cols:", ncol(new), "\n")
-}
-
-# Check zscore_exclusive
-if (file.exists(here("results/paper_data/zscore_exclusive.csv"))) {
-  old <- vroom::vroom(here("results/paper_data/zscore_exclusive.csv"), show_col_types = FALSE)
-  new <- vroom::vroom(file.path(output_dir, "zscore_exclusive.csv"), show_col_types = FALSE)
-  cat("zscore_exclusive — old rows:", nrow(old), ", new rows:", nrow(new), "\n")
-  cat("zscore_exclusive — old cols:", ncol(old), ", new cols:", ncol(new), "\n")
-}
-
-cat("\nEquivalence checks completed.\n")
-
-# Memory cleanup
-rm(nodelist_bp_count, cumulative_exclusive, cumulative_bp_exclusive,
-   exclusive_summary, result, i)
-gc()
-```
