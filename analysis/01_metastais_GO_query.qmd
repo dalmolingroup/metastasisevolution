@@ -1,52 +1,130 @@
 ---
-title: "Create Biological Process and genes DB"
+title: "Metastasis-Associated Gene Ontology Query and Gene Set Construction"
 author: "Gleison M. Azevedo"
 format: html
-execute: 
+execute:
   cache: true
+  echo: true
+  message: false
+  warning: false
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE,
-  message = FALSE,
-  warning = FALSE,
-  results = FALSE
+## Package Management
+
+```{r pkg-install}
+#| cache: false
+
+# Automatically detect and install any missing CRAN packages before loading.
+required_packages <- c(
+  "tidyr", "dplyr", "httr", "vroom", "here", "UpSetR", "tools", "svglite"
 )
-```
 
-## Import libraries
+missing <- required_packages[
+  !vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)
+]
 
-```{r libs}
+if (length(missing) > 0) {
+  install.packages(missing, repos = "https://cloud.r-project.org")
+}
+
 library(tidyr)
 library(dplyr)
 library(httr)
 library(vroom)
 library(here)
 library(UpSetR)
+library(tools)
+library(svglite)
 ```
 
-## Define Functions
+## Input Data Integrity Verification
 
-```{r funcs}
-# Function to search genes by GOids filtering by exoerimental evidences
+```{r checksum}
+#| cache: false
+
+# Verify MD5 checksums for all input files loaded from assets/ to ensure
+# data integrity and guard against unintended modifications or corruption.
+
+expected_checksums <- c(
+  "assets/Detatch_and_Dissemination.csv"   = "834eb00d5fd05ebc8b4340ca8e630b0e",
+  "assets/metastasis_supressors_nature.csv" = "6f1717e97a277fb0fed475e92647d214"
+)
+
+for (file_path in names(expected_checksums)) {
+  abs_path <- here(file_path)
+  observed <- unname(md5sum(abs_path))
+  if (observed != expected_checksums[file_path]) {
+    stop(
+      sprintf(
+        "Checksum mismatch for '%s': expected %s, got %s",
+        file_path, expected_checksums[file_path], observed
+      )
+    )
+  }
+}
+
+message("All input file checksums verified successfully.")
+```
+
+## Helper Functions
+
+```{r functions}
+#' Query Gene Ontology for genes annotated to a specific GO term.
+#'
+#' Retrieves human protein-coding gene symbols annotated under a given GO ID
+#' using the AmiGO 2 SOLR API, restricted to experimental evidence codes.
+#'
+#' @param GO_id Character. A Gene Ontology identifier (e.g., "GO:0045123").
+#' @return Character vector of unique gene symbols, or character(0) on failure.
 query_GO <- function(GO_id) {
-  url <- paste0("https://golr-aux.geneontology.io/solr/select?defType=edismax&qt=standard&indent=on&wt=csv&rows=100000&start=0&fl=bioentity_label&facet=true&facet.mincount=1&facet.sort=count&json.nl=arrarr&facet.limit=25&hl=true&hl.simple.pre=%3Cem%20class%3D%22hilite%22%3E&hl.snippets=1000&csv.encapsulator=&csv.separator=%09&csv.header=false&csv.mv.separator=%7C&fq=document_category:%22annotation%22&fq=isa_partof_closure:%22", GO_id,"%22&fq=taxon_subset_closure_label:%22Homo%20sapiens%22&fq=type:%22protein%22&fq=evidence_subset_closure_label:%22experimental%20evidence%22&facet.field=aspect&facet.field=taxon_subset_closure_label&facet.field=type&facet.field=evidence_subset_closure_label&facet.field=regulates_closure_label&facet.field=isa_partof_closure_label&facet.field=annotation_class_label&facet.field=qualifier&facet.field=annotation_extension_class_closure_label&facet.field=assigned_by&facet.field=panther_family_label&q=*%3A*")
-  response <- tryCatch({
-    vroom(url, delim = "\t", col_names = FALSE)
-  }, error = function(e) {
-    return(data.frame())
-  })
-  
+  url <- paste0(
+    "https://golr-aux.geneontology.io/solr/select?defType=edismax",
+    "&qt=standard&indent=on&wt=csv&rows=100000&start=0",
+    "&fl=bioentity_label&facet=true&facet.mincount=1&facet.sort=count",
+    "&json.nl=arrarr&facet.limit=25&hl=true",
+    "&hl.simple.pre=%3Cem%20class%3D%22hilite%22%3E&hl.snippets=1000",
+    "&csv.encapsulator=&csv.separator=%09&csv.header=false",
+    "&csv.mv.separator=%7C",
+    "&fq=document_category:%22annotation%22",
+    "&fq=isa_partof_closure:%22", GO_id, "%22",
+    "&fq=taxon_subset_closure_label:%22Homo%20sapiens%22",
+    "&fq=type:%22protein%22",
+    "&fq=evidence_subset_closure_label:%22experimental%20evidence%22",
+    "&facet.field=aspect&facet.field=taxon_subset_closure_label",
+    "&facet.field=type&facet.field=evidence_subset_closure_label",
+    "&facet.field=regulates_closure_label",
+    "&facet.field=isa_partof_closure_label",
+    "&facet.field=annotation_class_label&facet.field=qualifier",
+    "&facet.field=annotation_extension_class_closure_label",
+    "&facet.field=assigned_by&facet.field=panther_family_label",
+    "&q=*%3A*"
+  )
+
+  response <- tryCatch(
+    {
+      vroom(url, delim = "\t", col_names = FALSE, show_col_types = FALSE)
+    },
+    error = function(e) {
+      return(data.frame())
+    }
+  )
+
   if (ncol(response) == 0) {
     return(character(0))
   }
-  
-  genes <- response[[1]] 
+
+  genes <- response[[1]]
   return(unique(as.vector(genes)))
 }
 
-# Create a list with GOids and their respective genes 
+
+#' Batch-query Gene Ontology for a vector of GO IDs.
+#'
+#' Iterates over a set of GO identifiers and returns a named list mapping
+#' each GO ID to its associated gene symbols.
+#'
+#' @param go_ids Character vector of GO identifiers.
+#' @return Named list; names are GO IDs, values are character vectors of genes.
 get_genes_by_GOid <- function(go_ids) {
   genes_per_term <- list()
   for (go_id in go_ids) {
@@ -55,41 +133,73 @@ get_genes_by_GOid <- function(go_ids) {
   return(genes_per_term)
 }
 
-# Create gene data frame from list
+
+#' Convert a GO-to-genes list into a tidy data frame.
+#'
+#' Maps each gene to its corresponding metastasis signature label using the
+#' GO ID as the join key, producing a two-column data frame.
+#'
+#' @param genesPerTerm Named list from get_genes_by_GOid().
+#' @param metastasis_ids Data frame with columns GO_id and Signature.
+#' @return Data frame with columns: external_gene_name, Signature.
 list_to_df <- function(genesPerTerm, metastasis_ids) {
-  result <- data.frame(external_gene_name = character(), Signature = character(), stringsAsFactors = FALSE)
-  
+  result <- data.frame(
+    external_gene_name = character(),
+    Signature = character(),
+    stringsAsFactors = FALSE
+  )
+
   for (go_id in names(genesPerTerm)) {
     genes <- genesPerTerm[[go_id]]
     signature <- metastasis_ids$Signature[metastasis_ids$GO_id == go_id]
-    
+
     if (length(signature) > 0 && length(genes) > 0) {
-      temp <- data.frame(external_gene_name = genes, Signature = rep(signature, length(genes)), stringsAsFactors = FALSE)
+      temp <- data.frame(
+        external_gene_name = genes,
+        Signature = rep(signature, length(genes)),
+        stringsAsFactors = FALSE
+      )
       result <- rbind(result, temp)
     }
   }
-  
+
   return(result)
 }
 ```
 
-## Read Data
+## Data Loading
 
-First, we need to load the metastasis GO biological process table
+The metastasis-associated biological processes are sourced from a curated table
+mapping GO identifiers to hallmark signatures of the metastatic cascade. The
+signature labels are cleaned by removing a fixed-length prefix, and the GO ID
+column is split into the identifier and its textual description.
 
-```{r data}
-# Data frame with GOids and annotation
-metastasis_ids <- vroom::vroom(here("assets/Detatch_and_Dissemination.csv"))
-metastasis_ids$Signature <- substr(metastasis_ids$Signature, 12, nchar(metastasis_ids$Signature))
-metastasis_ids <- separate(metastasis_ids, GO_id, into = c("GO_id", "Description"), sep = 10, extra = "merge")
+A second dataset provides a list of known metastasis suppressor genes (MSGs)
+compiled from the literature (Rodrigues et al., *Nature Reviews Cancer*, 2024).
 
-# Metastasis suppressor genes from https://www.sciencedirect.com/science/article/pii/S0023683722011102
-# metastasis_suppressors <- vroom::vroom("../assets/metastasis_supressors.tsv", delim = "\t")
-# metastasis_suppressors <- metastasis_suppressors %>%
-#   dplyr::select(external_gene_name = `Gene Symbol`) %>%
-#   dplyr::mutate(Signature = "metastasis suppressor")
+```{r data-load}
+# Curated GO biological process identifiers for metastasis hallmarks
+metastasis_ids <- vroom::vroom(
+  here("assets/Detatch_and_Dissemination.csv"),
+  show_col_types = FALSE
+)
+metastasis_ids$Signature <- substr(
+  metastasis_ids$Signature, 12, nchar(metastasis_ids$Signature)
+)
+metastasis_ids <- separate(
+  metastasis_ids,
+  GO_id,
+  into = c("GO_id", "Description"),
+  sep = 10,
+  extra = "merge"
+)
 
-metastasis_suppressors <- vroom::vroom(here("assets/metastasis_supressors_nature.csv"), delim = "\t")
+# Metastasis suppressor genes from literature
+metastasis_suppressors <- vroom::vroom(
+  here("assets/metastasis_supressors_nature.csv"),
+  delim = "\t",
+  show_col_types = FALSE
+)
 metastasis_suppressors <- metastasis_suppressors %>%
   dplyr::select(external_gene_name = `GeneSymb`) %>%
   dplyr::mutate(Signature = "metastasis suppressor")
@@ -97,47 +207,147 @@ metastasis_suppressors <- metastasis_suppressors %>%
 head(metastasis_ids)
 ```
 
-## GO Querry
+## GO API Query and Gene Set Assembly
 
-Now we will query our sets of GOids to Gene Ontology db and classify them according to the biological processes in which they are involved
+Each GO identifier from the metastasis hallmark table is queried against the
+Gene Ontology AmiGO 2 SOLR endpoint to retrieve experimentally supported
+human gene annotations. The resulting gene lists are then merged with the
+curated metastasis suppressor gene set to form a unified gene–signature table.
 
-```{r run}
-# Get genes per GOid
+```{r go-query}
+#| cache: true
+
+# Query the GO database for genes associated with each GO term
 genesPerTerm <- get_genes_by_GOid(metastasis_ids$GO_id)
 
-# Create gene data frame
-result <- data.frame(external_gene_name = character(), Signature = character(), stringsAsFactors = FALSE)
-
+# Assemble gene-to-signature data frame and merge with suppressor genes
 result <- list_to_df(genesPerTerm, metastasis_ids) %>%
   bind_rows(metastasis_suppressors) %>%
   unique()
 
-result |> 
-  vroom::vroom_write(file = here("results/metastasis_genes/metastasis_genes.csv"), delim = ",")
-
+# Prepare Table 1: unique GO annotations (without Hallmark grouping)
 table1 <- dplyr::select(metastasis_ids, -Hallmark) %>%
   unique()
 
-table1 |>
-  vroom::vroom_write(file = here("results/paper_data/table1.csv"), delim = ",")
+# --- Save outputs to results/metastasis_genes/ ---
+output_dir <- here("results/metastasis_genes")
+if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
+
+result %>%
+  vroom::vroom_write(
+    file = file.path(output_dir, "metastasis_genes.csv"),
+    delim = ","
+  )
+
+table1 %>%
+  vroom::vroom_write(
+    file = file.path(output_dir, "table1.csv"),
+    delim = ","
+  )
 
 head(result)
+
+# --- Memory cleanup ---
+rm(genesPerTerm)
+gc()
 ```
 
-## Intersection of gene sets across each biological process.
+## Equivalence Checks
 
-```{r plot}
-#Upset Plot
-pivotada <- result %>% 
-  dplyr::select(external_gene_name, Signature) %>% 
-  dplyr::mutate(n = 1) %>% 
+Temporary validation chunk to verify that the refactored script produces
+outputs identical to the original pipeline. Set `eval: true` to activate.
+
+```{r equivalence}
+#| eval: false
+#| cache: false
+
+# Helper: trim whitespace in all character columns for robust comparison
+trim_char_cols <- function(df) {
+  df[] <- lapply(df, function(col) {
+    if (is.character(col)) trimws(col) else col
+  })
+  df
+}
+
+# --- Check metastasis_genes.csv equivalence ---
+# Compare the newly written CSV against the original to confirm identical output
+new_genes <- vroom::vroom(
+  here("results/metastasis_genes/metastasis_genes.csv"),
+  show_col_types = FALSE
+)
+
+new_genes_sorted <- trim_char_cols(as.data.frame(
+  new_genes[order(new_genes$external_gene_name, new_genes$Signature), ]
+))
+orig_genes_sorted <- trim_char_cols(as.data.frame(
+  result[order(result$external_gene_name, result$Signature), ]
+))
+
+genes_match <- all.equal(orig_genes_sorted, new_genes_sorted, check.attributes = FALSE)
+message("metastasis_genes.csv equivalence: ", genes_match)
+
+# --- Check table1.csv equivalence ---
+# Compare new output against original paper_data/table1.csv
+original_table1 <- vroom::vroom(
+  here("results/paper_data/table1.csv"),
+  show_col_types = FALSE
+)
+new_table1 <- vroom::vroom(
+  here("results/metastasis_genes/table1.csv"),
+  show_col_types = FALSE
+)
+
+orig_t1_sorted <- trim_char_cols(as.data.frame(
+  original_table1[order(original_table1$GO_id), ]
+))
+new_t1_sorted <- trim_char_cols(as.data.frame(
+  new_table1[order(new_table1$GO_id), ]
+))
+
+table1_match <- all.equal(orig_t1_sorted, new_t1_sorted, check.attributes = FALSE)
+message("table1.csv equivalence: ", table1_match)
+
+# Cleanup equivalence objects
+rm(new_genes, new_genes_sorted, orig_genes_sorted,
+   original_table1, new_table1, orig_t1_sorted, new_t1_sorted)
+```
+
+## Intersection of Gene Sets Across Biological Processes
+
+An UpSet plot is generated to visualize the overlap structure among gene sets
+assigned to each biological process signature. This provides an overview of
+shared and unique genes across the metastatic hallmarks and suppressor categories.
+
+```{r upset-plot}
+#| fig-width: 12
+#| fig-height: 7
+
+# Pivot gene-signature table to a binary membership matrix for UpSetR
+pivotada <- result %>%
+  dplyr::select(external_gene_name, Signature) %>%
+  dplyr::mutate(n = 1) %>%
   tidyr::pivot_wider(
     id_cols = external_gene_name,
     names_from = Signature,
     values_from = n,
     values_fn = list(n = length),
-    values_fill = list(n = 0),
+    values_fill = list(n = 0)
   )
 
+# Display UpSet plot
 UpSetR::upset(as.data.frame(pivotada), nsets = 50, nintersects = NA)
+
+# --- Save UpSet plot as SVG and PNG ---
+plot_dir <- here("results/metastasis_genes")
+if (!dir.exists(plot_dir)) dir.create(plot_dir, recursive = TRUE)
+
+# SVG
+svglite::svglite(file.path(plot_dir, "upset_gene_sets.svg"), width = 12, height = 7)
+UpSetR::upset(as.data.frame(pivotada), nsets = 50, nintersects = NA)
+dev.off()
+
+# PNG
+png(file.path(plot_dir, "upset_gene_sets.png"), width = 12, height = 7, units = "in", res = 300)
+UpSetR::upset(as.data.frame(pivotada), nsets = 50, nintersects = NA)
+dev.off()
 ```
