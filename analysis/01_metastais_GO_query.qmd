@@ -204,6 +204,30 @@ metastasis_suppressors <- metastasis_suppressors %>%
   dplyr::select(external_gene_name = `GeneSymb`) %>%
   dplyr::mutate(Signature = "metastasis suppressor")
 
+# Cancer gene list: tumor suppressor and oncogene sets
+cancer_genes <- vroom::vroom(
+  here("assets/cancerGeneList.tsv"),
+  delim = "\t",
+  show_col_types = FALSE
+)
+
+# TSG gene set: Gene Type = TSG or ONCOGENE_AND_TSG
+cancer_tsg <- cancer_genes %>%
+  dplyr::filter(`Gene Type` %in% c("TSG", "ONCOGENE_AND_TSG")) %>%
+  dplyr::select(external_gene_name = `Hugo Symbol`) %>%
+  dplyr::distinct() %>%
+  dplyr::mutate(Signature = "tumor suppressor")
+
+# Oncogene gene set: Gene Type = ONCOGENE or ONCOGENE_AND_TSG
+cancer_onc <- cancer_genes %>%
+  dplyr::filter(`Gene Type` %in% c("ONCOGENE", "ONCOGENE_AND_TSG")) %>%
+  dplyr::select(external_gene_name = `Hugo Symbol`) %>%
+  dplyr::distinct() %>%
+  dplyr::mutate(Signature = "oncogene")
+
+cat(sprintf("Cancer TSG gene set: %d genes\n", nrow(cancer_tsg)))
+cat(sprintf("Cancer Oncogene gene set: %d genes\n", nrow(cancer_onc)))
+
 head(metastasis_ids)
 ```
 
@@ -221,8 +245,11 @@ curated metastasis suppressor gene set to form a unified gene–signature table.
 genesPerTerm <- get_genes_by_GOid(metastasis_ids$GO_id)
 
 # Assemble gene-to-signature data frame and merge with suppressor genes
+# and cancer gene sets (tumor suppressor and oncogene)
 result <- list_to_df(genesPerTerm, metastasis_ids) %>%
   bind_rows(metastasis_suppressors) %>%
+  bind_rows(cancer_tsg) %>%
+  bind_rows(cancer_onc) %>%
   unique()
 
 # Prepare Table 1: unique GO annotations (without Hallmark grouping)
@@ -248,7 +275,7 @@ table1 %>%
 head(result)
 
 # --- Memory cleanup ---
-rm(genesPerTerm)
+rm(genesPerTerm, cancer_genes, cancer_tsg, cancer_onc)
 gc()
 ```
 

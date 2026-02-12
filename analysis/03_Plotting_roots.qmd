@@ -56,7 +56,9 @@ annotation_colors <- c(
   "regulation of metallopeptidase activity"  = "#E48C2AFF",
   "cell junction organization"               = "#72874EFF",
   "cellular extravasation"                   = "#046E8FFF",
-  "metastasis suppressor"                    = "#9B2335FF"
+  "metastasis suppressor"                    = "#9B2335FF",
+  "tumor suppressor"                         = "#8B008BFF",
+  "oncogene"                                 = "#FF6347FF"
 )
 
 # Annotation labels for biological process categories (English)
@@ -67,7 +69,9 @@ annotation_labels <- c(
   "regulation of metallopeptidase activity"  = "Metallopeptidase\nactivity regulation",
   "cell junction organization"               = "Cell junction\norganization",
   "cellular extravasation"                   = "Cellular\nextravasation",
-  "metastasis suppressor"                    = "Metastasis\nsuppressor"
+  "metastasis suppressor"                    = "Metastasis\nsuppressor",
+  "tumor suppressor"                         = "Tumor\nsuppressor",
+  "oncogene"                                 = "Oncogene"
 )
 
 # Vertical reference line marking the transition to Metazoa
@@ -153,7 +157,9 @@ calculate_cumulative_genes <- function(nodelist, node_annotation) {
                         "extracellular matrix organization",
                         "epithelial to mesenchymal transition",
                         "regulation of metallopeptidase activity",
-                        "metastasis suppressor")
+                        "metastasis suppressor",
+                        "tumor suppressor",
+                        "oncogene")
 
   cumulative_genes <- nodelist %>%
     arrange(desc(root)) %>%
@@ -183,7 +189,9 @@ calculate_cumulative_bp <- function(nodelist, node_annotation) {
                         "extracellular matrix organization",
                         "epithelial to mesenchymal transition",
                         "regulation of metallopeptidase activity",
-                        "metastasis suppressor")
+                        "metastasis suppressor",
+                        "tumor suppressor",
+                        "oncogene")
 
   cumulative_bp <- nodelist %>%
     dplyr::select(all_of(process_columns)) %>%
@@ -210,7 +218,9 @@ BP_by_clade <- function(data) {
                `cell adhesion`, `extracellular matrix organization`,
                `epithelial to mesenchymal transition`,
                `regulation of metallopeptidase activity`,
-               `metastasis suppressor`),
+               `metastasis suppressor`,
+               `tumor suppressor`,
+               `oncogene`),
       names_to = "process",
       values_to = "presence"
     ) %>%
@@ -321,10 +331,12 @@ upset(dplyr::select(as.data.frame(nodelist),
                     "regulation of metallopeptidase activity",
                     "cell junction organization",
                     "cellular extravasation",
-                    "metastasis suppressor"),
+                    "metastasis suppressor",
+                    "tumor suppressor",
+                    "oncogene"),
       nsets = 50, nintersects = NA,
       sets.bar.color = c("#06141FFF", "#72874EFF", "#9B2335FF", "#3D4F7DFF",
-                         "#742C14FF", "#046E8FFF", "#E48C2AFF"),
+                         "#742C14FF", "#046E8FFF", "#E48C2AFF", "#8B008BFF", "#FF6347FF"),
       mainbar.y.label = "Biological Process \nIntersections",
       sets.x.label = "Set Size")
 
@@ -341,10 +353,12 @@ upset(dplyr::select(as.data.frame(nodelist),
                     "regulation of metallopeptidase activity",
                     "cell junction organization",
                     "cellular extravasation",
-                    "metastasis suppressor"),
+                    "metastasis suppressor",
+                    "tumor suppressor",
+                    "oncogene"),
       nsets = 50, nintersects = NA,
       sets.bar.color = c("#06141FFF", "#72874EFF", "#9B2335FF", "#3D4F7DFF",
-                         "#742C14FF", "#046E8FFF", "#E48C2AFF"),
+                         "#742C14FF", "#046E8FFF", "#E48C2AFF", "#8B008BFF", "#FF6347FF"),
       mainbar.y.label = "Biological Process \nIntersections",
       sets.x.label = "Set Size")
 dev.off()
@@ -358,10 +372,12 @@ upset(dplyr::select(as.data.frame(nodelist),
                     "regulation of metallopeptidase activity",
                     "cell junction organization",
                     "cellular extravasation",
-                    "metastasis suppressor"),
+                    "metastasis suppressor",
+                    "tumor suppressor",
+                    "oncogene"),
       nsets = 50, nintersects = NA,
       sets.bar.color = c("#06141FFF", "#72874EFF", "#9B2335FF", "#3D4F7DFF",
-                         "#742C14FF", "#046E8FFF", "#E48C2AFF"),
+                         "#742C14FF", "#046E8FFF", "#E48C2AFF", "#8B008BFF", "#FF6347FF"),
       mainbar.y.label = "Biological Process \nIntersections",
       sets.x.label = "Set Size")
 dev.off()
@@ -552,7 +568,8 @@ processes <- c("cell adhesion", "extracellular matrix organization",
                "epithelial to mesenchymal transition",
                "regulation of metallopeptidase activity",
                "cell junction organization", "cellular extravasation",
-               "metastasis suppressor")
+               "metastasis suppressor",
+               "tumor suppressor", "oncogene")
 
 result_list <- list()
 
@@ -605,7 +622,9 @@ hipergeometric_df$Process <- factor(hipergeometric_df$Process,
                                                "regulation of metallopeptidase activity",
                                                "cell adhesion",
                                                "cellular extravasation",
-                                               "metastasis suppressor"))
+                                               "metastasis suppressor",
+                                               "tumor suppressor",
+                                               "oncogene"))
 
 # Bubble plot: enrichment significance by clade and process
 p_hyper <- ggplot(hipergeometric_df, aes(x = Process,
@@ -845,13 +864,15 @@ processes), metastasis suppressor genes, and KEGG cancer pathway genes.
 #| fig-width: 12
 #| fig-height: 8
 
-# Define the 6 biological processes
+# Define the 8 biological processes (including cancer gene sets)
 biological_processes <- c("cell adhesion",
                           "extracellular matrix organization",
                           "epithelial to mesenchymal transition",
                           "regulation of metallopeptidase activity",
                           "cell junction organization",
-                          "cellular extravasation")
+                          "cellular extravasation",
+                          "tumor suppressor",
+                          "oncogene")
 
 # Metastasis genes: at least one biological process
 nodelist_bp <- nodelist %>%

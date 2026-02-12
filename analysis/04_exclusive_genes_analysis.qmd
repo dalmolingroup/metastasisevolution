@@ -51,7 +51,9 @@ annotation_colors <- c(
   "regulation of metallopeptidase activity"  = "#E48C2AFF",
   "cell junction organization"               = "#72874EFF",
   "cellular extravasation"                   = "#046E8FFF",
-  "metastasis suppressor"                    = "#9B2335FF"
+  "metastasis suppressor"                    = "#9B2335FF",
+  "tumor suppressor"                         = "#8B008BFF",
+  "oncogene"                                 = "#FF6347FF"
 )
 
 # Reference root value for the first metazoan
@@ -138,7 +140,9 @@ biological_processes <- c("cell adhesion",
                           "epithelial to mesenchymal transition",
                           "regulation of metallopeptidase activity",
                           "cell junction organization",
-                          "cellular extravasation")
+                          "cellular extravasation",
+                          "tumor suppressor",
+                          "oncogene")
 
 # Count biological processes per gene
 nodelist_bp_count <- nodelist %>%
@@ -402,7 +406,9 @@ hipergeometric_exclusive_df$Process <- factor(
              "cell junction organization",
              "regulation of metallopeptidase activity",
              "cell adhesion",
-             "cellular extravasation")
+             "cellular extravasation",
+             "tumor suppressor",
+             "oncogene")
 )
 
 # Bubble plot: enrichment significance by clade and process
