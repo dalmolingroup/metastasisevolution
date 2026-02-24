@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_1" data-name="Camada 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 595.28 583.85">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9, .cls-10, .cls-11, .cls-12, .cls-13, .cls-14, .cls-15, .cls-16, .cls-17, .cls-18, .cls-19, .cls-20 {
+        stroke-linejoin: round;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-6, .cls-7, .cls-21, .cls-12, .cls-13, .cls-17, .cls-19, .cls-20 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-12, .cls-17, .cls-20 {
+        stroke-width: 2.13px;
+      }
+
+      .cls-1, .cls-4 {
+        stroke: #73874e;
+      }
+
+      .cls-22 {
+        font-size: 3.68px;
+      }
+
+      .cls-22, .cls-23, .cls-5, .cls-24, .cls-25, .cls-26, .cls-27, .cls-28, .cls-29, .cls-30, .cls-31, .cls-32 {
+        fill: #010101;
+      }
+
+      .cls-22, .cls-23, .cls-24, .cls-25, .cls-26, .cls-33, .cls-27, .cls-34, .cls-35, .cls-28, .cls-36, .cls-29, .cls-30, .cls-31, .cls-32, .cls-37, .cls-38 {
+        font-family: ArialMT, Arial;
+        isolation: isolate;
+      }
+
+      .cls-39 {
+        clip-path: url(#clippath-7);
+      }
+
+      .cls-40 {
+        letter-spacing: .02em;
+      }
+
+      .cls-41, .cls-10 {
+        fill: #0a6f90;
+      }
+
+      .cls-42 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-43 {
+        clip-path: url(#clippath-4);
+      }
+
+      .cls-2, .cls-15 {
+        stroke: #e58d29;
+      }
+
+      .cls-23 {
+        font-size: 4.63px;
+      }
+
+      .cls-3, .cls-10 {
+        stroke: #0a6f90;
+      }
+
+      .cls-4, .cls-5, .cls-8, .cls-9, .cls-10, .cls-11, .cls-14, .cls-15, .cls-16, .cls-18 {
+        stroke-linecap: round;
+        stroke-width: .71px;
+      }
+
+      .cls-4, .cls-44 {
+        fill: #73874e;
+      }
+
+      .cls-5 {
+        stroke: #010101;
+      }
+
+      .cls-24 {
+        font-size: 3.14px;
+      }
+
+      .cls-25 {
+        font-size: 2.68px;
+      }
+
+      .cls-45 {
+        clip-path: url(#clippath-10);
+      }
+
+      .cls-46, .cls-14 {
+        fill: #742d15;
+      }
+
+      .cls-47, .cls-8 {
+        fill: #08141f;
+      }
+
+      .cls-48 {
+        letter-spacing: .04em;
+      }
+
+      .cls-6 {
+        stroke: #e0e0e0;
+        stroke-dasharray: 1 3;
+      }
+
+      .cls-6, .cls-7 {
+        stroke-width: .53px;
+      }
+
+      .cls-7, .cls-19 {
+        stroke: #ebebeb;
+      }
+
+      .cls-49 {
+        clip-path: url(#clippath-11);
+      }
+
+      .cls-26 {
+        font-size: 3.17px;
+      }
+
+      .cls-50 {
+        letter-spacing: -.04em;
+      }
+
+      .cls-33 {
+        font-size: 3.19px;
+      }
+
+      .cls-33, .cls-34, .cls-35, .cls-36, .cls-37, .cls-38 {
+        fill: #4e4d4d;
+      }
+
+      .cls-51 {
+        letter-spacing: 0em;
+      }
+
+      .cls-8, .cls-20 {
+        stroke: #08141f;
+      }
+
+      .cls-27 {
+        font-size: 3.51px;
+      }
+
+      .cls-34 {
+        font-size: 2px;
+      }
+
+      .cls-52 {
+        clip-path: url(#clippath-1);
+      }
+
+      .cls-53 {
+        clip-path: url(#clippath-5);
+      }
+
+      .cls-35 {
+        font-size: 2.34px;
+      }
+
+      .cls-54 {
+        letter-spacing: 0em;
+      }
+
+      .cls-9, .cls-12 {
+        stroke: #3e507e;
+      }
+
+      .cls-9, .cls-55 {
+        fill: #3e507e;
+      }
+
+      .cls-56 {
+        clip-path: url(#clippath-8);
+      }
+
+      .cls-11 {
+        fill: #e52521;
+        stroke: #e52521;
+      }
+
+      .cls-57 {
+        letter-spacing: .04em;
+      }
+
+      .cls-58 {
+        letter-spacing: -.11em;
+      }
+
+      .cls-28 {
+        font-size: 3.86px;
+      }
+
+      .cls-59 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-60 {
+        letter-spacing: -.03em;
+      }
+
+      .cls-61 {
+        letter-spacing: .04em;
+      }
+
+      .cls-62 {
+        letter-spacing: 0em;
+      }
+
+      .cls-63 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-64 {
+        fill: #1d1d1b;
+        font-family: MyriadPro-Regular, 'Myriad Pro';
+        font-size: 12px;
+      }
+
+      .cls-65 {
+        letter-spacing: -.03em;
+      }
+
+      .cls-13 {
+        stroke-width: 2.56px;
+      }
+
+      .cls-13, .cls-16 {
+        stroke: #2e87ac;
+      }
+
+      .cls-36, .cls-32 {
+        font-size: 3.09px;
+      }
+
+      .cls-66 {
+        letter-spacing: 0em;
+      }
+
+      .cls-29 {
+        font-size: 4.42px;
+      }
+
+      .cls-14, .cls-17 {
+        stroke: #742d15;
+      }
+
+      .cls-67 {
+        letter-spacing: .04em;
+      }
+
+      .cls-68 {
+        letter-spacing: 0em;
+      }
+
+      .cls-30 {
+        font-size: 3.77px;
+      }
+
+      .cls-15, .cls-69 {
+        fill: #e58d29;
+      }
+
+      .cls-70 {
+        letter-spacing: 0em;
+      }
+
+      .cls-71 {
+        clip-path: url(#clippath-2);
+      }
+
+      .cls-16 {
+        fill: #2e87ac;
+      }
+
+      .cls-72 {
+        letter-spacing: .04em;
+      }
+
+      .cls-73 {
+        letter-spacing: -.11em;
+      }
+
+      .cls-18 {
+        fill: #bebdbe;
+        stroke: #bebdbe;
+      }
+
+      .cls-19 {
+        stroke-width: 1.07px;
+      }
+
+      .cls-74 {
+        letter-spacing: 0em;
+      }
+
+      .cls-75 {
+        letter-spacing: .06em;
+      }
+
+      .cls-31 {
+        font-size: 4.21px;
+      }
+
+      .cls-76 {
+        letter-spacing: .04em;
+      }
+
+      .cls-37 {
+        font-size: 2.52px;
+      }
+
+      .cls-38 {
+        font-size: 2.95px;
+      }
+    </style>
+    <clipPath id="clippath-1">
+      <rect class="cls-21" x="28.64" y="220.99" width="234.52" height="91.9"/>
+    </clipPath>
+    <clipPath id="clippath-2">
+      <rect class="cls-21" x="17.71" y="209.74" width="247.01" height="123.51"/>
+    </clipPath>
+    <clipPath id="clippath-4">
+      <rect class="cls-21" x="78.35" y="36.65" width="167.1" height="119.69"/>
+    </clipPath>
+    <clipPath id="clippath-5">
+      <rect class="cls-21" x="17.71" y="29.18" width="229.49" height="137.69"/>
+    </clipPath>
+    <clipPath id="clippath-7">
+      <rect class="cls-21" x="318.93" y="33.88" width="227.97" height="197.6"/>
+    </clipPath>
+    <clipPath id="clippath-8">
+      <rect class="cls-21" x="283.92" y="25.65" width="303.03" height="252.53"/>
+    </clipPath>
+    <clipPath id="clippath-10">
+      <rect class="cls-21" x="26.77" y="367.04" width="322.76" height="140.38"/>
+    </clipPath>
+    <clipPath id="clippath-11">
+      <rect class="cls-21" x="13.98" y="359.19" width="337.39" height="192.79"/>
+    </clipPath>
+  </defs>
+  <g>
+    <rect class="cls-21" x="17.71" y="209.74" width="247.01" height="123.51"/>
+    <g class="cls-52">
+      <g>
+        <line class="cls-7" x1="28.64" y1="298.83" x2="263.15" y2="298.83"/>
+        <line class="cls-7" x1="28.64" y1="278.65" x2="263.15" y2="278.65"/>
+        <line class="cls-7" x1="28.64" y1="258.47" x2="263.15" y2="258.47"/>
+        <line class="cls-7" x1="28.64" y1="238.29" x2="263.15" y2="238.29"/>
+        <line class="cls-6" x1="28.64" y1="308.92" x2="263.15" y2="308.92"/>
+        <line class="cls-6" x1="28.64" y1="288.74" x2="263.15" y2="288.74"/>
+        <line class="cls-6" x1="28.64" y1="268.56" x2="263.15" y2="268.56"/>
+        <line class="cls-6" x1="28.64" y1="248.38" x2="263.15" y2="248.38"/>
+        <line class="cls-6" x1="28.64" y1="228.2" x2="263.15" y2="228.2"/>
+        <polyline class="cls-13" points="34.01 308.72 42.96 301.05 51.91 300.65 60.86 297.21 69.81 295.2 78.76 292.17 87.71 290.55 96.67 272.8 105.62 265.73 114.57 262.91 123.52 262.1 132.47 260.89 141.42 260.08 150.37 256.65 159.32 253.62 168.27 252.41 177.22 249.38 186.18 234.25 195.13 233.24 204.08 231.83 213.03 229 221.98 228.6 230.93 227.39 239.88 225.57 248.83 225.37 257.78 225.17"/>
+        <circle class="cls-16" cx="34.01" cy="308.72" r=".71"/>
+        <circle class="cls-16" cx="42.96" cy="301.05" r=".71"/>
+        <circle class="cls-16" cx="51.91" cy="300.65" r=".71"/>
+        <circle class="cls-16" cx="60.86" cy="297.21" r=".71"/>
+        <circle class="cls-16" cx="69.81" cy="295.2" r=".71"/>
+        <circle class="cls-16" cx="78.76" cy="292.17" r=".71"/>
+        <circle class="cls-16" cx="87.71" cy="290.55" r=".71"/>
+        <circle class="cls-16" cx="96.67" cy="272.8" r=".71"/>
+        <circle class="cls-16" cx="105.62" cy="265.73" r=".71"/>
+        <circle class="cls-16" cx="114.57" cy="262.91" r=".71"/>
+        <circle class="cls-16" cx="123.52" cy="262.1" r=".71"/>
+        <circle class="cls-16" cx="132.47" cy="260.89" r=".71"/>
+        <circle class="cls-16" cx="141.42" cy="260.08" r=".71"/>
+        <circle class="cls-16" cx="150.37" cy="256.65" r=".71"/>
+        <circle class="cls-16" cx="159.32" cy="253.62" r=".71"/>
+        <circle class="cls-16" cx="168.27" cy="252.41" r=".71"/>
+        <circle class="cls-16" cx="177.22" cy="249.38" r=".71"/>
+        <circle class="cls-16" cx="186.18" cy="234.25" r=".71"/>
+        <circle class="cls-16" cx="195.13" cy="233.24" r=".71"/>
+        <circle class="cls-16" cx="204.08" cy="231.83" r=".71"/>
+        <circle class="cls-16" cx="213.03" cy="229" r=".71"/>
+        <circle class="cls-16" cx="221.98" cy="228.6" r=".71"/>
+        <circle class="cls-16" cx="230.93" cy="227.39" r=".71"/>
+        <circle class="cls-16" cx="239.88" cy="225.57" r=".71"/>
+        <circle class="cls-16" cx="248.83" cy="225.37" r=".71"/>
+        <circle class="cls-16" cx="257.78" cy="225.17" r=".71"/>
+      </g>
+    </g>
+    <g class="cls-71">
+      <g>
+        <text class="cls-37" transform="translate(23.03 309.84)"><tspan x="0" y="0">100</tspan></text>
+        <text class="cls-37" transform="translate(23.03 289.66)"><tspan x="0" y="0">200</tspan></text>
+        <text class="cls-37" transform="translate(23.03 269.47)"><tspan x="0" y="0">300</tspan></text>
+        <text class="cls-37" transform="translate(23.03 249.29)"><tspan x="0" y="0">400</tspan></text>
+        <text class="cls-37" transform="translate(23.03 229.11)"><tspan x="0" y="0">500</tspan></text>
+        <text class="cls-34" transform="translate(26.82 323.63) rotate(-45)"><tspan x="0" y="0">Metamonada</tspan></text>
+        <text class="cls-34" transform="translate(41.12 318.28) rotate(-45)"><tspan x="0" y="0">SAR</tspan></text>
+        <text class="cls-34" transform="translate(45.35 323) rotate(-45)"><tspan x="0" y="0">Rhodophyta</tspan></text>
+        <text class="cls-34" transform="translate(56.82 320.48) rotate(-45)"><tspan x="0" y="0">Discoba</tspan></text>
+        <text class="cls-34" transform="translate(63.12 323.13) rotate(-45)"><tspan class="cls-59" x="0" y="0">V</tspan><tspan x="1.3" y="0">iridiplantae</tspan></text>
+        <text class="cls-34" transform="translate(72.28 322.93) rotate(-45)"><tspan x="0" y="0">Amoebozoa</tspan></text>
+        <text class="cls-34" transform="translate(85.25 318.91) rotate(-45)"><tspan x="0" y="0">Fungi</tspan></text>
+        <text class="cls-34" transform="translate(87.11 325.99) rotate(-45)"><tspan x="0" y="0">Choanoflagellata</tspan></text>
+        <text class="cls-34" transform="translate(99.29 322.77) rotate(-45)"><tspan x="0" y="0">Ctenophora</tspan></text>
+        <text class="cls-34" transform="translate(110.68 320.33) rotate(-45)"><tspan x="0" y="0">Porifera</tspan></text>
+        <text class="cls-34" transform="translate(118.77 321.19) rotate(-45)"><tspan x="0" y="0">Placozoa</tspan></text>
+        <text class="cls-34" transform="translate(128.27 320.64) rotate(-45)"><tspan x="0" y="0">Cnidaria</tspan></text>
+        <text class="cls-34" transform="translate(137.77 320.09) rotate(-45)"><tspan x="0" y="0">Spiralia</tspan></text>
+        <text class="cls-34" transform="translate(144.52 322.29) rotate(-45)"><tspan x="0" y="0">Ecdysozoa</tspan></text>
+        <text class="cls-34" transform="translate(152.05 323.71) rotate(-45)"><tspan x="0" y="0">Ambulacraria</tspan></text>
+        <text class="cls-34" transform="translate(158.57 326.15) rotate(-45)"><tspan x="0" y="0">Cephalochordata</tspan></text>
+        <text class="cls-34" transform="translate(172.91 320.74) rotate(-45)"><tspan class="cls-50" x="0" y="0">T</tspan><tspan x="1.15" y="0">unicata</tspan></text>
+        <text class="cls-34" transform="translate(178.75 323.87) rotate(-45)"><tspan x="0" y="0">Actinopterygii</tspan></text>
+        <text class="cls-34" transform="translate(183.92 327.64) rotate(-45)"><tspan x="0" y="0">Coelacanthimorpha</tspan></text>
+        <text class="cls-34" transform="translate(199.25 321.27) rotate(-45)"><tspan x="0" y="0">Amphibia</tspan></text>
+        <text class="cls-34" transform="translate(206.94 322.53) rotate(-45)"><tspan x="0" y="0">Sauropsida</tspan></text>
+        <text class="cls-34" transform="translate(216.13 322.29) rotate(-45)"><tspan x="0" y="0">Prototheria</tspan></text>
+        <text class="cls-34" transform="translate(225.32 322.06) rotate(-45)"><tspan x="0" y="0">Metatheria</tspan></text>
+        <text class="cls-34" transform="translate(234.81 321.51) rotate(-45)"><tspan x="0" y="0">Afrotheria</tspan></text>
+        <text class="cls-34" transform="translate(243.61 321.66) rotate(-45)"><tspan x="0" y="0">Platyrrhini</tspan></text>
+        <text class="cls-34" transform="translate(252.87 321.35) rotate(-45)"><tspan x="0" y="0">Ponginae</tspan></text>
+        <text class="cls-24" transform="translate(127.89 331)"><tspan x="0" y="0">Evolutionary Root (Clade)</tspan></text>
+        <text class="cls-24" transform="translate(21.57 283.73) rotate(-90)"><tspan x="0" y="0">Cumulative Gene Count</tspan></text>
+        <text class="cls-24" transform="translate(28.64 218.74)"><tspan class="cls-58" x="0" y="0">T</tspan><tspan x="1.57" y="0">otal</tspan><tspan class="cls-76" x="6.64" y="0"> </tspan><tspan x="7.63" y="0">exclusive</tspan><tspan class="cls-76" x="20.56" y="0"> </tspan><tspan x="21.54" y="0">genes:</tspan><tspan class="cls-61" x="30.99" y="0"> </tspan><tspan x="31.97" y="0">n=515</tspan></text>
+        <text class="cls-30" transform="translate(28.64 214.06)"><tspan x="0" y="0">Cumulative Rooting: Exclusive Genes</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g>
+    <rect class="cls-21" x="17.71" y="29.18" width="229.49" height="137.69"/>
+    <g class="cls-43">
+      <g>
+        <line class="cls-7" x1="107.28" y1="156.34" x2="107.28" y2="36.65"/>
+        <line class="cls-7" x1="149.95" y1="156.34" x2="149.95" y2="36.65"/>
+        <line class="cls-7" x1="192.62" y1="156.34" x2="192.62" y2="36.65"/>
+        <line class="cls-7" x1="235.3" y1="156.34" x2="235.3" y2="36.65"/>
+        <line class="cls-19" x1="78.35" y1="144.76" x2="245.45" y2="144.76"/>
+        <line class="cls-19" x1="78.35" y1="125.45" x2="245.45" y2="125.45"/>
+        <line class="cls-19" x1="78.35" y1="106.15" x2="245.45" y2="106.15"/>
+        <line class="cls-19" x1="78.35" y1="86.84" x2="245.45" y2="86.84"/>
+        <line class="cls-19" x1="78.35" y1="67.54" x2="245.45" y2="67.54"/>
+        <line class="cls-19" x1="78.35" y1="48.23" x2="245.45" y2="48.23"/>
+        <line class="cls-19" x1="85.94" y1="156.34" x2="85.94" y2="36.65"/>
+        <line class="cls-19" x1="128.62" y1="156.34" x2="128.62" y2="36.65"/>
+        <line class="cls-19" x1="171.29" y1="156.34" x2="171.29" y2="36.65"/>
+        <line class="cls-19" x1="213.96" y1="156.34" x2="213.96" y2="36.65"/>
+        <rect class="cls-47" x="85.94" y="39.55" width="151.91" height="17.37"/>
+        <rect class="cls-44" x="85.94" y="58.85" width="34.14" height="17.37"/>
+        <rect class="cls-55" x="85.94" y="78.16" width="16.21" height="17.37"/>
+        <rect class="cls-46" x="85.94" y="97.46" width="14.08" height="17.37"/>
+        <rect class="cls-41" x="85.94" y="116.76" width="2.13" height="17.37"/>
+        <rect class="cls-69" x="85.94" y="136.07" width="1.28" height="17.37"/>
+        <text class="cls-26" transform="translate(238.39 49.39)"><tspan x="0" y="0">356</tspan></text>
+        <text class="cls-26" transform="translate(120.43 68.7)"><tspan x="0" y="0">80</tspan></text>
+        <text class="cls-26" transform="translate(102.51 88)"><tspan x="0" y="0">38</tspan></text>
+        <text class="cls-26" transform="translate(100.38 107.3)"><tspan x="0" y="0">33</tspan></text>
+        <text class="cls-26" transform="translate(88.25 126.61)"><tspan x="0" y="0">5</tspan></text>
+        <text class="cls-26" transform="translate(87.4 145.91)"><tspan x="0" y="0">3</tspan></text>
+      </g>
+    </g>
+    <g class="cls-53">
+      <g>
+        <text class="cls-33" transform="translate(23.62 145.92)"><tspan x="0" y="0">regulation of metallopeptidase activity</tspan></text>
+        <text class="cls-33" transform="translate(46.83 126.61)"><tspan x="0" y="0">cellular extravasation</tspan></text>
+        <text class="cls-33" transform="translate(31.78 107.31)"><tspan x="0" y="0">extracellular matrix organization</tspan></text>
+        <text class="cls-33" transform="translate(26.28 88.01)"><tspan x="0" y="0">epithelial to mesenchymal transition</tspan></text>
+        <text class="cls-33" transform="translate(41.87 68.7)"><tspan x="0" y="0">cell junction organization</tspan></text>
+        <text class="cls-33" transform="translate(58.17 49.39)"><tspan x="0" y="0">cell adhesion</tspan></text>
+        <text class="cls-33" transform="translate(85.06 160.23)"><tspan x="0" y="0">0</tspan></text>
+        <text class="cls-33" transform="translate(125.96 160.23)"><tspan x="0" y="0">100</tspan></text>
+        <text class="cls-33" transform="translate(168.63 160.23)"><tspan x="0" y="0">200</tspan></text>
+        <text class="cls-33" transform="translate(211.3 160.23)"><tspan x="0" y="0">300</tspan></text>
+        <text class="cls-27" transform="translate(140.17 164.36)"><tspan x="0" y="0">Number of Exclusive Genes</tspan></text>
+        <text class="cls-27" transform="translate(22.01 110.82) rotate(-90)"><tspan x="0" y="0">Biological Process</tspan></text>
+        <text class="cls-31" transform="translate(78.35 33.99)"><tspan x="0" y="0">Exclusive Genes per Biological Process</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g>
+    <rect class="cls-21" x="283.92" y="25.65" width="303.03" height="252.53"/>
+    <g class="cls-39">
+      <g>
+        <circle class="cls-11" cx="377.76" cy="45.95" r="1.64"/>
+        <circle class="cls-11" cx="341" cy="61.03" r="1.25"/>
+        <circle class="cls-11" cx="414.53" cy="106.28" r="1.17"/>
+        <circle class="cls-11" cx="377.76" cy="98.74" r="1.59"/>
+        <circle class="cls-18" cx="451.31" cy="106.28" r="1.17"/>
+        <circle class="cls-18" cx="488.07" cy="189.24" r="1.17"/>
+        <circle class="cls-18" cx="414.53" cy="159.07" r="1.2"/>
+        <circle class="cls-18" cx="414.53" cy="76.11" r="1.2"/>
+        <circle class="cls-18" cx="341" cy="136.45" r="1.25"/>
+        <circle class="cls-18" cx="524.84" cy="166.62" r="2.11"/>
+        <circle class="cls-18" cx="451.31" cy="204.32" r=".92"/>
+        <circle class="cls-18" cx="488.07" cy="211.87" r="1.03"/>
+        <circle class="cls-18" cx="488.07" cy="91.19" r="2.24"/>
+        <circle class="cls-18" cx="488.07" cy="181.7" r=".96"/>
+        <circle class="cls-18" cx="377.76" cy="76.11" r="1.2"/>
+        <circle class="cls-18" cx="488.07" cy="143.99" r="1.2"/>
+        <circle class="cls-18" cx="341" cy="53.49" r=".68"/>
+        <circle class="cls-18" cx="488.07" cy="68.57" r="1.06"/>
+        <circle class="cls-18" cx="377.76" cy="53.49" r=".68"/>
+        <circle class="cls-18" cx="488.07" cy="174.16" r=".87"/>
+        <circle class="cls-18" cx="341" cy="98.74" r="1.59"/>
+        <circle class="cls-18" cx="414.53" cy="38.4" r="2.37"/>
+        <circle class="cls-18" cx="524.84" cy="91.19" r="2.24"/>
+        <circle class="cls-18" cx="488.07" cy="128.9" r=".82"/>
+        <circle class="cls-18" cx="488.07" cy="113.82" r=".82"/>
+        <circle class="cls-18" cx="414.53" cy="204.32" r=".92"/>
+        <circle class="cls-18" cx="488.07" cy="166.62" r="2.11"/>
+        <circle class="cls-18" cx="341" cy="38.4" r="2.37"/>
+        <circle class="cls-18" cx="488.07" cy="136.45" r="1.25"/>
+        <circle class="cls-18" cx="414.53" cy="83.65" r=".99"/>
+        <circle class="cls-18" cx="377.76" cy="151.53" r=".92"/>
+        <circle class="cls-18" cx="377.76" cy="121.36" r=".92"/>
+        <circle class="cls-18" cx="377.76" cy="83.65" r=".99"/>
+        <circle class="cls-18" cx="488.07" cy="196.78" r=".68"/>
+        <circle class="cls-18" cx="341" cy="68.57" r="1.06"/>
+        <circle class="cls-18" cx="414.53" cy="61.03" r="1.25"/>
+        <circle class="cls-18" cx="414.53" cy="166.62" r="2.11"/>
+        <circle class="cls-18" cx="341" cy="106.28" r="1.17"/>
+        <circle class="cls-18" cx="341" cy="143.99" r="1.2"/>
+        <circle class="cls-18" cx="414.53" cy="151.53" r=".92"/>
+        <circle class="cls-18" cx="414.53" cy="121.36" r=".92"/>
+        <circle class="cls-18" cx="377.76" cy="159.07" r="1.2"/>
+        <circle class="cls-18" cx="488.07" cy="226.95" r=".5"/>
+        <circle class="cls-18" cx="488.07" cy="219.41" r=".5"/>
+        <circle class="cls-18" cx="341" cy="91.19" r="2.24"/>
+        <circle class="cls-18" cx="488.07" cy="38.4" r="2.37"/>
+        <circle class="cls-18" cx="488.07" cy="151.53" r=".92"/>
+        <circle class="cls-18" cx="488.07" cy="121.36" r=".92"/>
+        <circle class="cls-18" cx="414.53" cy="91.19" r="2.24"/>
+        <circle class="cls-18" cx="488.07" cy="83.65" r=".99"/>
+        <circle class="cls-18" cx="377.76" cy="38.4" r="2.37"/>
+        <circle class="cls-18" cx="377.76" cy="166.62" r="2.11"/>
+        <circle class="cls-18" cx="414.53" cy="45.95" r="1.64"/>
+        <circle class="cls-18" cx="488.07" cy="45.95" r="1.64"/>
+        <circle class="cls-18" cx="414.53" cy="143.99" r="1.2"/>
+        <circle class="cls-18" cx="488.07" cy="204.32" r=".92"/>
+        <circle class="cls-18" cx="341" cy="45.95" r="1.64"/>
+        <circle class="cls-18" cx="414.53" cy="98.74" r="1.59"/>
+        <circle class="cls-18" cx="488.07" cy="159.07" r="1.2"/>
+        <circle class="cls-18" cx="488.07" cy="98.74" r="1.59"/>
+        <circle class="cls-18" cx="488.07" cy="61.03" r="1.25"/>
+        <circle class="cls-18" cx="341" cy="166.62" r="2.11"/>
+        <circle class="cls-18" cx="488.07" cy="76.11" r="1.2"/>
+        <circle class="cls-18" cx="377.76" cy="91.19" r="2.24"/>
+        <circle class="cls-18" cx="488.07" cy="106.28" r="1.17"/>
+        <circle class="cls-18" cx="488.07" cy="53.49" r=".68"/>
+        <circle class="cls-18" cx="341" cy="226.95" r=".5"/>
+        <circle class="cls-18" cx="341" cy="219.41" r=".5"/>
+        <circle class="cls-18" cx="341" cy="211.87" r="1.03"/>
+        <circle class="cls-18" cx="341" cy="204.32" r=".92"/>
+        <circle class="cls-18" cx="341" cy="196.78" r=".68"/>
+        <circle class="cls-18" cx="341" cy="189.24" r="1.17"/>
+        <circle class="cls-18" cx="341" cy="181.7" r=".96"/>
+        <circle class="cls-18" cx="341" cy="174.16" r=".87"/>
+        <circle class="cls-18" cx="341" cy="159.07" r="1.2"/>
+        <circle class="cls-18" cx="341" cy="151.53" r=".92"/>
+        <circle class="cls-18" cx="341" cy="128.9" r=".82"/>
+        <circle class="cls-18" cx="341" cy="121.36" r=".92"/>
+        <circle class="cls-18" cx="341" cy="113.82" r=".82"/>
+        <circle class="cls-18" cx="341" cy="83.65" r=".99"/>
+        <circle class="cls-18" cx="341" cy="76.11" r="1.2"/>
+        <circle class="cls-18" cx="377.76" cy="226.95" r=".5"/>
+        <circle class="cls-18" cx="377.76" cy="219.41" r=".5"/>
+        <circle class="cls-18" cx="377.76" cy="211.87" r="1.03"/>
+        <circle class="cls-18" cx="377.76" cy="204.32" r=".92"/>
+        <circle class="cls-18" cx="377.76" cy="196.78" r=".68"/>
+        <circle class="cls-18" cx="377.76" cy="189.24" r="1.17"/>
+        <circle class="cls-18" cx="377.76" cy="181.7" r=".96"/>
+        <circle class="cls-18" cx="377.76" cy="174.16" r=".87"/>
+        <circle class="cls-18" cx="377.76" cy="143.99" r="1.2"/>
+        <circle class="cls-18" cx="377.76" cy="136.45" r="1.25"/>
+        <circle class="cls-18" cx="377.76" cy="128.9" r=".82"/>
+        <circle class="cls-18" cx="377.76" cy="113.82" r=".82"/>
+        <circle class="cls-18" cx="377.76" cy="106.28" r="1.17"/>
+        <circle class="cls-18" cx="377.76" cy="68.57" r="1.06"/>
+        <circle class="cls-18" cx="377.76" cy="61.03" r="1.25"/>
+        <circle class="cls-18" cx="451.31" cy="226.95" r=".5"/>
+        <circle class="cls-18" cx="451.31" cy="219.41" r=".5"/>
+        <circle class="cls-18" cx="451.31" cy="211.87" r="1.03"/>
+        <circle class="cls-18" cx="451.31" cy="196.78" r=".68"/>
+        <circle class="cls-18" cx="451.31" cy="189.24" r="1.17"/>
+        <circle class="cls-18" cx="451.31" cy="181.7" r=".96"/>
+        <circle class="cls-18" cx="451.31" cy="174.16" r=".87"/>
+        <circle class="cls-18" cx="451.31" cy="166.62" r="2.11"/>
+        <circle class="cls-18" cx="451.31" cy="159.07" r="1.2"/>
+        <circle class="cls-18" cx="451.31" cy="151.53" r=".92"/>
+        <circle class="cls-18" cx="451.31" cy="143.99" r="1.2"/>
+        <circle class="cls-18" cx="451.31" cy="136.45" r="1.25"/>
+        <circle class="cls-18" cx="451.31" cy="128.9" r=".82"/>
+        <circle class="cls-18" cx="451.31" cy="121.36" r=".92"/>
+        <circle class="cls-18" cx="451.31" cy="113.82" r=".82"/>
+        <circle class="cls-18" cx="451.31" cy="98.74" r="1.59"/>
+        <circle class="cls-18" cx="451.31" cy="91.19" r="2.24"/>
+        <circle class="cls-18" cx="451.31" cy="83.65" r=".99"/>
+        <circle class="cls-18" cx="451.31" cy="76.11" r="1.2"/>
+        <circle class="cls-18" cx="451.31" cy="68.57" r="1.06"/>
+        <circle class="cls-18" cx="451.31" cy="61.03" r="1.25"/>
+        <circle class="cls-18" cx="451.31" cy="53.49" r=".68"/>
+        <circle class="cls-18" cx="451.31" cy="45.95" r="1.64"/>
+        <circle class="cls-18" cx="451.31" cy="38.4" r="2.37"/>
+        <circle class="cls-18" cx="414.53" cy="226.95" r=".5"/>
+        <circle class="cls-18" cx="414.53" cy="219.41" r=".5"/>
+        <circle class="cls-18" cx="414.53" cy="211.87" r="1.03"/>
+        <circle class="cls-18" cx="414.53" cy="196.78" r=".68"/>
+        <circle class="cls-18" cx="414.53" cy="189.24" r="1.17"/>
+        <circle class="cls-18" cx="414.53" cy="181.7" r=".96"/>
+        <circle class="cls-18" cx="414.53" cy="174.16" r=".87"/>
+        <circle class="cls-18" cx="414.53" cy="136.45" r="1.25"/>
+        <circle class="cls-18" cx="414.53" cy="128.9" r=".82"/>
+        <circle class="cls-18" cx="414.53" cy="113.82" r=".82"/>
+        <circle class="cls-18" cx="414.53" cy="68.57" r="1.06"/>
+        <circle class="cls-18" cx="414.53" cy="53.49" r=".68"/>
+        <circle class="cls-18" cx="524.84" cy="226.95" r=".5"/>
+        <circle class="cls-18" cx="524.84" cy="219.41" r=".5"/>
+        <circle class="cls-18" cx="524.84" cy="211.87" r="1.03"/>
+        <circle class="cls-18" cx="524.84" cy="204.32" r=".92"/>
+        <circle class="cls-18" cx="524.84" cy="196.78" r=".68"/>
+        <circle class="cls-18" cx="524.84" cy="189.24" r="1.17"/>
+        <circle class="cls-18" cx="524.84" cy="181.7" r=".96"/>
+        <circle class="cls-18" cx="524.84" cy="174.16" r=".87"/>
+        <circle class="cls-18" cx="524.84" cy="159.07" r="1.2"/>
+        <circle class="cls-18" cx="524.84" cy="151.53" r=".92"/>
+        <circle class="cls-18" cx="524.84" cy="143.99" r="1.2"/>
+        <circle class="cls-18" cx="524.84" cy="136.45" r="1.25"/>
+        <circle class="cls-18" cx="524.84" cy="128.9" r=".82"/>
+        <circle class="cls-18" cx="524.84" cy="121.36" r=".92"/>
+        <circle class="cls-18" cx="524.84" cy="113.82" r=".82"/>
+        <circle class="cls-18" cx="524.84" cy="106.28" r="1.17"/>
+        <circle class="cls-18" cx="524.84" cy="98.74" r="1.59"/>
+        <circle class="cls-18" cx="524.84" cy="83.65" r=".99"/>
+        <circle class="cls-18" cx="524.84" cy="76.11" r="1.2"/>
+        <circle class="cls-18" cx="524.84" cy="68.57" r="1.06"/>
+        <circle class="cls-18" cx="524.84" cy="61.03" r="1.25"/>
+        <circle class="cls-18" cx="524.84" cy="53.49" r=".68"/>
+        <circle class="cls-18" cx="524.84" cy="45.95" r="1.64"/>
+        <circle class="cls-18" cx="524.84" cy="38.4" r="2.37"/>
+      </g>
+    </g>
+    <g class="cls-56">
+      <g>
+        <text class="cls-36" transform="translate(304.17 227.74)"><tspan x="0" y="0">Ponginae</tspan></text>
+        <text class="cls-36" transform="translate(303.49 220.19)"><tspan x="0" y="0">Platyrrhini</tspan></text>
+        <text class="cls-36" transform="translate(303.83 212.65)"><tspan x="0" y="0">Afrotheria</tspan></text>
+        <text class="cls-36" transform="translate(302.63 205.11)"><tspan x="0" y="0">Metatheria</tspan></text>
+        <text class="cls-36" transform="translate(302.12 197.57)"><tspan x="0" y="0">Prototheria</tspan></text>
+        <text class="cls-36" transform="translate(301.6 190.03)"><tspan x="0" y="0">Sauropsida</tspan></text>
+        <text class="cls-36" transform="translate(304.35 182.49)"><tspan x="0" y="0">Amphibia</tspan></text>
+        <text class="cls-36" transform="translate(290.46 174.95)"><tspan x="0" y="0">Coelacanthimorpha</tspan></text>
+        <text class="cls-36" transform="translate(296.45 167.4)"><tspan class="cls-75" x="0" y="0">Actinopterygi</tspan><tspan x="20.06" y="0">i</tspan></text>
+        <text class="cls-36" transform="translate(305.37 159.86)"><tspan class="cls-60" x="0" y="0">T</tspan><tspan class="cls-66" x="1.79" y="0">unicat</tspan><tspan x="10.11" y="0">a</tspan></text>
+        <text class="cls-36" transform="translate(293.72 152.32)"><tspan x="0" y="0">Cephalochordata</tspan></text>
+        <text class="cls-36" transform="translate(299.04 144.78)"><tspan x="0" y="0">Ambulacraria</tspan></text>
+        <text class="cls-36" transform="translate(302.12 137.23)"><tspan x="0" y="0">Ecdysozoa</tspan></text>
+        <text class="cls-36" transform="translate(306.92 129.69)"><tspan x="0" y="0">Spiralia</tspan></text>
+        <text class="cls-36" transform="translate(305.72 122.15)"><tspan x="0" y="0">Cnidaria</tspan></text>
+        <text class="cls-36" transform="translate(304.52 114.61)"><tspan x="0" y="0">Placozoa</tspan></text>
+        <text class="cls-36" transform="translate(306.4 107.07)"><tspan x="0" y="0">Porifera</tspan></text>
+        <text class="cls-36" transform="translate(299.89 99.52)"><tspan class="cls-67" x="0" y="0">Ctenophor</tspan><tspan x="15.6" y="0">a</tspan></text>
+        <text class="cls-36" transform="translate(292.34 91.98)"><tspan class="cls-72" x="0" y="0">Choanoflagellat</tspan><tspan x="23.15" y="0">a</tspan></text>
+        <text class="cls-36" transform="translate(309.49 84.44)"><tspan x="0" y="0">Fungi</tspan></text>
+        <text class="cls-36" transform="translate(300.75 76.9)"><tspan x="0" y="0">Amoebozoa</tspan></text>
+        <text class="cls-36" transform="translate(300.23 69.36)"><tspan class="cls-42" x="0" y="0">V</tspan><tspan x="2" y="0">iridiplantae</tspan></text>
+        <text class="cls-36" transform="translate(306.06 61.82)"><tspan x="0" y="0">Discoba</tspan></text>
+        <text class="cls-36" transform="translate(300.57 54.28)"><tspan x="0" y="0">Rhodophyta</tspan></text>
+        <text class="cls-36" transform="translate(310.86 46.73)"><tspan x="0" y="0">SAR</tspan></text>
+        <text class="cls-36" transform="translate(299.2 39.19)"><tspan x="0" y="0">Metamonada</tspan></text>
+        <text class="cls-36" transform="translate(311.81 265.64) rotate(-45)"><tspan x="0" y="0">extracellular matrix organization</tspan></text>
+        <text class="cls-36" transform="translate(344.82 269.4) rotate(-45)"><tspan x="0" y="0">epithelial to mesenchymal transition</tspan></text>
+        <text class="cls-36" transform="translate(392.26 258.73) rotate(-45)"><tspan x="0" y="0">cell junction organization</tspan></text>
+        <text class="cls-36" transform="translate(416.54 271.23) rotate(-45)"><tspan x="0" y="0">regulation of metallopeptidase activity</tspan></text>
+        <text class="cls-36" transform="translate(476.96 247.57) rotate(-45)"><tspan x="0" y="0">cell adhesion</tspan></text>
+        <text class="cls-36" transform="translate(505.97 255.33) rotate(-45)"><tspan x="0" y="0">cellular extravasation</tspan></text>
+        <text class="cls-28" transform="translate(417.16 275.42)"><tspan x="0" y="0">Biological Process</tspan></text>
+        <text class="cls-28" transform="translate(288.66 137.71) rotate(-90)"><tspan x="0" y="0">Clade</tspan></text>
+        <text class="cls-28" transform="translate(552.67 111.34)"><tspan x="0" y="0">Significance</tspan></text>
+        <circle class="cls-18" cx="555.7" cy="116.71" r=".68"/>
+        <circle class="cls-11" cx="555.7" cy="122.77" r=".68"/>
+        <text class="cls-32" transform="translate(560.65 117.84)"><tspan x="0" y="0">Not Significant</tspan></text>
+        <text class="cls-32" transform="translate(560.65 123.9)"><tspan x="0" y="0">Significant</tspan></text>
+        <text class="cls-28" transform="translate(552.67 136.72)"><tspan x="0" y="0">Number of Genes</tspan></text>
+        <circle class="cls-5" cx="555.7" cy="142.1" r=".87"/>
+        <circle class="cls-5" cx="555.7" cy="148.16" r="1.32"/>
+        <circle class="cls-5" cx="555.7" cy="154.22" r="1.81"/>
+        <text class="cls-32" transform="translate(560.65 143.22)"><tspan x="0" y="0">5 genes</tspan></text>
+        <text class="cls-32" transform="translate(560.65 149.28)"><tspan x="0" y="0">20 genes</tspan></text>
+        <text class="cls-32" transform="translate(560.65 155.34)"><tspan x="0" y="0">50 genes</tspan></text>
+        <text class="cls-23" transform="translate(318.93 30.94)"><tspan x="0" y="0">Hypergeometric</tspan><tspan class="cls-40" x="32.68" y="0"> </tspan><tspan class="cls-73" x="34.04" y="0">T</tspan><tspan x="36.36" y="0">est:</tspan><tspan class="cls-48" x="43.82" y="0"> </tspan><tspan x="45.28" y="0">Exclusive</tspan><tspan class="cls-57" x="64.83" y="0"> </tspan><tspan x="66.29" y="0">Genes</tspan></text>
+      </g>
+    </g>
+  </g>
+  <rect class="cls-21" x="13.98" y="359.19" width="337.39" height="192.79"/>
+  <g class="cls-45">
+    <g>
+      <line class="cls-7" x1="26.77" y1="483.74" x2="349.53" y2="483.74"/>
+      <line class="cls-7" x1="26.77" y1="447.68" x2="349.53" y2="447.68"/>
+      <line class="cls-7" x1="26.77" y1="411.63" x2="349.53" y2="411.63"/>
+      <line class="cls-7" x1="26.77" y1="375.59" x2="349.53" y2="375.59"/>
+      <line class="cls-6" x1="26.77" y1="501.76" x2="349.53" y2="501.76"/>
+      <line class="cls-6" x1="26.77" y1="465.71" x2="349.53" y2="465.71"/>
+      <line class="cls-6" x1="26.77" y1="429.66" x2="349.53" y2="429.66"/>
+      <line class="cls-6" x1="26.77" y1="393.61" x2="349.53" y2="393.61"/>
+      <polyline class="cls-20" points="34.16 477.24 46.48 468.95 71.12 466.07 83.44 462.83 95.76 460.66 108.08 458.86 120.4 434.34 132.72 427.5 145.04 426.42 157.36 424.97 169.67 423.53 181.99 422.09 194.31 417.4 206.63 412.72 218.95 411.27 231.27 408.39 243.59 388.56 255.91 386.76 268.23 384.24 280.54 379.19 292.86 378.47 305.18 377.39 317.5 374.14 329.82 373.78 342.14 373.42"/>
+      <polyline class="cls-1" points="34.16 494.91 46.48 493.47 71.12 492.38 95.76 490.22 108.08 489.5 120.4 485.17 132.72 484.09 145.04 481.21 169.67 480.85 206.63 480.49 218.95 480.13 231.27 477.96 243.59 473.64 305.18 472.92"/>
+      <line class="cls-3" x1="120.4" y1="501.04" x2="243.59" y2="499.96"/>
+      <polyline class="cls-12" points="34.16 499.59 46.48 495.99 58.8 495.63 95.76 494.55 108.08 494.19 120.4 493.83 132.72 490.58 169.67 490.22 218.95 489.86 231.27 489.5 243.59 488.06"/>
+      <polyline class="cls-17" points="34.16 498.87 46.48 498.51 58.8 498.15 71.12 495.99 83.44 495.63 120.4 493.83 132.72 492.38 145.04 492.03 194.31 490.58 206.63 490.22 243.59 489.86"/>
+      <line class="cls-2" x1="145.04" y1="501.04" x2="305.18" y2="500.68"/>
+      <circle class="cls-8" cx="34.16" cy="477.24" r=".65"/>
+      <circle class="cls-4" cx="34.16" cy="494.91" r=".65"/>
+      <circle class="cls-9" cx="34.16" cy="499.59" r=".65"/>
+      <circle class="cls-14" cx="34.16" cy="498.87" r=".65"/>
+      <circle class="cls-8" cx="46.48" cy="468.95" r=".65"/>
+      <circle class="cls-4" cx="46.48" cy="493.47" r=".65"/>
+      <circle class="cls-9" cx="46.48" cy="495.99" r=".65"/>
+      <circle class="cls-14" cx="46.48" cy="498.51" r=".65"/>
+      <circle class="cls-9" cx="58.8" cy="495.63" r=".65"/>
+      <circle class="cls-14" cx="58.8" cy="498.15" r=".65"/>
+      <circle class="cls-8" cx="71.12" cy="466.07" r=".65"/>
+      <circle class="cls-4" cx="71.12" cy="492.38" r=".65"/>
+      <circle class="cls-14" cx="71.12" cy="495.99" r=".65"/>
+      <circle class="cls-8" cx="83.44" cy="462.83" r=".65"/>
+      <circle class="cls-14" cx="83.44" cy="495.63" r=".65"/>
+      <circle class="cls-8" cx="95.76" cy="460.66" r=".65"/>
+      <circle class="cls-4" cx="95.76" cy="490.22" r=".65"/>
+      <circle class="cls-9" cx="95.76" cy="494.55" r=".65"/>
+      <circle class="cls-8" cx="108.08" cy="458.86" r=".65"/>
+      <circle class="cls-4" cx="108.08" cy="489.5" r=".65"/>
+      <circle class="cls-9" cx="108.08" cy="494.19" r=".65"/>
+      <circle class="cls-8" cx="120.4" cy="434.34" r=".65"/>
+      <circle class="cls-4" cx="120.4" cy="485.17" r=".65"/>
+      <circle class="cls-10" cx="120.4" cy="501.04" r=".65"/>
+      <circle class="cls-9" cx="120.4" cy="493.83" r=".65"/>
+      <circle class="cls-14" cx="120.4" cy="493.83" r=".65"/>
+      <circle class="cls-8" cx="132.72" cy="427.5" r=".65"/>
+      <circle class="cls-4" cx="132.72" cy="484.09" r=".65"/>
+      <circle class="cls-9" cx="132.72" cy="490.58" r=".65"/>
+      <circle class="cls-14" cx="132.72" cy="492.38" r=".65"/>
+      <circle class="cls-8" cx="145.04" cy="426.42" r=".65"/>
+      <circle class="cls-4" cx="145.04" cy="481.21" r=".65"/>
+      <circle class="cls-14" cx="145.04" cy="492.03" r=".65"/>
+      <circle class="cls-15" cx="145.04" cy="501.04" r=".65"/>
+      <circle class="cls-8" cx="157.36" cy="424.97" r=".65"/>
+      <circle class="cls-8" cx="169.67" cy="423.53" r=".65"/>
+      <circle class="cls-4" cx="169.67" cy="480.85" r=".65"/>
+      <circle class="cls-9" cx="169.67" cy="490.22" r=".65"/>
+      <circle class="cls-8" cx="181.99" cy="422.09" r=".65"/>
+      <circle class="cls-8" cx="194.31" cy="417.4" r=".65"/>
+      <circle class="cls-14" cx="194.31" cy="490.58" r=".65"/>
+      <circle class="cls-8" cx="206.63" cy="412.72" r=".65"/>
+      <circle class="cls-4" cx="206.63" cy="480.49" r=".65"/>
+      <circle class="cls-14" cx="206.63" cy="490.22" r=".65"/>
+      <circle class="cls-8" cx="218.95" cy="411.27" r=".65"/>
+      <circle class="cls-4" cx="218.95" cy="480.13" r=".65"/>
+      <circle class="cls-9" cx="218.95" cy="489.86" r=".65"/>
+      <circle class="cls-8" cx="231.27" cy="408.39" r=".65"/>
+      <circle class="cls-4" cx="231.27" cy="477.96" r=".65"/>
+      <circle class="cls-9" cx="231.27" cy="489.5" r=".65"/>
+      <circle class="cls-8" cx="243.59" cy="388.56" r=".65"/>
+      <circle class="cls-4" cx="243.59" cy="473.64" r=".65"/>
+      <circle class="cls-10" cx="243.59" cy="499.96" r=".65"/>
+      <circle class="cls-9" cx="243.59" cy="488.06" r=".65"/>
+      <circle class="cls-14" cx="243.59" cy="489.86" r=".65"/>
+      <circle class="cls-8" cx="255.91" cy="386.76" r=".65"/>
+      <circle class="cls-8" cx="268.23" cy="384.24" r=".65"/>
+      <circle class="cls-8" cx="280.54" cy="379.19" r=".65"/>
+      <circle class="cls-8" cx="292.86" cy="378.47" r=".65"/>
+      <circle class="cls-8" cx="305.18" cy="377.39" r=".65"/>
+      <circle class="cls-4" cx="305.18" cy="472.92" r=".65"/>
+      <circle class="cls-15" cx="305.18" cy="500.68" r=".65"/>
+      <circle class="cls-8" cx="317.5" cy="374.14" r=".65"/>
+      <circle class="cls-8" cx="329.82" cy="373.78" r=".65"/>
+      <circle class="cls-8" cx="342.14" cy="373.42" r=".65"/>
+    </g>
+  </g>
+  <g class="cls-49">
+    <g>
+      <text class="cls-38" transform="translate(23.48 502.83)"><tspan x="0" y="0">0</tspan></text>
+      <text class="cls-38" transform="translate(20.21 466.78)"><tspan x="0" y="0">100</tspan></text>
+      <text class="cls-38" transform="translate(20.21 430.73)"><tspan x="0" y="0">200</tspan></text>
+      <text class="cls-38" transform="translate(20.21 394.68)"><tspan x="0" y="0">300</tspan></text>
+      <text class="cls-35" transform="translate(25.74 519.99) rotate(-45)"><tspan x="0" y="0">Metamonada</tspan></text>
+      <text class="cls-35" transform="translate(44.32 513.72) rotate(-45)"><tspan x="0" y="0">SAR</tspan></text>
+      <text class="cls-35" transform="translate(51.11 519.25) rotate(-45)"><tspan x="0" y="0">Rhodophyta</tspan></text>
+      <text class="cls-35" transform="translate(66.38 516.3) rotate(-45)"><tspan x="0" y="0">Discoba</tspan></text>
+      <text class="cls-35" transform="translate(75.6 519.4) rotate(-45)"><tspan class="cls-63" x="0" y="0">V</tspan><tspan x="1.52" y="0">iridiplantae</tspan></text>
+      <text class="cls-35" transform="translate(88.16 519.16) rotate(-45)"><tspan x="0" y="0">Amoebozoa</tspan></text>
+      <text class="cls-35" transform="translate(105.18 514.46) rotate(-45)"><tspan x="0" y="0">Fungi</tspan></text>
+      <text class="cls-35" transform="translate(109.21 522.75) rotate(-45)"><tspan x="0" y="0">Choanoflagellata</tspan></text>
+      <text class="cls-35" transform="translate(125.3 518.97) rotate(-45)"><tspan x="0" y="0">Ctenophora</tspan></text>
+      <text class="cls-35" transform="translate(140.48 516.12) rotate(-45)"><tspan x="0" y="0">Porifera</tspan></text>
+      <text class="cls-35" transform="translate(151.79 517.13) rotate(-45)"><tspan x="0" y="0">Placozoa</tspan></text>
+      <text class="cls-35" transform="translate(164.75 516.49) rotate(-45)"><tspan x="0" y="0">Cnidaria</tspan></text>
+      <text class="cls-35" transform="translate(177.72 515.84) rotate(-45)"><tspan x="0" y="0">Spiralia</tspan></text>
+      <text class="cls-35" transform="translate(187.45 518.42) rotate(-45)"><tspan x="0" y="0">Ecdysozoa</tspan></text>
+      <text class="cls-35" transform="translate(198.11 520.08) rotate(-45)"><tspan x="0" y="0">Ambulacraria</tspan></text>
+      <text class="cls-35" transform="translate(207.58 522.94) rotate(-45)"><tspan x="0" y="0">Cephalochordata</tspan></text>
+      <text class="cls-35" transform="translate(226.21 516.6) rotate(-45)"><tspan class="cls-65" x="0" y="0">T</tspan><tspan class="cls-70" x="1.35" y="0">unicat</tspan><tspan x="7.63" y="0">a</tspan></text>
+      <text class="cls-35" transform="translate(234.89 520.26) rotate(-45)"><tspan x="0" y="0">Actinopterygii</tspan></text>
+      <text class="cls-35" transform="translate(242.78 524.68) rotate(-45)"><tspan x="0" y="0">Coelacanthimorpha</tspan></text>
+      <text class="cls-35" transform="translate(262.57 517.22) rotate(-45)"><tspan x="0" y="0">Amphibia</tspan></text>
+      <text class="cls-35" transform="translate(273.41 518.7) rotate(-45)"><tspan x="0" y="0">Sauropsida</tspan></text>
+      <text class="cls-35" transform="translate(286.01 518.42) rotate(-45)"><tspan x="0" y="0">Prototheria</tspan></text>
+      <text class="cls-35" transform="translate(298.6 518.14) rotate(-45)"><tspan x="0" y="0">Metatheria</tspan></text>
+      <text class="cls-35" transform="translate(311.56 517.5) rotate(-45)"><tspan x="0" y="0">Afrotheria</tspan></text>
+      <text class="cls-35" transform="translate(323.7 517.68) rotate(-45)"><tspan x="0" y="0">Platyrrhini</tspan></text>
+      <text class="cls-35" transform="translate(336.39 517.32) rotate(-45)"><tspan x="0" y="0">Ponginae</tspan></text>
+      <text class="cls-22" transform="translate(167.07 528.61)"><tspan x="0" y="0">Evolutionary Root (Clade)</tspan></text>
+      <text class="cls-22" transform="translate(18.49 456.88) rotate(-90)"><tspan x="0" y="0">Cumulative Gene Count</tspan></text>
+      <text class="cls-22" transform="translate(100.72 542.96)"><tspan x="0" y="0">Biological Process</tspan></text>
+      <line class="cls-20" x1="133.2" y1="537.81" x2="137.83" y2="537.81"/>
+      <circle class="cls-8" cx="135.52" cy="537.81" r=".65"/>
+      <line class="cls-1" x1="133.2" y1="545.43" x2="137.83" y2="545.43"/>
+      <circle class="cls-4" cx="135.52" cy="545.43" r=".65"/>
+      <line class="cls-3" x1="171.99" y1="537.81" x2="176.62" y2="537.81"/>
+      <circle class="cls-10" cx="174.3" cy="537.81" r=".65"/>
+      <line class="cls-12" x1="171.99" y1="545.43" x2="176.62" y2="545.43"/>
+      <circle class="cls-9" cx="174.3" cy="545.43" r=".65"/>
+      <line class="cls-17" x1="223.87" y1="537.81" x2="228.5" y2="537.81"/>
+      <circle class="cls-14" cx="226.19" cy="537.81" r=".65"/>
+      <line class="cls-2" x1="223.87" y1="545.43" x2="228.5" y2="545.43"/>
+      <circle class="cls-15" cx="226.19" cy="545.43" r=".65"/>
+      <text class="cls-25" transform="translate(140.24 538.79)"><tspan x="0" y="0">cell adhesion</tspan></text>
+      <text class="cls-25" transform="translate(140.24 546.4)"><tspan x="0" y="0">cell junction</tspan><tspan class="cls-62" x="14" y="0"> </tspan><tspan x="14.75" y="0">organization</tspan></text>
+      <text class="cls-25" transform="translate(179.03 538.79)"><tspan x="0" y="0">cellular</tspan><tspan class="cls-74" x="8.48" y="0"> </tspan><tspan x="9.24" y="0">extravasation</tspan></text>
+      <text class="cls-25" transform="translate(179.03 546.4)"><tspan x="0" y="0">epithelial</tspan><tspan class="cls-51" x="10.57" y="0"> </tspan><tspan x="11.32" y="0">to</tspan><tspan class="cls-62" x="13.55" y="0"> </tspan><tspan x="14.3" y="0">mesenchymal</tspan><tspan class="cls-51" x="30.82" y="0"> </tspan><tspan x="31.57" y="0">transition</tspan></text>
+      <text class="cls-25" transform="translate(230.92 538.79)"><tspan x="0" y="0">extracellular</tspan><tspan class="cls-54" x="14.44" y="0"> </tspan><tspan x="15.19" y="0">matrix</tspan><tspan class="cls-68" x="22.48" y="0"> </tspan><tspan x="23.23" y="0">organization</tspan></text>
+      <text class="cls-25" transform="translate(230.92 546.4)"><tspan x="0" y="0">regulation</tspan><tspan class="cls-51" x="11.76" y="0"> </tspan><tspan x="12.51" y="0">of</tspan><tspan class="cls-62" x="14.74" y="0"> </tspan><tspan x="15.49" y="0">metallopeptidase</tspan><tspan class="cls-51" x="35.74" y="0"> </tspan><tspan x="36.49" y="0">activity</tspan></text>
+      <text class="cls-29" transform="translate(26.77 364.24)"><tspan x="0" y="0">Cumulative Rooting by Biological Process: Exclusive Genes Only</tspan></text>
+    </g>
+  </g>
+  <text class="cls-64" transform="translate(24.28 25.65)"><tspan x="0" y="0">A</tspan></text>
+  <text class="cls-64" transform="translate(24.28 202.68)"><tspan x="0" y="0">B</tspan></text>
+  <text class="cls-64" transform="translate(24.28 352.84)"><tspan x="0" y="0">C</tspan></text>
+  <text class="cls-64" transform="translate(302.04 25.65)"><tspan x="0" y="0">D</tspan></text>
+</svg>
