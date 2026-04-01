@@ -1,0 +1,463 @@
+---
+title: "Exclusive Genes Analysis: Evolutionary Rooting of Single-Process Metastasis Genes"
+author: "Gleison M. Azevedo"
+format: html
+execute:
+  cache: true
+  echo: true
+  message: false
+  warning: false
+---
+
+## Package Management
+
+```{r pkg-install}
+#| cache: false
+
+# Automatically detect and install any missing CRAN packages before loading.
+required_packages <- c(
+  "tidyverse", "vroom", "ggplot2", "ggtext", "UpSetR",
+  "scales", "here", "svglite"
+)
+
+missing <- required_packages[
+  !vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)
+]
+if (length(missing) > 0) {
+  install.packages(missing, repos = "https://cloud.r-project.org")
+}
+
+library(tidyverse)
+library(vroom)
+library(ggplot2)
+library(ggtext)
+library(UpSetR)
+library(scales)
+library(here)
+library(svglite)
+```
+
+## Helper Functions and Theme Definitions
+
+```{r functions}
+# ---------------------------------------------------------------------------
+# Color palette mapping each biological process to a distinct color,
+# consistent with the other scripts in the analysis pipeline.
+# ---------------------------------------------------------------------------
+annotation_colors <- c(
+  "cell adhesion"                            = "#06141FFF",
+  "extracellular matrix organization"        = "#742C14FF",
+  "epithelial to mesenchymal transition"     = "#3D4F7DFF",
+  "regulation of metallopeptidase activity"  = "#E48C2AFF",
+  "cell junction organization"               = "#72874EFF",
+  "cellular extravasation"                   = "#046E8FFF",
+  "metastasis suppressor"                    = "#9B2335FF"
+)
+
+# Reference root value for the first metazoan
+first_metazoan <- 29
+
+# Compute modified z-scores for gene counts per clade to identify clades
+# with statistically significant enrichment or depletion of exclusive genes.
+# Clades with zero genes are included via right join.
+calc_modified_zscore_exclusive <- function(nodelist_excl, clade_order_df) {
+  # Count genes per clade
+  genes_per_clade <- nodelist_excl %>%
+    dplyr::select(root, clade_name, queryItem) %>%
+    unique() %>%
+    group_by(root, clade_name) %>%
+    summarise(n = n(), .groups = "drop") %>%
+    right_join(clade_order_df %>% dplyr::select(clade_name), by = "clade_name") %>%
+    replace_na(list(n = 0))
+
+  # Modified z-score calculation
+  median_val <- median(genes_per_clade$n, na.rm = TRUE)
+  mad_val <- mad(genes_per_clade$n, constant = 1, na.rm = TRUE)
+
+  genes_per_clade <- genes_per_clade %>%
+    mutate(
+      modified_zscore = (n - median_val) / (1.4826 * mad_val),
+      significant = abs(modified_zscore) > 3.5
+    )
+
+  return(genes_per_clade)
+}
+```
+
+## Data Loading
+
+Rooted node list and metastasis gene annotations produced by scripts 01
+and 02 are loaded. Metastasis suppressor genes are excluded from this
+analysis, which focuses on the six core biological processes.
+
+```{r data-load}
+nodelist <- vroom::vroom(
+  here("results/orthology_data/nodelist.csv"),
+  show_col_types = FALSE
+)
+
+metastasis_genes <- vroom::vroom(
+  here("results/metastasis_genes/metastasis_genes.csv"),
+  show_col_types = FALSE
+) %>%
+  subset(Signature != "metastasis suppressor")
+
+# Establish clade ordering (most ancestral first) restricted to metastasis genes
+clade_order <- nodelist %>%
+  subset(queryItem %in% unique(metastasis_genes$external_gene_name)) %>%
+  dplyr::select(clade_name, root) %>%
+  unique() %>%
+  arrange(desc(root)) %>%
+  pull(clade_name)
+
+# Clade order as a data frame for z-score joins
+clade_order_df <- nodelist %>%
+  subset(queryItem %in% unique(metastasis_genes$external_gene_name)) %>%
+  dplyr::select(clade_name, root) %>%
+  unique() %>%
+  arrange(desc(root))
+
+# Create output directories
+output_dir <- here("results/exclusive_genes")
+plot_dir   <- file.path(output_dir, "plots")
+if (!dir.exists(plot_dir)) dir.create(plot_dir, recursive = TRUE)
+```
+
+## Identifying Exclusive Genes
+
+Exclusive genes are defined as those participating in exactly one of the
+six core biological processes (cell adhesion, ECM organization, EMT,
+metallopeptidase regulation, cell junction organization, or cellular
+extravasation). This filtering removes multi-process genes to enable
+process-specific evolutionary analysis.
+
+```{r identify-exclusive}
+# Define the 6 biological processes
+biological_processes <- c("cell adhesion",
+                          "extracellular matrix organization",
+                          "epithelial to mesenchymal transition",
+                          "regulation of metallopeptidase activity",
+                          "cell junction organization",
+                          "cellular extravasation")
+
+# Count biological processes per gene
+nodelist_bp_count <- nodelist %>%
+  mutate(bp_count = rowSums(dplyr::select(., all_of(biological_processes)), na.rm = TRUE))
+
+# Filter for exclusive genes (exactly 1 biological process)
+nodelist_exclusive <- nodelist_bp_count %>%
+  filter(bp_count == 1)
+
+# Summary statistics
+cat("Total genes:", nrow(nodelist), "\n")
+cat("Exclusive genes (belong to 1 BP only):", nrow(nodelist_exclusive), "\n")
+cat("Shared genes (belong to 2+ BPs):", nrow(nodelist) - nrow(nodelist_exclusive), "\n")
+```
+
+## Distribution of Exclusive Genes by Biological Process
+
+A horizontal bar chart shows the number of exclusive genes assigned to each
+biological process, revealing which processes have the most genes not shared
+with other functional categories.
+
+```{r exclusive-distribution}
+#| fig-width: 10
+#| fig-height: 6
+
+# Count exclusive genes per process
+exclusive_summary <- nodelist_exclusive %>%
+  pivot_longer(
+    cols = all_of(biological_processes),
+    names_to = "process",
+    values_to = "presence"
+  ) %>%
+  filter(presence == 1) %>%
+  group_by(process) %>%
+  summarise(n_exclusive = n_distinct(queryItem), .groups = "drop") %>%
+  arrange(desc(n_exclusive))
+
+exclusive_summary
+
+# Bar plot
+p_excl_bar <- ggplot(exclusive_summary, aes(x = reorder(process, n_exclusive),
+                                             y = n_exclusive, fill = process)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = n_exclusive), hjust = -0.1, size = 3.5) +
+  coord_flip() +
+  scale_fill_manual(values = annotation_colors) +
+  labs(x = "Biological Process",
+       y = "Number of Exclusive Genes",
+       title = "Exclusive Genes per Biological Process") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        axis.text = element_text(size = 10))
+
+print(p_excl_bar)
+
+ggsave(file.path(plot_dir, "exclusive_genes_per_process.svg"), plot = p_excl_bar, width = 10, height = 6)
+ggsave(file.path(plot_dir, "exclusive_genes_per_process.png"), plot = p_excl_bar, width = 10, height = 6, dpi = 300)
+```
+
+## Modified Z-Score Analysis for Exclusive Genes
+
+A modified z-score identifies clades where exclusive gene acquisition
+departs significantly from the median rate. Clades with |z| > 3.5 are
+flagged as significant, indicating bursts or gaps in the acquisition of
+single-process genes.
+
+```{r modified-zscore}
+#| fig-width: 14
+#| fig-height: 6
+
+zscore_exclusive <- calc_modified_zscore_exclusive(nodelist_exclusive, clade_order_df)
+
+# Display significant clades
+zscore_exclusive %>%
+  filter(significant) %>%
+  arrange(desc(abs(modified_zscore)))
+
+# Order clades for plotting
+zscore_exclusive$clade_name <- factor(zscore_exclusive$clade_name, levels = clade_order)
+
+# Z-score bar plot
+p_zscore <- ggplot(zscore_exclusive, aes(x = clade_name, y = modified_zscore)) +
+  geom_bar(stat = "identity", aes(fill = significant)) +
+  geom_hline(yintercept = c(-3.5, 3.5), linetype = "dashed", color = "red") +
+  scale_fill_manual(values = c("FALSE" = "gray60", "TRUE" = "#9B2335")) +
+  labs(x = "Clade",
+       y = "Modified Z-Score",
+       title = "Modified Z-Score Analysis: Exclusive Genes",
+       fill = "Significant") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+    legend.position = "bottom"
+  )
+
+print(p_zscore)
+
+ggsave(file.path(plot_dir, "zscore_exclusive_genes.svg"), plot = p_zscore, width = 14, height = 6)
+ggsave(file.path(plot_dir, "zscore_exclusive_genes.png"), plot = p_zscore, width = 14, height = 6, dpi = 300)
+```
+
+## Cumulative Rooting Count for Exclusive Genes
+
+Cumulative gene count is computed from the most ancestral to the most recent
+clade, showing the tempo of exclusive gene acquisition across evolutionary
+time for the entire set.
+
+```{r cumulative-rooting}
+#| fig-width: 12
+#| fig-height: 6
+
+cumulative_exclusive <- nodelist_exclusive %>%
+  dplyr::select(root, clade_name, queryItem) %>%
+  unique() %>%
+  arrange(desc(root)) %>%
+  group_by(root, clade_name) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  arrange(desc(root)) %>%
+  mutate(cumulative = cumsum(n))
+
+cumulative_exclusive$clade_name <- factor(cumulative_exclusive$clade_name, levels = clade_order)
+
+# Cumulative line plot
+p_cumul <- ggplot(cumulative_exclusive, aes(x = clade_name, y = cumulative)) +
+  geom_line(group = 1, color = "#2E86AB", linewidth = 1.2) +
+  geom_point(color = "#2E86AB", size = 2) +
+  labs(x = "Evolutionary Root (Clade)",
+       y = "Cumulative Gene Count",
+       title = "Cumulative Rooting: Exclusive Genes",
+       subtitle = paste0("Total exclusive genes: n=",
+                         nrow(nodelist_exclusive %>% dplyr::select(queryItem) %>% unique()))) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+    panel.grid.major.y = element_line(linewidth = 0.25, linetype = "dotted", color = "#E0E0E0"),
+    panel.grid.major.x = element_blank()
+  )
+
+print(p_cumul)
+
+ggsave(file.path(plot_dir, "cumulative_exclusive_genes.svg"), plot = p_cumul, width = 12, height = 6)
+ggsave(file.path(plot_dir, "cumulative_exclusive_genes.png"), plot = p_cumul, width = 12, height = 6, dpi = 300)
+```
+
+## Cumulative Rooting by Biological Process (Exclusive Genes Only)
+
+Per-process cumulative rooting reveals how the exclusive gene complement
+for each biological process accumulated over evolutionary time, enabling
+comparison of acquisition timing across functional categories.
+
+```{r cumulative-by-process}
+#| fig-width: 14
+#| fig-height: 8
+
+cumulative_bp_exclusive <- nodelist_exclusive %>%
+  pivot_longer(
+    cols = all_of(biological_processes),
+    names_to = "process",
+    values_to = "presence"
+  ) %>%
+  filter(presence == 1) %>%
+  dplyr::select(root, clade_name, queryItem, process) %>%
+  unique() %>%
+  arrange(desc(root)) %>%
+  group_by(root, clade_name, process) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  arrange(desc(root)) %>%
+  group_by(process) %>%
+  mutate(cumulative = cumsum(n))
+
+cumulative_bp_exclusive$clade_name <- factor(cumulative_bp_exclusive$clade_name, levels = clade_order)
+
+# Multi-line cumulative plot by process
+p_cumul_bp <- ggplot(cumulative_bp_exclusive, aes(x = clade_name, y = cumulative,
+                                     color = process, group = process)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 1.5) +
+  scale_color_manual(values = annotation_colors) +
+  labs(x = "Evolutionary Root (Clade)",
+       y = "Cumulative Gene Count",
+       title = "Cumulative Rooting by Biological Process: Exclusive Genes Only",
+       color = "Biological Process") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+    legend.position = "bottom",
+    legend.text = element_text(size = 8),
+    panel.grid.major.y = element_line(linewidth = 0.25, linetype = "dotted", color = "#E0E0E0"),
+    panel.grid.major.x = element_blank()
+  ) +
+  guides(color = guide_legend(nrow = 2))
+
+print(p_cumul_bp)
+
+ggsave(file.path(plot_dir, "cumulative_bp_exclusive.svg"), plot = p_cumul_bp, width = 14, height = 8)
+ggsave(file.path(plot_dir, "cumulative_bp_exclusive.png"), plot = p_cumul_bp, width = 14, height = 8, dpi = 300)
+```
+
+## Hypergeometric Enrichment Test for Exclusive Genes
+
+A hypergeometric test assesses whether each biological process is
+over-represented among exclusive genes within each evolutionary clade.
+P-values are corrected for multiple comparisons using the
+Benjamini-Hochberg method (FDR < 0.05).
+
+```{r hypergeometric-test}
+#| fig-width: 12
+#| fig-height: 10
+
+clades <- unique(nodelist_exclusive$clade_name)
+processes <- biological_processes
+
+result <- list()
+
+for (process in processes) {
+  for (clade in clades) {
+    N <- length(unique(nodelist_exclusive$string_id))             # total unique genes
+    M <- sum(nodelist_exclusive[, process])                       # genes in this process
+    n <- length(which(nodelist_exclusive$clade_name == clade))    # genes in this clade
+    k <- sum(filter(nodelist_exclusive, clade_name == clade)[[process]])  # clade genes in process
+
+    p_valor <- 1 - phyper(k - 1, M, N - M, n)
+
+    result[[paste(process, clade, sep = "_")]] <- c(process, clade, k, M, N, n, p_valor)
+  }
+}
+
+hipergeometric_exclusive_df <- do.call(rbind, result) %>%
+  as.data.frame() %>%
+  setNames(c("Process", "clade_name", "k", "M", "N", "n", "p.val")) %>%
+  arrange(p.val)
+rownames(hipergeometric_exclusive_df) <- NULL
+
+hipergeometric_exclusive_df <- hipergeometric_exclusive_df %>%
+  mutate(across(all_of(c("k", "M", "N", "n", "p.val")), as.numeric))
+
+hipergeometric_exclusive_df <- hipergeometric_exclusive_df %>%
+  mutate(p.adj = p.adjust(p.val, method = "BH"))
+
+# Assign significance color for plotting
+hipergeometric_exclusive_df$p.adj <- as.numeric(hipergeometric_exclusive_df$p.adj)
+hipergeometric_exclusive_df$p.val_color <- ifelse(hipergeometric_exclusive_df$p.adj > 0.05, "gray", "red")
+
+# Merge with clade root order
+i <- nodelist_exclusive %>%
+  dplyr::select(clade_name, root) %>%
+  unique()
+
+hipergeometric_exclusive_df <- hipergeometric_exclusive_df %>%
+  inner_join(i, by = "clade_name")
+
+hipergeometric_exclusive_df$clade_name <- factor(
+  hipergeometric_exclusive_df$clade_name,
+  levels = unique(hipergeometric_exclusive_df$clade_name[order(hipergeometric_exclusive_df$root)])
+)
+
+hipergeometric_exclusive_df$Process <- factor(
+  hipergeometric_exclusive_df$Process,
+  levels = c("extracellular matrix organization",
+             "epithelial to mesenchymal transition",
+             "cell junction organization",
+             "regulation of metallopeptidase activity",
+             "cell adhesion",
+             "cellular extravasation")
+)
+
+# Bubble plot: enrichment significance by clade and process
+p_hyper <- ggplot(hipergeometric_exclusive_df, aes(x = Process,
+                                                    y = clade_name,
+                                                    size = as.numeric(n),
+                                                    color = p.val_color)) +
+  geom_point() +
+  scale_color_manual(values = c("gray" = "gray", "red" = "red"),
+                     labels = c("Not Significant", "Significant")) +
+  labs(x = "Biological Process",
+       y = "Clade",
+       size = "Number of Genes",
+       color = "Significance",
+       title = "Hypergeometric Test: Exclusive Genes") +
+  scale_size_continuous(breaks = c(5, 20, 50), labels = c("5 genes", "20 genes", "50 genes")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major.x = element_blank(),
+        panel.grid.major.y = element_blank()) +
+  scale_y_discrete(labels = function(x) {
+    x <- gsub("Choanoflagellata", "<b>Choanoflagellata</b>", x)
+    x <- gsub("Ctenophora", "<b>Ctenophora</b>", x)
+    x <- gsub("Actinopterygii", "<b>Actinopterygii</b>", x)
+    return(x)
+  }) +
+  theme(axis.text.y = ggtext::element_markdown())
+
+print(p_hyper)
+
+ggsave(file.path(plot_dir, "hypergeometric_exclusive.svg"), plot = p_hyper, width = 12, height = 10)
+ggsave(file.path(plot_dir, "hypergeometric_exclusive.png"), plot = p_hyper, width = 12, height = 10, dpi = 300)
+```
+
+## Export Results and Equivalence Checks
+
+```{r save-outputs}
+#| cache: false
+
+# Save exclusive gene list
+nodelist_exclusive %>%
+  vroom::vroom_write(file = file.path(output_dir, "nodelist_exclusive.csv"), delim = ",")
+
+# Save hypergeometric results
+hipergeometric_exclusive_df %>%
+  vroom::vroom_write(file = file.path(output_dir, "hypergeometric_exclusive.csv"), delim = ",")
+
+# Save z-score results
+zscore_exclusive %>%
+  vroom::vroom_write(file = file.path(output_dir, "zscore_exclusive.csv"), delim = ",")
+
+# --- Equivalence Checks (temporary) ---
+trim_char_cols <- function(df) {
+  df[] <- lapply(df, function(col) {
+    if (is.character(col)) trimws(col) else col
+  })
+  df
+}

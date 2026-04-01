@@ -1,0 +1,190 @@
+Process,clade_name,k,M,N,n,p.val,p.adj,p.val_color,root
+cellular extravasation,Actinopterygii,14,38,787,103,1.19337065333625e-4,0.011277352674027562,red,20
+extracellular matrix organization,Discoba,8,57,787,27,3.47853100874262e-4,0.021217176972263066,red,34
+cell adhesion,Sauropsida,16,489,787,16,4.49040782481758e-4,0.021217176972263066,red,17
+regulation of metallopeptidase activity,Porifera,2,3,787,26,0.00308811891886618,0.1167308951331416,gray,28
+cell junction organization,Porifera,12,171,787,26,0.00418389087281734,0.1317925624937462,gray,28
+metastasis suppressor,Rhodophyta,4,161,787,5,0.00713600283915738,0.18058250557008396,gray,35
+cell adhesion,Afrotheria,10,489,787,10,0.00828032323410188,0.18058250557008396,gray,14
+metastasis suppressor,Ctenophora,20,161,787,59,0.00859916693190876,0.18058250557008396,gray,29
+cellular extravasation,Prototheria,2,38,787,4,0.0128177084536314,0.24225468977363346,gray,16
+epithelial to mesenchymal transition,SAR,10,65,787,60,0.0196749410018603,0.33805125903196337,gray,36
+cell adhesion,Choanoflagellata,96,489,787,138,0.0286688867433991,0.4394199956594626,gray,30
+regulation of metallopeptidase activity,Metatheria,1,3,787,8,0.0302246557861006,0.4394199956594626,gray,15
+extracellular matrix organization,Ecdysozoa,5,57,787,26,0.0338114036666,0.4564539494991,gray,24
+cell junction organization,Metamonada,43,171,787,157,0.0367457342715232,0.4629962518211923,gray,37
+cell junction organization,Amoebozoa,9,171,787,23,0.0421980449841204,0.4886170555204922,gray,32
+cellular extravasation,Dermoptera,1,38,787,1,0.048284625158831,0.4886170555204922,gray,10
+cell adhesion,Actinopterygii,72,489,787,103,0.0497083311565111,0.4886170555204922,gray,20
+cellular extravasation,Choanoflagellata,11,38,787,138,0.0526420495370591,0.4886170555204922,gray,30
+cell junction organization,Tunicata,7,171,787,17,0.0543863868521687,0.4886170555204922,gray,21
+extracellular matrix organization,Ctenophora,8,57,787,59,0.0544040449489627,0.4886170555204922,gray,29
+cell adhesion,Coelacanthimorpha,6,489,787,6,0.0568760593727557,0.4886170555204922,gray,19
+metastasis suppressor,Spiralia,4,161,787,8,0.0596149022960085,0.48987897973676553,gray,25
+metastasis suppressor,Porifera,9,161,787,26,0.0637148305222799,0.5017542903629542,gray,28
+epithelial to mesenchymal transition,Amoebozoa,4,65,787,23,0.113880204429797,0.8609343454892653,gray,32
+cell adhesion,Amphibia,7,489,787,8,0.129243044283134,0.9346552789676067,gray,18
+metastasis suppressor,Cnidaria,5,161,787,14,0.137942375267514,0.9346552789676067,gray,26
+cellular extravasation,Fungi,2,38,787,14,0.143430445271971,0.9346552789676067,gray,31
+cell adhesion,Prototheria,4,489,787,4,0.148357980788509,0.9346552789676067,gray,16
+cell adhesion,Placozoa,4,489,787,4,0.148357980788509,0.9346552789676067,gray,27
+cell adhesion,Viridiplantae,10,489,787,13,0.209016528434898,1,gray,33
+cell junction organization,Cephalochordata,5,171,787,15,0.209771995793612,1,gray,22
+metastasis suppressor,SAR,15,161,787,60,0.225553388922713,1,gray,36
+cell junction organization,Metatheria,3,171,787,8,0.241568301690016,1,gray,15
+extracellular matrix organization,Cnidaria,2,57,787,14,0.269199243693073,1,gray,26
+extracellular matrix organization,Porifera,3,57,787,26,0.28945714034405,1,gray,28
+cell adhesion,Ecdysozoa,18,489,787,26,0.294392551517283,1,gray,24
+cell adhesion,Ambulacraria,16,489,787,23,0.303759591442917,1,gray,23
+extracellular matrix organization,Rhodophyta,1,57,787,5,0.314025393197413,1,gray,35
+epithelial to mesenchymal transition,Cnidaria,2,65,787,14,0.324073553416651,1,gray,26
+cellular extravasation,Metatheria,1,38,787,8,0.328157269009556,1,gray,15
+epithelial to mesenchymal transition,Rhodophyta,1,65,787,5,0.350897123877204,1,gray,35
+epithelial to mesenchymal transition,Cephalochordata,2,65,787,15,0.355528899136593,1,gray,22
+cell junction organization,Cnidaria,4,171,787,14,0.361877637412194,1,gray,26
+extracellular matrix organization,Coelacanthimorpha,1,57,787,6,0.364026099831362,1,gray,19
+metastasis suppressor,Cephalochordata,4,161,787,15,0.368710145530472,1,gray,22
+cellular extravasation,Discoba,2,38,787,27,0.378725315596747,1,gray,34
+cellular extravasation,Afrotheria,1,38,787,10,0.392144296934472,1,gray,14
+epithelial to mesenchymal transition,Coelacanthimorpha,1,65,787,6,0.404850687749303,1,gray,19
+cell adhesion,Metamonada,99,489,787,157,0.432498276553675,1,gray,37
+cell junction organization,Choanoflagellata,31,171,787,138,0.447958537614053,1,gray,30
+extracellular matrix organization,Spiralia,1,57,787,8,0.453524721771768,1,gray,25
+metastasis suppressor,Metamonada,33,161,787,157,0.461191251948235,1,gray,37
+metastasis suppressor,Ambulacraria,5,161,787,23,0.522880130019849,1,gray,23
+cellular extravasation,Sauropsida,1,38,787,16,0.55052266250357,1,gray,17
+cell junction organization,Discoba,6,171,787,27,0.552395031728324,1,gray,34
+extracellular matrix organization,Choanoflagellata,10,57,787,138,0.557885091042019,1,gray,30
+metastasis suppressor,Choanoflagellata,28,161,787,138,0.561694684571164,1,gray,30
+metastasis suppressor,Fungi,3,161,787,14,0.570521706996041,1,gray,31
+metastasis suppressor,Placozoa,1,161,787,4,0.600474973421631,1,gray,27
+extracellular matrix organization,Metamonada,11,57,787,157,0.607138075799725,1,gray,37
+cell junction organization,Fungi,3,171,787,14,0.616374739081381,1,gray,31
+cell adhesion,Ponginae,1,489,787,1,0.621346886912325,1,gray,4
+cell adhesion,Platyrrhini,1,489,787,1,0.621346886912325,1,gray,7
+cell adhesion,Dermoptera,1,489,787,1,0.621346886912325,1,gray,10
+cell junction organization,Prototheria,1,171,787,4,0.625457007752878,1,gray,16
+extracellular matrix organization,Viridiplantae,1,57,787,13,0.626640405688738,1,gray,33
+cell adhesion,Spiralia,5,489,787,8,0.643620015354197,1,gray,25
+epithelial to mesenchymal transition,Metamonada,12,65,787,157,0.674856029640968,1,gray,37
+cell adhesion,Cephalochordata,9,489,787,15,0.675838203691622,1,gray,22
+epithelial to mesenchymal transition,Viridiplantae,1,65,787,13,0.676857893974359,1,gray,33
+extracellular matrix organization,Sauropsida,1,57,787,16,0.703293007942412,1,gray,17
+epithelial to mesenchymal transition,Fungi,1,65,787,14,0.703995150940337,1,gray,31
+metastasis suppressor,Amoebozoa,4,161,787,23,0.72556762923093,1,gray,32
+cellular extravasation,Ecdysozoa,1,38,787,26,0.72967979712357,1,gray,24
+cell adhesion,Fungi,8,489,787,14,0.750723345120776,1,gray,31
+epithelial to mesenchymal transition,Sauropsida,1,65,787,16,0.751712587345735,1,gray,17
+cell junction organization,Actinopterygii,20,171,787,103,0.767190781558704,1,gray,20
+cell junction organization,Ambulacraria,4,171,787,23,0.772609275247717,1,gray,23
+epithelial to mesenchymal transition,Tunicata,1,65,787,17,0.772644729787404,1,gray,21
+metastasis suppressor,Viridiplantae,2,161,787,13,0.780764748792381,1,gray,33
+metastasis suppressor,Ecdysozoa,4,161,787,26,0.813385122007085,1,gray,24
+extracellular matrix organization,Ambulacraria,1,57,787,23,0.827064271945025,1,gray,23
+metastasis suppressor,Metatheria,1,161,787,8,0.841220598434964,1,gray,15
+metastasis suppressor,Amphibia,1,161,787,8,0.841220598434964,1,gray,18
+cell adhesion,Tunicata,9,489,787,17,0.851290908584177,1,gray,21
+cell junction organization,Ecdysozoa,4,171,787,26,0.852125099387814,1,gray,24
+cell adhesion,Metatheria,4,489,787,8,0.858789778863209,1,gray,15
+cell junction organization,Spiralia,1,171,787,8,0.860515071509817,1,gray,25
+cell junction organization,SAR,10,171,787,60,0.877560891152134,1,gray,36
+epithelial to mesenchymal transition,Actinopterygii,6,65,787,103,0.879567691133209,1,gray,20
+epithelial to mesenchymal transition,Ecdysozoa,1,65,787,26,0.897646204482801,1,gray,24
+epithelial to mesenchymal transition,Porifera,1,65,787,26,0.897646204482801,1,gray,28
+cell adhesion,Discoba,14,489,787,27,0.905719513829476,1,gray,34
+epithelial to mesenchymal transition,Discoba,1,65,787,27,0.906388644310157,1,gray,34
+metastasis suppressor,Discoba,3,161,787,27,0.938656486114988,1,gray,34
+cellular extravasation,SAR,1,38,787,60,0.954485412072776,1,gray,36
+cell adhesion,Cnidaria,6,489,787,14,0.960331682860148,1,gray,26
+cell junction organization,Ctenophora,8,171,787,59,0.965365356843794,1,gray,29
+metastasis suppressor,Actinopterygii,14,161,787,103,0.979994811797811,1,gray,20
+cell adhesion,Amoebozoa,10,489,787,23,0.98028842491198,1,gray,32
+metastasis suppressor,Tunicata,1,161,787,17,0.980475437520544,1,gray,21
+cell adhesion,SAR,30,489,787,60,0.983432021513621,1,gray,36
+extracellular matrix organization,Actinopterygii,3,57,787,103,0.987106366080116,1,gray,20
+extracellular matrix organization,SAR,1,57,787,60,0.990872000033071,1,gray,36
+epithelial to mesenchymal transition,Choanoflagellata,5,65,787,138,0.994690879985093,1,gray,30
+cell adhesion,Ctenophora,27,489,787,59,0.997393434088887,1,gray,29
+cellular extravasation,Metamonada,1,38,787,157,0.999831102012106,1,gray,37
+cell adhesion,Porifera,6,489,787,26,0.999992998513838,1,gray,28
+cell adhesion,Rhodophyta,0,489,787,5,1,1,gray,35
+extracellular matrix organization,Ponginae,0,57,787,1,1,1,gray,4
+extracellular matrix organization,Platyrrhini,0,57,787,1,1,1,gray,7
+extracellular matrix organization,Dermoptera,0,57,787,1,1,1,gray,10
+extracellular matrix organization,Afrotheria,0,57,787,10,1,1,gray,14
+extracellular matrix organization,Metatheria,0,57,787,8,1,1,gray,15
+extracellular matrix organization,Prototheria,0,57,787,4,1,1,gray,16
+extracellular matrix organization,Amphibia,0,57,787,8,1,1,gray,18
+extracellular matrix organization,Tunicata,0,57,787,17,1,1,gray,21
+extracellular matrix organization,Cephalochordata,0,57,787,15,1,1,gray,22
+extracellular matrix organization,Placozoa,0,57,787,4,1,1,gray,27
+extracellular matrix organization,Fungi,0,57,787,14,1,1,gray,31
+extracellular matrix organization,Amoebozoa,0,57,787,23,1,1,gray,32
+epithelial to mesenchymal transition,Ponginae,0,65,787,1,1,1,gray,4
+epithelial to mesenchymal transition,Platyrrhini,0,65,787,1,1,1,gray,7
+epithelial to mesenchymal transition,Dermoptera,0,65,787,1,1,1,gray,10
+epithelial to mesenchymal transition,Afrotheria,0,65,787,10,1,1,gray,14
+epithelial to mesenchymal transition,Metatheria,0,65,787,8,1,1,gray,15
+epithelial to mesenchymal transition,Prototheria,0,65,787,4,1,1,gray,16
+epithelial to mesenchymal transition,Amphibia,0,65,787,8,1,1,gray,18
+epithelial to mesenchymal transition,Ambulacraria,0,65,787,23,1,1,gray,23
+epithelial to mesenchymal transition,Spiralia,0,65,787,8,1,1,gray,25
+epithelial to mesenchymal transition,Placozoa,0,65,787,4,1,1,gray,27
+regulation of metallopeptidase activity,Ponginae,0,3,787,1,1,1,gray,4
+regulation of metallopeptidase activity,Platyrrhini,0,3,787,1,1,1,gray,7
+regulation of metallopeptidase activity,Dermoptera,0,3,787,1,1,1,gray,10
+regulation of metallopeptidase activity,Afrotheria,0,3,787,10,1,1,gray,14
+regulation of metallopeptidase activity,Prototheria,0,3,787,4,1,1,gray,16
+regulation of metallopeptidase activity,Sauropsida,0,3,787,16,1,1,gray,17
+regulation of metallopeptidase activity,Amphibia,0,3,787,8,1,1,gray,18
+regulation of metallopeptidase activity,Coelacanthimorpha,0,3,787,6,1,1,gray,19
+regulation of metallopeptidase activity,Actinopterygii,0,3,787,103,1,1,gray,20
+regulation of metallopeptidase activity,Tunicata,0,3,787,17,1,1,gray,21
+regulation of metallopeptidase activity,Cephalochordata,0,3,787,15,1,1,gray,22
+regulation of metallopeptidase activity,Ambulacraria,0,3,787,23,1,1,gray,23
+regulation of metallopeptidase activity,Ecdysozoa,0,3,787,26,1,1,gray,24
+regulation of metallopeptidase activity,Spiralia,0,3,787,8,1,1,gray,25
+regulation of metallopeptidase activity,Cnidaria,0,3,787,14,1,1,gray,26
+regulation of metallopeptidase activity,Placozoa,0,3,787,4,1,1,gray,27
+regulation of metallopeptidase activity,Ctenophora,0,3,787,59,1,1,gray,29
+regulation of metallopeptidase activity,Choanoflagellata,0,3,787,138,1,1,gray,30
+regulation of metallopeptidase activity,Fungi,0,3,787,14,1,1,gray,31
+regulation of metallopeptidase activity,Amoebozoa,0,3,787,23,1,1,gray,32
+regulation of metallopeptidase activity,Viridiplantae,0,3,787,13,1,1,gray,33
+regulation of metallopeptidase activity,Discoba,0,3,787,27,1,1,gray,34
+regulation of metallopeptidase activity,Rhodophyta,0,3,787,5,1,1,gray,35
+regulation of metallopeptidase activity,SAR,0,3,787,60,1,1,gray,36
+regulation of metallopeptidase activity,Metamonada,0,3,787,157,1,1,gray,37
+cell junction organization,Ponginae,0,171,787,1,1,1,gray,4
+cell junction organization,Platyrrhini,0,171,787,1,1,1,gray,7
+cell junction organization,Dermoptera,0,171,787,1,1,1,gray,10
+cell junction organization,Afrotheria,0,171,787,10,1,1,gray,14
+cell junction organization,Sauropsida,0,171,787,16,1,1,gray,17
+cell junction organization,Amphibia,0,171,787,8,1,1,gray,18
+cell junction organization,Coelacanthimorpha,0,171,787,6,1,1,gray,19
+cell junction organization,Placozoa,0,171,787,4,1,1,gray,27
+cell junction organization,Viridiplantae,0,171,787,13,1,1,gray,33
+cell junction organization,Rhodophyta,0,171,787,5,1,1,gray,35
+cellular extravasation,Ponginae,0,38,787,1,1,1,gray,4
+cellular extravasation,Platyrrhini,0,38,787,1,1,1,gray,7
+cellular extravasation,Amphibia,0,38,787,8,1,1,gray,18
+cellular extravasation,Coelacanthimorpha,0,38,787,6,1,1,gray,19
+cellular extravasation,Tunicata,0,38,787,17,1,1,gray,21
+cellular extravasation,Cephalochordata,0,38,787,15,1,1,gray,22
+cellular extravasation,Ambulacraria,0,38,787,23,1,1,gray,23
+cellular extravasation,Spiralia,0,38,787,8,1,1,gray,25
+cellular extravasation,Cnidaria,0,38,787,14,1,1,gray,26
+cellular extravasation,Placozoa,0,38,787,4,1,1,gray,27
+cellular extravasation,Porifera,0,38,787,26,1,1,gray,28
+cellular extravasation,Ctenophora,0,38,787,59,1,1,gray,29
+cellular extravasation,Amoebozoa,0,38,787,23,1,1,gray,32
+cellular extravasation,Viridiplantae,0,38,787,13,1,1,gray,33
+cellular extravasation,Rhodophyta,0,38,787,5,1,1,gray,35
+metastasis suppressor,Ponginae,0,161,787,1,1,1,gray,4
+metastasis suppressor,Platyrrhini,0,161,787,1,1,1,gray,7
+metastasis suppressor,Dermoptera,0,161,787,1,1,1,gray,10
+metastasis suppressor,Afrotheria,0,161,787,10,1,1,gray,14
+metastasis suppressor,Prototheria,0,161,787,4,1,1,gray,16
+metastasis suppressor,Sauropsida,0,161,787,16,1,1,gray,17
+metastasis suppressor,Coelacanthimorpha,0,161,787,6,1,1,gray,19
+epithelial to mesenchymal transition,Ctenophora,15,65,787,59,2.69578117757518e-5,0.00509502642561709,red,29

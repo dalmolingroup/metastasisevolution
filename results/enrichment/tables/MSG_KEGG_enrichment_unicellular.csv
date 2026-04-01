@@ -1,0 +1,5 @@
+category,subcategory,ID,Description,GeneRatio,BgRatio,pvalue,p.adjust,qvalue,geneID,Count,evolutionary_group
+Metabolism,Nucleotide metabolism,hsa00240,Pyrimidine metabolism,4/37,58/9561,6.936367537172662e-5,0.010612642331874172,0.009272828181272928,RRM1/NME3/NME1/NME2,4,Unicellular
+Metabolism,Xenobiotics biodegradation and metabolism,hsa00983,Drug metabolism - other enzymes,4/37,81/9561,2.5527094597029015e-4,0.015670104582853825,0.013691801045905993,RRM1/NME3/NME1/NME2,4,Unicellular
+Metabolism,Global and overview maps,hsa01232,Nucleotide metabolism,4/37,85/9561,3.0725695260497694e-4,0.015670104582853825,0.013691801045905993,RRM1/NME3/NME1/NME2,4,Unicellular
+Metabolism,Nucleotide metabolism,hsa00230,Purine metabolism,4/37,128/9561,0.0014378925133880303,0.04399951090967373,0.038444705094795764,RRM1/NME3/NME1/NME2,4,Unicellular

@@ -1,0 +1,37 @@
+Gene Symbol	Ensembl ID	Proposed biochemical and biological function	Intracellular localization	Implicated metastasis step	Full Name
+AKAP12	ENSG00000131016	Scaffold for protein kinases, protein binding, regulated Src, PKC and Rho signaling, VEGF secretion	Cytoskeleton, cytoplasm, focal adhesion, plasma membrane	Angiogenesis, migration	A-kinase anchoring protein 12
+ARHGDIB	ENSG00000111348	Regulates Rho GTPases, cytoskeletal remodeling, GTPase activity, GTPase activator activity	Cytoplasm, cytoskeleton, extracellular	Migration, colonization	Rho GDP dissociation inhibitor beta
+BRMS1	ENSG00000174744	Transcriptional regulation, chromatin modifying protein, reduce phosphoinositide signaling and restore gap junction communication	Nucleus	Invasion, transport, colonization	Breast cancer metastasis suppressor 1
+CADM1	ENSG00000182985	Protein binding, cytoskeletal remodeling, cell cycle arrest, apoptosis and invasion	Membrane, extracellular	Colonization	Cell adhesion molecule 1
+CASP8	ENSG00000064012	Protein binding, stress-activated protease (apoptosis related), cell cycle arrest	Cytoplasm, nucleus, plasma membrane	Survival, transport, invasion, colonization	Caspase-8
+CAV1	ENSG00000105974	Scaffolding protein, protein binding, links integrins to tyrosine kinase FYN-activation of signaling through Ras-Raf-MEK-Erk, altering caveolae function	Membrane (caveolae), Golgi apparatus, endosome, endoplasmatic reticulum	Invasion (intravasation/extravasation), possibly colonization	Caveolin-1
+CD44	ENSG00000026508	Transmembrane glicoprotein adhesion molecule, cell–cell and cell–matrix adhesion	Membrane, extracellular, Golgi apparatus	Migration	CD44 molecule (Indian blood group)
+CD82	ENSG00000085117	Protein binding, induces apoptosis, regulates TIMPs, stabilizes adherens junction	Plasma membrane, extracellular	Intravasation, transport	CD82 molecule
+CDH1	ENSG00000039068	Protein binding cell–cell adhesion	Membrane-extracellular, Golgi, endosome	EMT, invasion	Cadherin 1
+CDH11	ENSG00000140937	Cell–cell adhesion	Plasma membrane, extracellular	Tumor cell dissociation, intravasation, migration	Cadherin 11
+CDH2	ENSG00000170558	Cell–cell and cell–matrix adhesion	Plasma membrane, extracellular	Tumor cell dissociation (local invasion), intravasation	Cadherin 2
+CSTA	ENSG00000121552	Protease binding cathepsin inhibitor	Extracellular, plasma membrane, nucleus, cytosol	Angiogenesis, migration, invasion	Cystatin A
+DCC	ENSG00000187323	Protein binding, regulates MAPK signaling; cytoskeletal remodeling; regulates cell cycle arrest and apoptosis	Plasma membrane	Transport, migration, invasion	DCC netrin 1 receptor
+DLC1	ENSG00000164741	Rho GTPase activator activity, cytoskeletal remodeling	Cytoskeleton, cytosol, nucleus, plasma membrane	Migration, invasion	DLC1 rho GTPase-activating protein
+DPYSL3	ENSG00000113657	Protein binding, cytoskeletal remodeling	Cytoskeleton, cytosol	Invasion	Dihydropyrimidinase like 3
+DRG1	ENSG00000185721	GTP binding, promotes cell differentiation, upregulates E-cadherin and inhibits EMT	Cytoplasmic/nuclear upon DNA damage	Angiogenesis, invasion, colonization	Developmentally regulated GTP binding protein 1
+GAS1	ENSG00000180447	Protein binding, cell cycle arrest, apoptosis	Membrane	Colonization	Growth arrest specific 1
+GPR68	ENSG00000119714	G protein-coupled receptor activity (proton sensing receptor)	Plasma membrane	Migration	G protein-coupled receptor 68
+GSN	ENSG00000148180	Protein (actin, myosin II) binding, cytoskeletal remodeling, inhibits EMT	Cytosol, cytoskeleton, plasma membrane, extracellular	Migration	Gelsolin
+HUNK	ENSG00000142149	Protein kinase, cytoskeletal remodeling	Cytosol, nucleus	Migration, invasion	Hormonally upregulated Neu-associated kinase
+KDM1A	ENSG00000004487	Protein and DNA binding, chromatin remodeling, histone demethylase activity	Nuclear	Invasion	Lysine demethylase 1A
+KISS1	ENSG00000170498	Ligand for G-protein receptor (Kiss receptor), angiogenesis	Extracellular (secretion)	Colonization, angiogenesis	KiSS-1 metastasis suppressor
+KLF17	ENSG00000171872	DNA binding, transcriptional factor	Nucleus	Invasion	Kruppel like factor 17
+LIFR	ENSG00000113594	Protein binding, signaling molecule, ciliary neurotrophic factor receptor binding	Plasma membrane, extracellular	Migration, invasion, colonization	Leukemia inhibitory factor receptor alpha
+MAP2K4	ENSG00000065559	Stress-activated protein kinase	Cytosol, nucleus	Migration, colonization	Mitogen-activated protein kinase kinase 4
+MAP2K7	ENSG00000076984	Stress-activated protein kinase	Cytosol, nucleus	Migration, colonization	Mitogen-activated protein kinase kinase 7
+MAPK14	ENSG00000112062	Stress-activated protein kinase	Cytosol, extracellular, nucleus	Colonization	Mitogen-activated protein kinase 14 (p38)
+MTBP MDM2	ENSG00000172167	Protein binding, cell cycle arrest, cytoskeleton remodeling	Cytosol, nucleus	Invasion	Binding protein
+NME1	ENSG00000239672	Nucleotide binding, NDP kinase, protein kinase, protein scaffold, cellular nucleotide pool maintenance	Cytosol, nucleus, plasma membrane, extracellular	Migration, colonization	NME/NM23 nucleoside diphosphate kinase 1
+NR1H4	ENSG00000012504	DNA binding, transcriptional factor activity, lipid and glucose metabolism, promote apoptosis	Nucleus	Invasion, colonization	Nuclear receptor subfamily 1 group H member 4
+PEBP1	ENSG00000089220	Protein binding, nucleotide binding, Raf1 kinase inhibitor, inhibits MEK phosphorylation, cytoskeletal remodeling	Cytosol, nucleus, extracellular	Migration, invasion	Phosphatidylethanolamine binding protein 1
+RRM1	ENSG00000167325	Protein binding, ribonucleoside-diphosphate reductase activity, cytoskeletal remodeling	Cytosol, nucleus, extracellular	Migration, invasion	Ribonucleotide reductase catalytic subunit M1
+TIMP1	ENSG00000102265	Protease binding, inhibit MMP expression and signaling	Extracellular (secretion)	Angiogenesis, migration, invasion, transport	TIMP metallopeptidase inhibitor 1
+TIMP2	ENSG00000035862	Protease binding, inhibit MMP expression and signaling	Extracellular (secretion)	Angiogenesis, migration, invasion, transport	TIMP metallopeptidase inhibitor 2
+TIMP3	ENSG00000100234	Protease binding, inhibit MMP expression and signaling	Extracellular (secretion)	Angiogenesis, migration, invasion, transport	TIMP metallopeptidase inhibitor 3
+TIMP4	ENSG00000157150	Protease binding, inhibit MMP expression and signaling	Extracellular (secretion)	Angiogenesis, migration, invasion, transport	TIMP metallopeptidase inhibitor 4

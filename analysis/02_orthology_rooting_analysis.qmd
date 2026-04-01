@@ -1,23 +1,44 @@
 ---
-title: "Orthology Rooting Analysis"
+title: "Orthology Rooting Analysis of Metastasis-Associated Genes"
 author: "Gleison M. Azevedo"
 format: html
-execute: 
+execute:
   cache: true
+  echo: true
+  message: false
+  warning: false
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE,
-  message = FALSE,
-  warning = FALSE,
-  results = FALSE
+## Package Management
+
+```{r pkg-install}
+#| cache: false
+
+# Automatically detect and install missing CRAN and Bioconductor packages.
+required_cran <- c(
+  "readr", "dplyr", "purrr", "magrittr", "ape", "tidyverse",
+  "data.table", "stringi", "here", "vroom", "RCurl", "BiocManager"
 )
-```
 
-## Import libraries
+missing_cran <- required_cran[
+  !vapply(required_cran, requireNamespace, logical(1), quietly = TRUE)
+]
+if (length(missing_cran) > 0) {
+  install.packages(missing_cran, repos = "https://cloud.r-project.org")
+}
 
-```{r libs}
+required_bioc <- c(
+  "GeneBridge", "geneplast.data", "biomaRt", "KEGGREST",
+  "AnnotationHub", "sourcetools"
+)
+
+missing_bioc <- required_bioc[
+  !vapply(required_bioc, requireNamespace, logical(1), quietly = TRUE)
+]
+if (length(missing_bioc) > 0) {
+  BiocManager::install(missing_bioc, ask = FALSE, update = FALSE)
+}
+
 library(GeneBridge)
 library(geneplast.data)
 library(readr)
@@ -35,10 +56,39 @@ library(sourcetools)
 library(here)
 ```
 
-## Define Functions
+## Input Data Integrity Verification
 
-```{r funcs}
-# Function to download needed files
+```{r checksum}
+#| cache: false
+
+# Verify MD5 checksums for all input files loaded from assets/ to ensure
+# data integrity and guard against unintended modifications or corruption.
+
+expected_checksums <- c(
+  "assets/string_eukaryotes.rda"       = "77d822d3e1ccdce6ca6f1a18a461b759",
+  "assets/COG.mappings.v11.0.txt.gz"   = "a2e2180b10e596f22172c1dd65613c97"
+)
+
+for (file_path in names(expected_checksums)) {
+  abs_path <- here(file_path)
+  observed <- unname(tools::md5sum(abs_path))
+  if (observed != expected_checksums[file_path]) {
+    stop(
+      sprintf(
+        "Checksum mismatch for '%s': expected %s, got %s",
+        file_path, expected_checksums[file_path], observed
+      )
+    )
+  }
+}
+
+message("All input file checksums verified successfully.")
+```
+
+## Helper Functions
+
+```{r functions}
+# Download a file to assets/ if it does not already exist locally.
 download_if_missing <- function(url, filename = basename(url)) {
   filename <- here::here("assets/", filename)
   if (!file.exists(filename)) {
@@ -46,9 +96,12 @@ download_if_missing <- function(url, filename = basename(url)) {
   }
 }
 
+
+# Map HGNC gene symbols to STRING protein identifiers using the STRING v11.0
+# protein.info and protein.aliases databases for a given species.
 get_string_ids <- function(genes_hgnc, species_id = "9606") {
-  
-  # --- 1. Ler protein.info ---
+
+  # Step 1: Read protein.info and map by preferred_name
   protein_info <- vroom::vroom(
     paste0(
       "https://stringdb-static.org/download/protein.info.v11.0/",
@@ -58,20 +111,20 @@ get_string_ids <- function(genes_hgnc, species_id = "9606") {
     delim = "\t",
     comment = "##"
   )
-  
-  # Mapeamento direto pelo preferred_name
+
+  # Direct mapping by preferred_name
   map_info <- protein_info %>%
     dplyr::filter(preferred_name %in% genes_hgnc) %>%
     dplyr::select(stringId = protein_external_id, queryItem = preferred_name) %>%
     dplyr::distinct()
-  
-  # Remover prefixo species
+
+  # Remove species prefix from STRING IDs
   map_info$stringId <- sub(paste0("^", species_id, "\\."), "", map_info$stringId)
-  
-  # Genes que não foram mapeados no protein.info
+
+  # Identify genes not mapped via protein.info
   not_mapped <- setdiff(genes_hgnc, map_info$queryItem)
-  
-  # --- 2. Ler protein.aliases ---
+
+  # Step 2: Read protein.aliases for remaining unmapped genes
   aliases <- vroom::vroom(
     paste0(
       "https://stringdb-static.org/download/protein.aliases.v11.0/",
@@ -82,263 +135,345 @@ get_string_ids <- function(genes_hgnc, species_id = "9606") {
     comment = "##",
     col_names = c("string_protein_id", "alias", "source")
   )
-  
-  # Mapeamento pelos aliases
+
+  # Mapping by alias
   map_aliases <- aliases %>%
     dplyr::filter(alias %in% not_mapped) %>%
     dplyr::select(stringId = string_protein_id, queryItem = alias) %>%
     dplyr::distinct()
-  
-  # Remover prefixo species
+
+  # Remove species prefix
   map_aliases$stringId <- sub(paste0("^", species_id, "\\."), "", map_aliases$stringId)
-  
-  # --- 3. Unir resultados ---
+
+  # Step 3: Combine results from both mapping sources
   map_ids <- dplyr::bind_rows(map_info, map_aliases) %>%
     dplyr::distinct()
-  
-  # --- 4. Checar duplicados ---
+
+  # Step 4: Warn about genes mapping to multiple STRING IDs
   dup_genes <- map_ids$queryItem[duplicated(map_ids$queryItem)]
   if (length(dup_genes) > 0) {
-    warning("Genes mapeados para múltiplos stringIds: ", paste(unique(dup_genes), collapse = ", "))
+    warning("Genes mapped to multiple stringIds: ", paste(unique(dup_genes), collapse = ", "))
   }
-  
+
   return(map_ids)
 }
 
 
- # Get STRING interactions
- get_network_interaction <- function(map_ids, stringId, species_id = "9606") {
- 
-   identifiers <- map_ids %>% pull(stringId) %>% na.omit %>% paste0(collapse="%0d") 
- 
-   req2 <- RCurl::postForm(
-     "https://string-db.org/api/tsv/network",
-     identifiers = identifiers, 
-     required_core = "0", 
-     species = species_id,
-     .opts = list(ssl.verifypeer = FALSE)
-   )
-   
-   int_network <- read.table(text = req2, sep = "\t", header = TRUE)
-   
-   int_network <- unique(int_network)
-   
-   return(int_network)
- }
+# Query the STRING database API to retrieve the protein-protein interaction
+# network for a set of STRING identifiers.
+get_network_interaction <- function(map_ids, stringId, species_id = "9606") {
 
- ## Recomputing scores
+  identifiers <- map_ids %>% pull(stringId) %>% na.omit %>% paste0(collapse = "%0d")
+
+  req2 <- RCurl::postForm(
+    "https://string-db.org/api/tsv/network",
+    identifiers = identifiers,
+    required_core = "0",
+    species = species_id,
+    .opts = list(ssl.verifypeer = FALSE)
+  )
+
+  int_network <- read.table(text = req2, sep = "\t", header = TRUE)
+  int_network <- unique(int_network)
+
+  return(int_network)
+}
+
+
+# Recompute combined interaction scores from individual STRING evidence
+# channels using a probabilistic combination (1 - product of complements).
 combine_scores <- function(dat, evidences = "all", confLevel = 0.4) {
-  if(evidences[1] == "all"){
-    edat<-dat[,-c(1,2,ncol(dat))]
+  if (evidences[1] == "all") {
+    edat <- dat[, -c(1, 2, ncol(dat))]
   } else {
-    if(!all(evidences%in%colnames(dat))){
+    if (!all(evidences %in% colnames(dat))) {
       stop("NOTE: one or more 'evidences' not listed in 'dat' colnames!")
     }
-    edat<-dat[,evidences]
+    edat <- dat[, evidences]
   }
   if (any(edat > 1)) {
-    edat <- edat/1000
+    edat <- edat / 1000
   }
-  edat<-1-edat
-  sc<- apply(X = edat, MARGIN = 1, FUN = function(x) 1-prod(x))
-  dat <- cbind(dat[,c(1,2)],combined_score = sc)
+  edat <- 1 - edat
+  sc <- apply(X = edat, MARGIN = 1, FUN = function(x) 1 - prod(x))
+  dat <- cbind(dat[, c(1, 2)], combined_score = sc)
   idx <- dat$combined_score >= confLevel
-  dat <-dat[idx,]
+  dat <- dat[idx, ]
   return(dat)
 }
 ```
 
-## Read data
+## Data Loading
 
-```{r data}
-# Metastasis Genes data frame
-df <- vroom::vroom("../results/metastasis_genes/metastasis_genes.csv")
+The metastasis gene set produced by script 01 is loaded as the primary input.
+Two additional resources are required: the STRING eukaryote species table and
+the full COG orthologous group mappings from STRING v11.0 (pre-downloaded).
+Phylogenetic tree and COG annotation data are retrieved from AnnotationHub.
 
-# NCBI Eukaryotes 
-load('../assets/string_eukaryotes.rda')
+```{r data-load}
+#| cache: true
 
-## Table with Orthologous Groups and their proteins
-#download_if_missing("https://stringdb-static.org/download/COG.mappings.v11.0.txt.gz")
+# Metastasis gene set from Script 01
+df <- vroom::vroom(
+  here("results/metastasis_genes/metastasis_genes.csv"),
+  show_col_types = FALSE
+)
 
+# NCBI Eukaryotes species list (pre-curated)
+load(here("assets/string_eukaryotes.rda"))
+
+# COG orthologous group mappings (STRING v11.0, ~380 MB compressed)
 cogs <- fread(
-  "../assets/COG.mappings.v11.0.txt.gz",
-  header           = F,
-  stringsAsFactors = F,
+  here("assets/COG.mappings.v11.0.txt.gz"),
+  header           = FALSE,
+  stringsAsFactors  = FALSE,
   skip             = 1,
   sep              = "\t",
-  col.names        = c("taxid.string_id","cog_id"),
-  select           = c(1,4),
+  col.names        = c("taxid.string_id", "cog_id"),
+  select           = c(1, 4),
   quote            = ""
 )
 
-# Query Phylotree and OG data
+# Phylogenetic tree and COG annotation from AnnotationHub (geneplast)
 ah <- AnnotationHub()
 meta <- query(ah, "geneplast")
 load(meta[["AH83116"]])
 cogdata <- dplyr::select(cogdata, "protein_id", "ssp_id", "og_id" = "cog_id")
 ```
 
-## Process Orthology Data
+## STRING ID Mapping and COG Processing
 
-```{r run}
-# Query by STRING API
+Human gene symbols are mapped to STRING protein identifiers via the STRING
+v11.0 API. The COG mapping table is then parsed, filtered to eukaryotic taxa,
+and merged with geneplast annotation data. Proteins mapping to multiple COGs
+are resolved manually based on domain analysis.
+
+```{r orthology-processing}
+#| cache: true
+
+# Map gene symbols to STRING protein identifiers
 map_ids <- get_string_ids(unique(df$external_gene_name))
 
-# Spliting first column into taxid and string_id
-separated_ids <- cogs %$% stri_split_fixed(taxid.string_id, pattern = ".", n = 2, simplify = T)
+# Split the composite taxid.string_id column into separate taxid and string_id
+separated_ids <- cogs %$%
+  stri_split_fixed(taxid.string_id, pattern = ".", n = 2, simplify = TRUE)
 
 cogs[["taxid"]]     <- separated_ids[, 1]
 cogs[["string_id"]] <- separated_ids[, 2]
 
-# Freeing up some memory
+# Memory cleanup: remove large intermediate matrix
 rm(separated_ids)
-
-# keeping only eukaryotes
-cogs %<>% dplyr::select(-taxid.string_id) %>% 
-  filter(taxid %in% string_eukaryotes[["taxid"]])
 gc()
 
-cogdata2 <- cogs %>% 
+# Retain only eukaryotic taxa present in the STRING species table
+cogs %<>%
+  dplyr::select(-taxid.string_id) %>%
+  filter(taxid %in% string_eukaryotes[["taxid"]])
+
+# Merge geneplast COG data with STRING COG mappings
+cogdata2 <- cogs %>%
   dplyr::select(protein_id = string_id, ssp_id = taxid, og_id = cog_id)
 cogdata2 <- as.data.frame(cogdata2)
 
 ogdata <- unique(rbind(cogdata, cogdata2))
 
-# Subsetting cogs of interest - METASTASIS GENES
+# Subset COGs for metastasis-associated genes
 gene_cogs <- cogs %>%
   filter(string_id %in% map_ids[["stringId"]]) %>%
   dplyr::select(-taxid) %>%
   group_by(string_id) %>%
   summarise(n = n(), cog_id = paste(cog_id, collapse = " / "))
 
-## Proteins with multiple COGs
+# Identify proteins assigned to multiple COGs
 gene_cogs %>% filter(n > 1)
 
-# Resolving main proteins
+# Manually resolve proteins with multiple COG assignments
 gene_cogs_resolved <- tribble(
   ~string_id, ~cog_id,
-"ENSP00000239462",	"KOG1225",
-"ENSP00000264808",	"KOG1721",	
-"ENSP00000265562",	"KOG2220",	
-"ENSP00000323856",	"COG5069",		
-"ENSP00000359085",  "KOG3512",		
-"ENSP00000361467",  "KOG3528",		
-"ENSP00000363317",	"KOG3528",
-"ENSP00000367408" , "KOG0033",          
-"ENSP00000383042",  "KOG0685",		
-"ENSP00000418112",	"COG5599",		
-"ENSP00000422533",	"KOG3545"
+  "ENSP00000264808", "KOG1721",
+  "ENSP00000265562", "KOG2220",
+  "ENSP00000323856", "COG5069",
+  "ENSP00000359085", "KOG3512",
+  "ENSP00000361467", "KOG3528",
+  "ENSP00000363317", "KOG3528",
+  "ENSP00000367408", "KOG0033",
+  "ENSP00000383042", "KOG0685",
+  "ENSP00000418112", "COG5599",
 )
 
-# Removing unresolved cases and adding manual assignments
+# Remove multi-COG entries and add manual assignments
 gene_cogs %<>%
   filter(n == 1) %>%
- dplyr:: select(-n) %>%
+  dplyr::select(-n) %>%
   bind_rows(gene_cogs_resolved)
 
-# Exporting for package use
-gene_cogs |> 
-  vroom::vroom_write(file = here("results/orthology_data/gene_cogs.csv"), delim = ",")
+# --- Save intermediate outputs ---
+output_dir <- here("results/orthology_data")
+if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
 
-map_ids |> 
-  vroom::vroom_write(file = here("results/orthology_data/map_ids.csv"), delim = ",")
+gene_cogs |>
+  vroom::vroom_write(file = file.path(output_dir, "gene_cogs.csv"), delim = ",")
 
-cogs |> 
-  vroom::vroom_write(file = here("results/orthology_data/cogs.csv"), delim = ",")
+map_ids |>
+  vroom::vroom_write(file = file.path(output_dir, "map_ids.csv"), delim = ",")
+
+cogs |>
+  vroom::vroom_write(file = file.path(output_dir, "cogs.csv"), delim = ",")
+
+# Memory cleanup after heavy COG processing
+rm(cogdata2, gene_cogs_resolved)
+gc()
 ```
 
-## Get interaction network from STRINGdb
+## Protein–Protein Interaction Network from STRING
 
-```{r network}
-# Get proteins interaction
+The STRING database API is queried to retrieve the interaction network for
+all mapped metastasis-associated proteins. Interaction scores are recomputed
+using only experimental (ascore), coexpression (escore), and database (dscore)
+evidence channels with a minimum confidence level of 0.9.
+
+```{r network-interaction}
+#| cache: true
+
+# Retrieve network interactions from STRING API
 string_edgelist <- get_network_interaction(map_ids)
 
-# Recomputing scores
-string_edgelist <- combine_scores(string_edgelist, 
-                                  evidences = c("ascore", "escore", "dscore"), 
-                                  confLevel = 0.4)
+# Recompute combined scores from selected evidence channels
+string_edgelist <- combine_scores(
+  string_edgelist,
+  evidences = c("ascore", "escore", "dscore"),
+  confLevel = 0.9
+)
 
 colnames(string_edgelist) <- c("stringId_A", "stringId_B", "combined_score")
 
-# Remove o species id
+# Remove species ID prefix (e.g., "9606.ENSP..." -> "ENSP...")
 string_edgelist$stringId_A <- substring(string_edgelist$stringId_A, 6, 1000)
 string_edgelist$stringId_B <- substring(string_edgelist$stringId_B, 6, 1000)
 
-# How many edgelist proteins are absent in gene_ids? (should return 0)
-setdiff(
+# Validation: all edgelist proteins should be present in the mapping table
+unmapped_in_network <- setdiff(
   string_edgelist %$% c(stringId_A, stringId_B),
   map_ids %>% pull(stringId)
-) 
+)
+if (length(unmapped_in_network) > 0) {
+  warning("Unmapped proteins found in network: ", paste(unmapped_in_network, collapse = ", "))
+} else {
+  message("All network proteins are present in the mapping table.")
+}
 
-# Exporting for package use
-string_edgelist |> 
-  vroom::vroom_write(file = here("results/orthology_data/string_edgelist.csv"), delim = ",")
+# Export interaction edgelist
+string_edgelist |>
+  vroom::vroom_write(
+    file = here("results/orthology_data/string_edgelist.csv"),
+    delim = ","
+  )
 ```
 
-## GeneBridge Rooting
+## GeneBridge Evolutionary Rooting
+
+The GeneBridge algorithm performs evolutionary rooting of orthologous groups
+to infer the phylogenetic origin (last common ancestor) of each gene. A
+permutation test (n=1000) assesses the statistical significance of each
+rooting assignment against a null distribution.
 
 ```{r genebridge}
-## Run GeneBridge
-ogr <- newBridge(ogdata=ogdata, phyloTree=phyloTree, ogids = gene_cogs$cog_id, refsp="9606")
+#| cache: true
 
+# Initialize the GeneBridge object with orthology data and phylogenetic tree
+ogr <- newBridge(
+  ogdata   = ogdata,
+  phyloTree = phyloTree,
+  ogids    = gene_cogs$cog_id,
+  refsp    = "9606"
+)
+
+# Run the rooting algorithm with penalty and threshold parameters
 ogr <- runBridge(ogr, penalty = 2, threshold = 0.5, verbose = TRUE)
 
-ogr <- runPermutation(ogr, nPermutations=1000, verbose=FALSE)
+# Permutation test for statistical significance
+ogr <- runPermutation(ogr, nPermutations = 1000, verbose = FALSE)
 
-res <- getBridge(ogr, what="results")
+# Extract rooting results
+res <- getBridge(ogr, what = "results")
 
-res |> 
-  vroom::vroom_write(file = here("results/orthology_data/genebridge_result.csv"), delim = ",")
+# Save results
+res |>
+  vroom::vroom_write(
+    file = here("results/orthology_data/genebridge_result.csv"),
+    delim = ","
+  )
 
-save(ogr, file = "../results/orthology_data/genebridge_ogr.RData")
+save(ogr, file = here("results/orthology_data/genebridge_ogr.RData"))
+
+# Memory cleanup after heavy GeneBridge computation
+rm(ogdata, cogdata)
+gc()
 ```
-## GeneBridge results processing
 
-```{r run}
-## Naming the rooted clades and getting the final results table
+## Results Processing and Network Assembly
+
+The GeneBridge rooting results are annotated with clade names from a curated
+reference table, and then merged with the STRING interaction network. Node
+metadata (gene identity, biological process signature, clade assignment) is
+assembled for downstream network visualization and analysis.
+
+```{r results-processing}
+# Clade name annotations for the phylogenetic tree
 CLADE_NAMES <- "https://raw.githubusercontent.com/dalmolingroup/neurotransmissionevolution/ctenophora_before_porifera/analysis/geneplast_clade_names.tsv"
 
-lca_names <- read_table(CLADE_NAMES)
+lca_names <- read_table(CLADE_NAMES, show_col_types = FALSE)
 
+# Map COG rooting results to clade names and gene identifiers
 groot_df <- res %>%
   tibble::rownames_to_column("cog_id") %>%
   dplyr::select(cog_id, root = Root) %>%
   inner_join(lca_names) %>%
-  inner_join(gene_cogs) 
+  inner_join(gene_cogs)
 
-groot_df |> 
-  vroom::vroom_write(file = here("results/orthology_data/groot_df.csv"), delim = ",")
+groot_df |>
+  vroom::vroom_write(
+    file = here("results/orthology_data/groot_df.csv"),
+    delim = ","
+  )
 
-## Create
-nodelist <- data.frame(node = unique(c(string_edgelist$stringId_A, string_edgelist$stringId_B)))
+# Build network node list from interaction edgelist
+nodelist <- data.frame(
+  node = unique(c(string_edgelist$stringId_A, string_edgelist$stringId_B))
+)
 
 merged_paths <- merge(nodelist, groot_df, by.x = "node", by.y = "string_id")
 
-merged_paths |> 
-  vroom::vroom_write(file = here("results/orthology_data/merged_paths.csv"), delim = ",")
-```
+merged_paths |>
+  vroom::vroom_write(
+    file = here("results/orthology_data/merged_paths.csv"),
+    delim = ","
+  )
 
-## Network
-
-```{r network}
+# Query STRING for interactions among the merged path proteins
 net <- get_network_interaction(merged_paths, "node")
-net <- combine_scores(net, evidences = c("ascore", "escore", "dscore"), confLevel = 0.4)
+net <- combine_scores(
+  net,
+  evidences = c("ascore", "escore", "dscore"),
+  confLevel = 0.4
+)
 
-net <-  net %>%
+net <- net %>%
   separate(stringId_A,
            into = c("ncbi_taxon_id", "stringId_A"),
            sep = "\\.") %>%
   separate(stringId_B,
            into = c("ncbi_taxon_id", "stringId_B"),
-           sep = "\\.") 
+           sep = "\\.")
 
 network_filtered <- net %>%
   dplyr::select(stringId_A, stringId_B) |>
   distinct()
 
-pivotada <- df %>% 
-  dplyr::select(external_gene_name, Signature) %>% 
-  dplyr::mutate(n = 1) %>% 
+# Build gene-to-signature pivot table for node annotation
+pivotada <- df %>%
+  dplyr::select(external_gene_name, Signature) %>%
+  dplyr::mutate(n = 1) %>%
   tidyr::pivot_wider(
     id_cols = external_gene_name,
     names_from = Signature,
@@ -347,34 +482,41 @@ pivotada <- df %>%
     values_fill = list(n = 0),
   )
 
-source_statements <-
-  colnames(pivotada)[2:length(pivotada)]
+source_statements <- colnames(pivotada)[2:length(pivotada)]
 
+# Assemble full network node list with metadata
 network_nodelist <-
   data.frame(node = unique(c(network_filtered$stringId_A, network_filtered$stringId_B))) %>%
   left_join(merged_paths, by = c("node" = "node")) %>%
   left_join(map_ids, by = c("node" = "stringId")) %>%
   left_join(pivotada, by = c("queryItem" = "external_gene_name"))
 
+# Assemble complete node list (all rooted genes, not just network members)
 nodelist <-
   groot_df %>%
   left_join(map_ids, by = c("string_id" = "stringId")) %>%
   left_join(pivotada, by = c("queryItem" = "external_gene_name"))
 
-# Network Metrics
-connected_nodes <- rle(sort(c(network_filtered[,1], network_filtered[,2])))
-connected_nodes <- data.frame(count=connected_nodes$lengths, node=connected_nodes$values)
+# Compute network degree metrics (number of connections per node)
+connected_nodes <- rle(sort(c(network_filtered[, 1], network_filtered[, 2])))
+connected_nodes <- data.frame(count = connected_nodes$lengths, node = connected_nodes$values)
 connected_nodes <- left_join(network_nodelist, connected_nodes, by = c("node" = "node"))
 
-nodelist |> 
+# --- Save all network outputs ---
+nodelist |>
   vroom::vroom_write(file = here("results/orthology_data/nodelist.csv"), delim = ",")
 
-network_nodelist |> 
+network_nodelist |>
   vroom::vroom_write(file = here("results/orthology_data/network_nodelist.csv"), delim = ",")
 
-connected_nodes |> 
+connected_nodes |>
   vroom::vroom_write(file = here("results/orthology_data/connected_nodes.csv"), delim = ",")
 
-network_filtered |> 
+network_filtered |>
   vroom::vroom_write(file = here("results/orthology_data/network_filtered.csv"), delim = ",")
+
+# Memory cleanup
+rm(net, pivotada, source_statements)
+gc()
 ```
+

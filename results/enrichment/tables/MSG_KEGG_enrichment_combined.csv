@@ -1,0 +1,14 @@
+category,subcategory,ID,Description,GeneRatio,BgRatio,pvalue,p.adjust,qvalue,geneID,Count,evolutionary_group
+Metabolism,Nucleotide metabolism,hsa00240,Pyrimidine metabolism,4/37,58/9561,6.936367537172662e-5,0.010612642331874172,0.009272828181272928,RRM1/NME3/NME1/NME2,4,Unicellular
+Metabolism,Xenobiotics biodegradation and metabolism,hsa00983,Drug metabolism - other enzymes,4/37,81/9561,2.5527094597029015e-4,0.015670104582853825,0.013691801045905993,RRM1/NME3/NME1/NME2,4,Unicellular
+Metabolism,Global and overview maps,hsa01232,Nucleotide metabolism,4/37,85/9561,3.0725695260497694e-4,0.015670104582853825,0.013691801045905993,RRM1/NME3/NME1/NME2,4,Unicellular
+Metabolism,Nucleotide metabolism,hsa00230,Purine metabolism,4/37,128/9561,0.0014378925133880303,0.04399951090967373,0.038444705094795764,RRM1/NME3/NME1/NME2,4,Unicellular
+Cellular Processes,Cell growth and death,hsa04115,p53 signaling pathway,5/53,75/9561,5.55402482584216e-5,0.003358468963336592,0.002496631700369159,SERPINB5/CASP3/CASP8/THBS1/CD82,5,Multicellular non-vertebrate
+NA,NA,hsa04518,Integrin signaling,6/53,154/9561,1.9469559540604266e-4,0.008615280096717387,0.006404460375198772,TGFB1/THBS1/CDH1/ITGA2/ITGB1/HGF,6,Multicellular non-vertebrate
+Environmental Information Processing,Signal transduction,hsa04350,TGF-beta signaling pathway,5/53,110/9561,3.40234823884816e-4,0.010036927304602072,0.007461289997474036,SKI/TGFB1/BMP4/SMAD4/THBS1,5,Multicellular non-vertebrate
+NA,NA,hsa04517,IgSF CAM signaling,7/53,302/9561,0.0012960030679879386,0.027370277831236717,0.020346623424945524,CXADR/MTSS1/DCC/EPB41L3/CDH1/ITGB1/APP,7,Multicellular non-vertebrate
+Cellular Processes,Cell growth and death,hsa04115,p53 signaling pathway,3/12,75/9561,9.694955515267907e-5,0.003877982206107163,0.0026533562462838483,TNFRSF10A/TNFRSF10B/IGFBP3,3,Vertebrates
+Environmental Information Processing,Signaling molecules and interaction,hsa04060,Cytokine-cytokine receptor interaction,4/12,298/9561,3.7555729761877625e-4,0.0071983242759682715,0.004925169241451976,TNFRSF10A/TNFRSF10B/LIFR/NGFR,4,Vertebrates
+Organismal Systems,Immune system,hsa04650,Natural killer cell mediated cytotoxicity,3/12,134/9561,5.398743206976203e-4,0.0071983242759682715,0.004925169241451976,TNFRSF10A/TNFRSF10B/ICAM2,3,Vertebrates
+Environmental Information Processing,Signaling molecules and interaction,hsa04514,Cell adhesion molecule (CAM) interaction,3/12,160/9561,9.055626978379002e-4,0.009055626978379002,0.006195955300996159,CLDN1/CADM1/ICAM2,3,Vertebrates
+Environmental Information Processing,Signaling molecules and interaction,hsa04061,Viral protein interaction with cytokine and cytokine receptor,2/12,100/9561,0.006676345451634899,0.04450896967756599,0.030453505568860943,TNFRSF10A/TNFRSF10B,2,Vertebrates

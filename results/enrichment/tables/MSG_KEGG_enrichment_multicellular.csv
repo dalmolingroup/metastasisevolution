@@ -1,0 +1,5 @@
+category,subcategory,ID,Description,GeneRatio,BgRatio,pvalue,p.adjust,qvalue,geneID,Count,evolutionary_group
+Cellular Processes,Cell growth and death,hsa04115,p53 signaling pathway,5/53,75/9561,5.55402482584216e-5,0.003358468963336592,0.002496631700369159,SERPINB5/CASP3/CASP8/THBS1/CD82,5,Multicellular non-vertebrate
+NA,NA,hsa04518,Integrin signaling,6/53,154/9561,1.9469559540604266e-4,0.008615280096717387,0.006404460375198772,TGFB1/THBS1/CDH1/ITGA2/ITGB1/HGF,6,Multicellular non-vertebrate
+Environmental Information Processing,Signal transduction,hsa04350,TGF-beta signaling pathway,5/53,110/9561,3.40234823884816e-4,0.010036927304602072,0.007461289997474036,SKI/TGFB1/BMP4/SMAD4/THBS1,5,Multicellular non-vertebrate
+NA,NA,hsa04517,IgSF CAM signaling,7/53,302/9561,0.0012960030679879386,0.027370277831236717,0.020346623424945524,CXADR/MTSS1/DCC/EPB41L3/CDH1/ITGB1/APP,7,Multicellular non-vertebrate
