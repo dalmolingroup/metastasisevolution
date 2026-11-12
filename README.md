@@ -11,10 +11,8 @@ Metastasis is not a *de novo* functional module innovation but rather the pathol
 ## Repository Structure
 
 ```
-├── _dev            # Exploratory scripts and analyses under development
 ├── analysis        # Quarto documents with the main analyses (01–06)
 ├── assets          # Input data required to run the analyses
-├── deprecated      # Discontinued scripts kept for reference
 └── results
     ├── enrichment         # MSG functional enrichment (GO BP and KEGG)
     ├── exclusive_genes    # Rooting of single-process (exclusive) genes
@@ -35,3 +33,17 @@ Metastasis is not a *de novo* functional module innovation but rather the pathol
 | `04_exclusive_genes_analysis.qmd` | Rooting of genes exclusive to a single biological process |
 | `05_MSG_enrichment.qmd` | Functional enrichment of metastasis suppressor genes per evolutionary group |
 | `06_MSG_enrichment_cumulative.qmd` | Cumulative functional enrichment of metastasis suppressor genes |
+
+## Reproducibility notes
+
+### Evolutionary groups of metastasis suppressor genes
+
+In `05_MSG_enrichment.qmd`, metastasis suppressor genes are grouped by the root (LCA) inferred with GeneBridge:
+
+| Group | Root | Clades |
+|---|---|---|
+| Unicellular | > 30 | Before Choanoflagellata (Metamonada to Fungi) |
+| Multicellular non-vertebrate | 21 to 30 | Choanoflagellata to Tunicata |
+| Vertebrates | ≤ 20 | Actinopterygii and more recent clades |
+
+This is the grouping used to generate the tables in `results/enrichment/tables/` and the results reported in the article (64, 81 and 16 genes, respectively).
