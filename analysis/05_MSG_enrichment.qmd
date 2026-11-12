@@ -238,8 +238,8 @@ cat("Total metastasis suppressor genes in nodelist:", nrow(msg_nodelist), "\n")
 msg_nodelist <- msg_nodelist %>%
   mutate(
     evolutionary_group = case_when(
-      root => 30 ~ "Unicellular",
-      root >= 21 & root < 30 ~ "Multicellular non-vertebrate",
+      root > 30 ~ "Unicellular",
+      root >= 21 & root <= 30 ~ "Multicellular non-vertebrate",
       root <= 20 ~ "Vertebrates"
     )
   ) %>%
